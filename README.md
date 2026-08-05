@@ -1,16 +1,36 @@
-# React + Vite
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+    <title>Inventory — Kelola Stok Gudang Anda</title>
+    <meta
+      name="description"
+      content="Satu dashboard untuk mencatat barang masuk, barang keluar, dan stok di seluruh gudang Anda — akurat, real-time, dan mudah diaudit."
+    />
+    <meta name="theme-color" content="#0b1220" />
 
-Currently, two official plugins are available:
+    <!-- Open Graph -->
+    <meta property="og:title" content="Inventory — Kelola Stok Gudang Anda" />
+    <meta
+      property="og:description"
+      content="Scan barcode, pantau stok multi-gudang, dan lihat laporan real-time dari satu dashboard."
+    />
+    <meta property="og:type" content="website" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+    <!-- Font yang dipakai di LandingPage.jsx, Login.jsx, Dashboard.jsx -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
