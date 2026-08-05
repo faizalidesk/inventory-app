@@ -7,7 +7,7 @@ from "react-router-dom";
 
 
 import Login 
-from "./pages/auth/Login";
+from "./pages/auth/Index";
 
 
 import Register 
