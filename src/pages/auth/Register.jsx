@@ -1,38 +1,6 @@
-// Listed directory scratch
-
-// Berikut adalah versi komponen **Register** yang telah diperbarui dengan desain **modern, futuristik, dan elegan** (gaya *dark glassmorphism* seperti aplikasi web SaaS modern saat ini).
-
-// ### 🚀 Fitur & Peningkatan UI/UX:
-// 1. **Desain Card Split-Screen (Hero Panel & Form)**: Memiliki side panel branding di sebelah kiri (pada layar besar/desktop) yang menampilkan *benefit checklist*.
-// 2. **Ambient Glow & Dark Glassmorphism**: Background efek *blurred mesh gradient* memberikan kesan aplikasi premium.
-// 3. **Ikon Input (`lucide-react`)**: Setiap input dilengkapi ikon visual (`User`, `Mail`, `Lock`) untuk *usability* yang lebih baik.
-// 4. **Show / Hide Password**: Tombol mata (`Eye` / `EyeOff`) untuk melihat/menyembunyikan kata sandi.
-// 5. **Indikator Kekuatan Password**: Bar warna dinamis (Lemah, Sedang, Baik, Sangat Kuat) yang berubah secara *real-time* saat pengguna mengetik.
-// 6. **Animasi & Hover States**: Tombol dengan *gradient glow*, spinner animasi saat *loading*, dan transisi halus pada *focus rings*.
-// 7. **Pesan Error yang Jelas**: Banner alert merah transparan dilengkapi ikon `AlertCircle`.
-
-// ---
-
-// ### 💻 Kode Komponen `Register.jsx` (atau `Register.tsx`):
-
-// > **Catatan:** Komponen ini menggunakan ikon dari paket [`lucide-react`](https://lucide.dev/). Pastikan Anda sudah menginstalnya (`npm install lucide-react`), atau sesuaikan ikon sesuai library yang Anda gunakan.
-
-// ```jsx
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
-import { 
-  User, 
-  Mail, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  ArrowRight, 
-  AlertCircle, 
-  CheckCircle2, 
-  ShieldCheck, 
-  Sparkles 
-} from "lucide-react";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -50,7 +18,6 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  // Kalkulator kekuatan password
   const getPasswordStrength = (pass) => {
     if (!pass) return { score: 0, label: "", color: "bg-slate-800" };
     let score = 0;
@@ -119,14 +86,14 @@ export default function Register() {
       {/* Card Utama */}
       <div className="relative w-full max-w-4xl bg-slate-900/80 backdrop-blur-2xl border border-slate-800/80 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
         
-        {/* Panel Kiri: Hero & Branding (Khusus Layar Desktop) */}
+        {/* Panel Kiri: Hero & Branding */}
         <div className="hidden lg:flex lg:col-span-5 relative flex-col justify-between p-8 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white overflow-hidden">
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-xl pointer-events-none" />
           
           {/* Logo */}
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-xl text-white shadow-inner border border-white/20">
-              <Sparkles className="w-5 h-5 text-indigo-200" />
+              <svg className="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
             </div>
             <span className="font-bold text-xl tracking-tight">AppLogo</span>
           </div>
@@ -134,7 +101,8 @@ export default function Register() {
           {/* Value Proposition */}
           <div className="my-auto py-6">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-indigo-100 border border-white/15 mb-4">
-              <ShieldCheck className="w-3.5 h-3.5" /> Registrasi Cepat & Aman
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+              <span>Registrasi Cepat & Aman</span>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight leading-tight">
               Mulai perjalanan Anda bersama kami.
@@ -151,24 +119,22 @@ export default function Register() {
                 "Dukungan penuh 24/7",
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 text-xs text-indigo-100">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   <span>{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Footer note */}
           <p className="text-xs text-indigo-200/60">
             © {new Date().getFullYear()} AppName. All rights reserved.
           </p>
         </div>
 
-        {/* Panel Kanan: Form Registrasi */}
+        {/* Panel Kanan: Form */}
         <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center bg-slate-900/60">
           <div className="max-w-md mx-auto w-full">
             
-            {/* Header Form */}
             <div className="text-center sm:text-left mb-6">
               <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 Buat akun baru ✨
@@ -178,15 +144,13 @@ export default function Register() {
               </p>
             </div>
 
-            {/* Alert Error */}
             {error && (
-              <div className="mb-5 flex items-start gap-3 rounded-2xl bg-red-500/10 border border-red-500/20 p-3.5 text-sm text-red-400 animate-fadeIn">
-                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+              <div className="mb-5 flex items-start gap-3 rounded-2xl bg-red-500/10 border border-red-500/20 p-3.5 text-sm text-red-400">
+                <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span className="leading-snug">{error}</span>
               </div>
             )}
 
-            {/* Form */}
             <form onSubmit={register} className="space-y-4">
               {/* Field: Nama */}
               <div>
@@ -194,7 +158,7 @@ export default function Register() {
                   Nama Lengkap
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                   <input
                     name="name"
                     type="text"
@@ -212,7 +176,7 @@ export default function Register() {
                   Alamat Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   <input
                     name="email"
                     type="email"
@@ -230,7 +194,7 @@ export default function Register() {
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                   <input
                     name="password"
                     type={showPassword ? "text" : "password"}
@@ -245,14 +209,13 @@ export default function Register() {
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" /></svg>
                     ) : (
-                      <Eye className="w-4 h-4" />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                     )}
                   </button>
                 </div>
 
-                {/* Meter Kekuatan Password */}
                 {form.password && (
                   <div className="mt-2 space-y-1">
                     <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -275,40 +238,21 @@ export default function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-2 group relative flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
+                className="w-full mt-2 group relative flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
                     <span>Memproses...</span>
                   </>
                 ) : (
                   <>
                     <span>Daftar Akun</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                   </>
                 )}
               </button>
 
-              {/* Link ke Login */}
               <p className="mt-6 text-center text-sm text-slate-400">
                 Sudah punya akun?{" "}
                 <button
