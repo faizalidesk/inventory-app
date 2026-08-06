@@ -1,22 +1,21 @@
 import {
-BrowserRouter,
-Routes,
-Route
+  BrowserRouter,
+  Routes,
+  Route
 }
 from "react-router-dom";
 
+import LandingPage
+from "./pages/LandingPage";
 
-import Login 
+import Login
 from "./pages/auth/Index";
 
-
-import Register 
+import Register
 from "./pages/auth/Register";
 
-
-import Dashboard 
+import Dashboard
 from "./pages/dashboard/Dashboard";
-
 
 import ProtectedRoute
 from "./routes/ProtectedRoute";
@@ -34,6 +33,10 @@ return (
 <Routes>
 
 
+<Route
+path="/"
+element={<LandingPage/>}
+/>
 
 
 <Route
