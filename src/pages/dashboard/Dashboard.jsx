@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,15 +18,22 @@ import {
     FaArrowDown,
     FaArrowUp,
     FaChevronDown,
+    FaSun,
+    FaMoon,
 } from "react-icons/fa";
 
 export default function Dashboard() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [theme, setTheme] = useState("light");
 
     async function handleLogout() {
         await logout();
         navigate("/");
+    }
+
+    function toggleTheme() {
+        setTheme((t) => (t === "light" ? "dark" : "light"));
     }
 
     const navItems = [
@@ -90,15 +98,15 @@ export default function Dashboard() {
     const dashOffset = circumference * (1 - stockHealth / 100);
 
     return (
-        <div className="dash-shell">
+        <div className="dash-shell" data-theme={theme}>
             <style>{`
                 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap");
 
                 * { box-sizing: border-box; }
 
                 .dash-shell {
-                    --navy: #f0f0f0;
-                    --navy-dark: #f0f0f0;
+                    --navy: #1E3A5F;
+                    --navy-dark: #16283F;
                     --amber: #f59e0b;
                     --green: #16a34a;
                     --red: #dc2626;
@@ -107,7 +115,10 @@ export default function Dashboard() {
                     --card: #ffffff;
                     --text: #0f172a;
                     --muted: #64748b;
-                    --border: #0d57c7;
+                    --border: #e4e7ee;
+                    --table-divider: #f1f5f9;
+                    --progress-track: #eef1f6;
+                    --shadow: 0 8px 16px rgba(30, 58, 95, 0.1);
 
                     display: flex;
                     height: 100vh;
@@ -116,6 +127,45 @@ export default function Dashboard() {
                     font-family: "Inter", system-ui, sans-serif;
                     color: var(--text);
                     overflow: hidden;
+                    transition: background-color .4s ease, color .4s ease;
+                }
+
+                .dash-shell[data-theme="dark"] {
+                    --navy: #2A4A73;
+                    --navy-dark: #16283F;
+                    --amber: #F2A63A;
+                    --green: #35C99A;
+                    --red: #E2685E;
+                    --blue: #5B8DEF;
+                    --bg: #0B1220;
+                    --card: #121B2D;
+                    --text: #ECEFF4;
+                    --muted: #8B93A5;
+                    --border: #212C42;
+                    --table-divider: #1F2A3D;
+                    --progress-track: #1A2438;
+                    --shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+                }
+
+                .dash-shell,
+                .dash-sidebar,
+                .dash-logo,
+                .dash-nav-item,
+                .dash-avatar-btn,
+                .dash-search,
+                .dash-icon-btn,
+                .dash-card,
+                .dash-cat-card,
+                .dash-switch,
+                .dash-progress,
+                .dash-progress > div,
+                .dash-member .circle,
+                .dash-table tbody td,
+                .dash-hero,
+                .dash-bar,
+                input {
+                    transition: background-color .4s ease, background-image .4s ease,
+                        border-color .4s ease, color .4s ease, box-shadow .4s ease;
                 }
 
                 .dash-shell h1,
@@ -130,7 +180,7 @@ export default function Dashboard() {
                 .dash-sidebar {
                     width: 84px;
                     flex-shrink: 0;
-                    background: #ffffff;
+                    background: var(--card);
                     border-right: 1px solid var(--border);
                     display: flex;
                     flex-direction: column;
@@ -172,7 +222,6 @@ export default function Dashboard() {
                     font-size: 9.5px;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: background 0.15s ease, color 0.15s ease;
                 }
 
                 .dash-nav-item svg {
@@ -180,14 +229,14 @@ export default function Dashboard() {
                 }
 
                 .dash-nav-item:hover {
-                    background: #f1f5f9;
+                    background: var(--progress-track);
                     color: var(--navy);
                 }
 
                 .dash-nav-item.active {
                     background: var(--navy);
                     color: #ffffff;
-                    box-shadow: 0 8px 16px rgba(30, 58, 95, 0.25);
+                    box-shadow: var(--shadow);
                 }
 
                 .dash-sidebar-bottom {
@@ -229,7 +278,7 @@ export default function Dashboard() {
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    background: #ffffff;
+                    background: var(--card);
                     border: 1px solid var(--border);
                     border-radius: 10px;
                     padding: 9px 14px;
@@ -246,13 +295,14 @@ export default function Dashboard() {
                     font-size: 13px;
                     width: 100%;
                     font-family: inherit;
+                    color: var(--text);
                 }
 
                 .dash-icon-btn {
                     width: 38px;
                     height: 38px;
                     border-radius: 10px;
-                    background: #ffffff;
+                    background: var(--card);
                     border: 1px solid var(--border);
                     display: flex;
                     align-items: center;
@@ -264,7 +314,7 @@ export default function Dashboard() {
                 }
 
                 .dash-icon-btn:hover {
-                    background: #f1f5f9;
+                    background: var(--progress-track);
                 }
 
                 .dash-icon-btn.logout {
@@ -279,7 +329,7 @@ export default function Dashboard() {
                     height: 7px;
                     border-radius: 50%;
                     background: var(--red);
-                    border: 2px solid #ffffff;
+                    border: 2px solid var(--card);
                 }
 
                 /* Layout grid: hero + rooms on top row, gauge/chart + members below */
@@ -423,7 +473,6 @@ export default function Dashboard() {
                     background: var(--border);
                     position: relative;
                     cursor: pointer;
-                    transition: background 0.15s ease;
                 }
 
                 .dash-switch.on {
@@ -602,12 +651,12 @@ export default function Dashboard() {
                 }
 
                 .dash-summary-top .label { color: var(--muted); }
-                .dash-summary-top .value { font-family: "JetBrains Mono", monospace; font-weight: 600; }
+                .dash-summary-top .value { font-family: "JetBrains Mono", monospace; font-weight: 600; color: var(--text); }
 
                 .dash-progress {
                     height: 6px;
                     border-radius: 6px;
-                    background: #eef1f6;
+                    background: var(--progress-track);
                     overflow: hidden;
                 }
 
@@ -647,7 +696,7 @@ export default function Dashboard() {
                 }
 
                 .dash-member .circle.add {
-                    background: #ffffff;
+                    background: var(--card);
                     border: 1.5px dashed var(--border);
                     color: var(--muted);
                 }
@@ -678,7 +727,8 @@ export default function Dashboard() {
 
                 .dash-table tbody td {
                     padding: 12px 0;
-                    border-bottom: 1px solid #f1f5f9;
+                    border-bottom: 1px solid var(--table-divider);
+                    color: var(--text);
                 }
 
                 .dash-mono {
@@ -697,8 +747,8 @@ export default function Dashboard() {
                 }
 
                 .dash-pill svg { font-size: 10px; }
-                .dash-pill-in { background: #fffbeb; color: var(--amber); }
-                .dash-pill-out { background: #fef2f2; color: var(--red); }
+                .dash-pill-in { background: color-mix(in srgb, var(--amber) 16%, transparent); color: var(--amber); }
+                .dash-pill-out { background: color-mix(in srgb, var(--red) 14%, transparent); color: var(--red); }
 
                 @media (max-width: 1180px) {
                     .dash-grid { grid-template-columns: 1fr; }
@@ -743,6 +793,13 @@ export default function Dashboard() {
                         <FaSearch />
                         <input placeholder="Cari produk, supplier..." />
                     </div>
+                    <button
+                        className="dash-icon-btn"
+                        onClick={toggleTheme}
+                        title={theme === "light" ? "Mode gelap" : "Mode terang"}
+                    >
+                        {theme === "light" ? <FaMoon /> : <FaSun />}
+                    </button>
                     <button className="dash-icon-btn">
                         <FaBell />
                         <span className="dot" />
@@ -816,7 +873,7 @@ export default function Dashboard() {
                                         cy="75"
                                         r="54"
                                         fill="none"
-                                        stroke="#eef1f6"
+                                        stroke="var(--progress-track)"
                                         strokeWidth="12"
                                     />
                                     <circle
@@ -824,7 +881,7 @@ export default function Dashboard() {
                                         cy="75"
                                         r="54"
                                         fill="none"
-                                        stroke="#f59e0b"
+                                        stroke="var(--amber)"
                                         strokeWidth="12"
                                         strokeLinecap="round"
                                         strokeDasharray={circumference}
