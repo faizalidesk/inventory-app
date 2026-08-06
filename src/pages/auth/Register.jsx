@@ -18,8 +18,9 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  // Indikator kekuatan password
   const getPasswordStrength = (pass) => {
-    if (!pass) return { score: 0, label: "", color: "bg-slate-800" };
+    if (!pass) return { score: 0, label: "", color: "#334155" };
     let score = 0;
     if (pass.length >= 6) score += 1;
     if (pass.length >= 10) score += 1;
@@ -28,15 +29,15 @@ export default function Register() {
 
     switch (score) {
       case 1:
-        return { score: 25, label: "Lemah", color: "bg-red-500", text: "text-red-400" };
+        return { score: 25, label: "Lemah", color: "#ef4444", text: "#f87171" };
       case 2:
-        return { score: 50, label: "Sedang", color: "bg-amber-500", text: "text-amber-400" };
+        return { score: 50, label: "Sedang", color: "#f59e0b", text: "#fbbf24" };
       case 3:
-        return { score: 75, label: "Baik", color: "bg-blue-500", text: "text-blue-400" };
+        return { score: 75, label: "Baik", color: "#3b82f6", text: "#60a5fa" };
       case 4:
-        return { score: 100, label: "Sangat Kuat", color: "bg-emerald-500", text: "text-emerald-400" };
+        return { score: 100, label: "Sangat Kuat", color: "#10b981", text: "#34d399" };
       default:
-        return { score: 0, label: "", color: "bg-slate-800", text: "text-slate-400" };
+        return { score: 0, label: "", color: "#334155", text: "#94a3b8" };
     }
   };
 
@@ -77,195 +78,491 @@ export default function Register() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-slate-950 overflow-hidden font-sans p-4 sm:p-6 lg:p-8">
-      {/* Visual Background Lighting & Ambient Blobs */}
-      <div className="absolute top-0 -left-20 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
-      <div className="absolute bottom-0 -right-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-pulse delay-700" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="register-wrapper">
+      {/* ==================== INTERNAL CSS STYLES ==================== */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-      {/* Card Utama */}
-      <div className="relative w-full max-w-4xl bg-slate-900/80 backdrop-blur-2xl border border-slate-800/80 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+        .register-wrapper {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #020617;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          padding: 20px;
+          box-sizing: border-box;
+          overflow: hidden;
+          color: #f8fafc;
+        }
+
+        /* Background Glowing Blobs */
+        .blob-1 {
+          position: absolute;
+          top: -100px;
+          left: -100px;
+          width: 350px;
+          height: 350px;
+          background: rgba(79, 70, 229, 0.25);
+          border-radius: 50%;
+          filter: blur(80px);
+          pointer-events: none;
+        }
+
+        .blob-2 {
+          position: absolute;
+          bottom: -100px;
+          right: -100px;
+          width: 350px;
+          height: 350px;
+          background: rgba(147, 51, 234, 0.25);
+          border-radius: 50%;
+          filter: blur(80px);
+          pointer-events: none;
+        }
+
+        /* Container Card Utama */
+        .register-card {
+          position: relative;
+          width: 100%;
+          max-width: 900px;
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(51, 65, 85, 0.7);
+          border-radius: 24px;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+          .register-card {
+            flex-direction: row;
+          }
+        }
+
+        /* Hero Panel Kiri (Desktop) */
+        .hero-panel {
+          display: none;
+          flex: 5;
+          background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #7e22ce 100%);
+          padding: 40px;
+          color: #ffffff;
+          flex-direction: column;
+          justify-content: space-between;
+          position: relative;
+        }
+
+        @media (min-width: 768px) {
+          .hero-panel {
+            display: flex;
+          }
+        }
+
+        .hero-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .hero-logo {
+          width: 40px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          font-size: 20px;
+        }
+
+        .hero-title {
+          font-size: 26px;
+          font-weight: 800;
+          line-height: 1.3;
+          margin-top: 16px;
+        }
+
+        .hero-desc {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.8);
+          margin-top: 8px;
+          line-height: 1.5;
+        }
+
+        .feature-list {
+          margin-top: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Section Form Kanan */
+        .form-section {
+          flex: 7;
+          padding: 40px 32px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .form-header h1 {
+          font-size: 24px;
+          font-weight: 700;
+          margin: 0;
+          color: #ffffff;
+        }
+
+        .form-header p {
+          font-size: 14px;
+          color: #94a3b8;
+          margin: 6px 0 24px 0;
+        }
+
+        /* Alert Error */
+        .alert-error {
+          background: rgba(239, 68, 68, 0.12);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          color: #f87171;
+          padding: 12px 16px;
+          border-radius: 12px;
+          font-size: 13.5px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+
+        /* Group Input Form */
+        .form-group {
+          margin-bottom: 18px;
+        }
+
+        .form-label {
+          display: block;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: #cbd5e1;
+          margin-bottom: 6px;
+        }
+
+        .input-container {
+          position: relative;
+        }
+
+        .input-icon {
+          position: absolute;
+          left: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 18px;
+          height: 18px;
+          color: #64748b;
+        }
+
+        .form-input {
+          width: 100%;
+          padding: 12px 14px 12px 42px;
+          background: #1e293b;
+          border: 1px solid #334155;
+          border-radius: 12px;
+          color: #ffffff;
+          font-size: 14px;
+          box-sizing: border-box;
+          transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+          outline: none;
+          border-color: #6366f1;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .toggle-btn {
+          position: absolute;
+          right: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #64748b;
+          cursor: pointer;
+          padding: 0;
+          display: flex;
+          align-items: center;
+        }
+
+        .toggle-btn:hover {
+          color: #cbd5e1;
+        }
+
+        /* Password Strength Bar */
+        .strength-bar-bg {
+          height: 6px;
+          width: 100%;
+          background: #1e293b;
+          border-radius: 99px;
+          overflow: hidden;
+          margin-top: 8px;
+        }
+
+        .strength-bar-fill {
+          height: 100%;
+          transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-text {
+          display: flex;
+          justify-content: space-between;
+          font-size: 11px;
+          margin-top: 4px;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+          width: 100%;
+          padding: 14px;
+          background: linear-gradient(135deg, #4f46e5 0%, #7e22ce 100%);
+          border: none;
+          border-radius: 12px;
+          color: #ffffff;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+          transition: all 0.2s ease;
+          margin-top: 10px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+          opacity: 0.95;
+          transform: translateY(-1px);
+        }
+
+        .btn-submit:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        /* Link Login */
+        .login-redirect {
+          text-align: center;
+          font-size: 14px;
+          color: #94a3b8;
+          margin-top: 20px;
+        }
+
+        .login-btn-link {
+          background: none;
+          border: none;
+          color: #818cf8;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: underline;
+          padding: 0;
+          font-size: 14px;
+        }
+
+        .login-btn-link:hover {
+          color: #a5b4fc;
+        }
+
+        .spinner {
+          width: 16px;
+          height: 16px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: #ffffff;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+
+      {/* Ambient Blobs */}
+      <div className="blob-1" />
+      <div className="blob-2" />
+
+      {/* Main Card */}
+      <div className="register-card">
         
-        {/* Panel Kiri: Hero & Branding */}
-        <div className="hidden lg:flex lg:col-span-5 relative flex-col justify-between p-8 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white overflow-hidden">
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-xl pointer-events-none" />
-          
-          {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-xl text-white shadow-inner border border-white/20">
-              <svg className="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+        {/* Panel Kiri (Desktop Only) */}
+        <div className="hero-panel">
+          <div>
+            <div className="hero-header">
+              <div className="hero-logo">✨</div>
+              <span style={{ fontWeight: 700, fontSize: 18 }}>AppLogo</span>
             </div>
-            <span className="font-bold text-xl tracking-tight">AppLogo</span>
-          </div>
 
-          {/* Value Proposition */}
-          <div className="my-auto py-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-indigo-100 border border-white/15 mb-4">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-              <span>Registrasi Cepat & Aman</span>
-            </div>
-            <h2 className="text-3xl font-extrabold tracking-tight leading-tight">
-              Mulai perjalanan Anda bersama kami.
-            </h2>
-            <p className="mt-3 text-indigo-100/80 text-sm leading-relaxed">
-              Bergabunglah dengan pengguna lainnya dan nikmati akses penuh ke berbagai fitur unggulan aplikasi kami.
-            </p>
+            <div style={{ marginTop: 32 }}>
+              <span style={{ fontSize: 11, background: 'rgba(255,255,255,0.15)', padding: '4px 10px', borderRadius: 99, fontWeight: 600 }}>
+                🔒 Registrasi Cepat & Aman
+              </span>
+              <h2 className="hero-title">Mulai perjalanan Anda bersama kami.</h2>
+              <p className="hero-desc">
+                Bergabunglah dengan ribuan pengguna lainnya dan nikmati akses penuh fitur aplikasi kami.
+              </p>
 
-            {/* Feature Checklist */}
-            <div className="mt-8 space-y-3">
-              {[
-                "Akses langsung ke seluruh fitur",
-                "Keamanan data terenkripsi",
-                "Dukungan penuh 24/7",
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2.5 text-xs text-indigo-100">
-                  <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <span>{item}</span>
+              <div className="feature-list">
+                <div className="feature-item">
+                  <span style={{ color: '#34d399' }}>✓</span> Akses penuh ke fitur dasar
                 </div>
-              ))}
+                <div className="feature-item">
+                  <span style={{ color: '#34d399' }}>✓</span> Keamanan data terenkripsi
+                </div>
+                <div className="feature-item">
+                  <span style={{ color: '#34d399' }}>✓</span> Layanan dukungan 24/7
+                </div>
+              </div>
             </div>
           </div>
 
-          <p className="text-xs text-indigo-200/60">
+          <span style={{ fontSize: 12, opacity: 0.6 }}>
             © {new Date().getFullYear()} AppName. All rights reserved.
-          </p>
+          </span>
         </div>
 
-        {/* Panel Kanan: Form */}
-        <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center bg-slate-900/60">
-          <div className="max-w-md mx-auto w-full">
-            
-            <div className="text-center sm:text-left mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                Buat akun baru ✨
-              </h1>
-              <p className="text-sm text-slate-400 mt-1.5">
-                Daftar hanya dalam beberapa detik untuk memulai
-              </p>
+        {/* Panel Form Kanan */}
+        <div className="form-section">
+          <div className="form-header">
+            <h1>Buat akun baru ✨</h1>
+            <p>Daftar hanya dalam beberapa detik untuk mulai</p>
+          </div>
+
+          {error && (
+            <div className="alert-error">
+              <span>⚠️</span>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={register}>
+            {/* Input: Nama */}
+            <div className="form-group">
+              <label className="form-label">Nama Lengkap</label>
+              <div className="input-container">
+                <svg className="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                <input
+                  name="name"
+                  type="text"
+                  value={form.name}
+                  onChange={change}
+                  placeholder="Contoh: Alex Ferguson"
+                  className="form-input"
+                />
+              </div>
             </div>
 
-            {error && (
-              <div className="mb-5 flex items-start gap-3 rounded-2xl bg-red-500/10 border border-red-500/20 p-3.5 text-sm text-red-400">
-                <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span className="leading-snug">{error}</span>
+            {/* Input: Email */}
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <div className="input-container">
+                <svg className="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={change}
+                  placeholder="nama@email.com"
+                  className="form-input"
+                />
               </div>
-            )}
+            </div>
 
-            <form onSubmit={register} className="space-y-4">
-              {/* Field: Nama */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Nama Lengkap
-                </label>
-                <div className="relative">
-                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                  <input
-                    name="name"
-                    type="text"
-                    value={form.name}
-                    onChange={change}
-                    placeholder="Contoh: Alex Ferguson"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition-all shadow-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Field: Email */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Alamat Email
-                </label>
-                <div className="relative">
-                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  <input
-                    name="email"
-                    type="email"
-                    value={form.email}
-                    onChange={change}
-                    placeholder="nama@email.com"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition-all shadow-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Field: Password */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Password
-                </label>
-                <div className="relative">
-                  <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                  <input
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={form.password}
-                    onChange={change}
-                    placeholder="Minimal 6 karakter"
-                    className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 transition-all shadow-sm"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition"
-                  >
-                    {showPassword ? (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" /></svg>
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                    )}
-                  </button>
-                </div>
-
-                {form.password && (
-                  <div className="mt-2 space-y-1">
-                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full transition-all duration-300 ${passStrength.color}`}
-                        style={{ width: `${passStrength.score}%` }}
-                      />
-                    </div>
-                    <div className="flex justify-between items-center text-[11px]">
-                      <span className="text-slate-400">Kekuatan password:</span>
-                      <span className={`font-semibold ${passStrength.text}`}>
-                        {passStrength.label}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full mt-2 group relative flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
-                    <span>Memproses...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Daftar Akun</span>
-                    <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                  </>
-                )}
-              </button>
-
-              <p className="mt-6 text-center text-sm text-slate-400">
-                Sudah punya akun?{" "}
+            {/* Input: Password */}
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <div className="input-container">
+                <svg className="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={change}
+                  placeholder="Minimal 6 karakter"
+                  className="form-input"
+                  style={{ paddingRight: 40 }}
+                />
                 <button
                   type="button"
-                  onClick={() => navigate("/login")}
-                  className="font-semibold text-indigo-400 hover:text-indigo-300 hover:underline transition"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="toggle-btn"
                 >
-                  Masuk di sini
+                  {showPassword ? "🙈" : "👁️"}
                 </button>
-              </p>
-            </form>
+              </div>
 
-          </div>
+              {/* Password Strength */}
+              {form.password && (
+                <div>
+                  <div className="strength-bar-bg">
+                    <div
+                      className="strength-bar-fill"
+                      style={{
+                        width: `${passStrength.score}%`,
+                        backgroundColor: passStrength.color,
+                      }}
+                    />
+                  </div>
+                  <div className="strength-text">
+                    <span style={{ color: '#94a3b8' }}>Kekuatan password:</span>
+                    <span style={{ color: passStrength.text, fontWeight: 600 }}>
+                      {passStrength.label}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button type="submit" disabled={loading} className="btn-submit">
+              {loading ? (
+                <>
+                  <div className="spinner" />
+                  <span>Memproses...</span>
+                </>
+              ) : (
+                <span>Register Sekarang →</span>
+              )}
+            </button>
+
+            {/* Link Login */}
+            <p className="login-redirect">
+              Sudah punya akun?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="login-btn-link"
+              >
+                Masuk
+              </button>
+            </p>
+          </form>
+
         </div>
 
       </div>
