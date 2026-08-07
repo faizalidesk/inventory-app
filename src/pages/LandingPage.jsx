@@ -1,288 +1,278 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  FaArrowRight,
+  FaCode,
+  FaFigma,
+  FaGithub,
+  FaInstagram,
+  FaLinkedinIn,
+  FaMoon,
+  FaPalette,
+  FaSun,
+} from "react-icons/fa";
 import "./LandingPage.css";
 
-const TICKER_ENTRIES = [
-  { type: "in", sku: "SKU-2291", wh: "Gudang Cikarang", qty: "+240 unit" },
-  { type: "out", sku: "SKU-1187", wh: "Gudang Bandung", qty: "-18 unit" },
-  { type: "in", sku: "SKU-4402", wh: "Gudang Surabaya", qty: "+96 unit" },
-  { type: "out", sku: "SKU-0765", wh: "Gudang Cikarang", qty: "-312 unit" },
-  { type: "in", sku: "SKU-3319", wh: "Gudang Medan", qty: "+54 unit" },
-  { type: "out", sku: "SKU-8842", wh: "Gudang Bandung", qty: "-7 unit" },
-];
-
-const STOCK_ROWS = [
-  { sku: "SKU-2291", nama: "Kabel HDMI 2m", gudang: "Cikarang", stok: "1.240", status: "in" },
-  { sku: "SKU-1187", nama: "Baterai AA (12pcs)", gudang: "Bandung", stok: "86", status: "out" },
-  { sku: "SKU-4402", nama: "Rak Sepatu Lipat", gudang: "Surabaya", stok: "312", status: "in" },
-  { sku: "SKU-0765", nama: "Casing Ponsel Bening", gudang: "Cikarang", stok: "2.008", status: "out" },
-];
-
-const FEATURES = [
+const PROJECTS = [
   {
-    tag: "SCN-01",
-    title: "Scan Barcode",
-    desc: "Pindai barang masuk dan keluar lewat kamera ponsel atau alat scan — otomatis tercatat ke sistem, tanpa input manual.",
-    icon: (
-      <path d="M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3M8 9v6M12 9v6M16 9v6" />
-    ),
+    number: "01",
+    type: "Web application",
+    title: "Orbit Analytics",
+    description: "A focused analytics experience that turns complex product data into clear, useful decisions.",
+    tags: ["React", "Data visualization", "Product design"],
+    className: "project-orbit",
   },
   {
-    tag: "WH-02",
-    title: "Multi-Gudang",
-    desc: "Pantau stok di setiap lokasi secara terpisah maupun gabungan, ter-update real-time dari mana saja Anda bekerja.",
-    icon: <path d="M3 10l9-6 9 6M5 9v10h14V9M9 19v-6h6v6" />,
+    number: "02",
+    type: "Digital experience",
+    title: "Frame Archive",
+    description: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
+    tags: ["Creative development", "UI/UX", "Motion"],
+    className: "project-frame",
   },
   {
-    tag: "LOG-03",
-    title: "Laporan & Audit",
-    desc: "Setiap pergerakan stok tercatat lengkap dengan waktu, pengguna, dan alasannya — siap diaudit kapan saja dibutuhkan.",
-    icon: (
-      <>
-        <path d="M9 3h6l2 4H7l2-4ZM5 7h14l-1 14H6L5 7Z" />
-        <path d="M10 11v6M14 11v6" />
-      </>
-    ),
+    number: "03",
+    type: "Design experiment",
+    title: "Mono Systems",
+    description: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
+    tags: ["Design system", "Prototype", "Art direction"],
+    className: "project-mono",
   },
 ];
 
-const STEPS = [
+const SERVICES = [
   {
-    num: "01 / Masuk",
-    title: "Pindai barang masuk",
-    desc: "Saat barang tiba, scan barcode-nya. Sistem otomatis mencatat jumlah, waktu, dan siapa yang menerima.",
-    width: "100%",
+    icon: <FaCode />,
+    title: "Web development",
+    description: "Fast, accessible, and responsive interfaces built with modern frontend technology.",
   },
   {
-    num: "02 / Tersimpan",
-    title: "Terpantau real-time",
-    desc: "Stok langsung ter-update dan tersinkron ke semua gudang — tim lain langsung melihat angka yang sama.",
-    width: "70%",
+    icon: <FaPalette />,
+    title: "UI/UX design",
+    description: "Digital products shaped around clarity, usability, and a distinctive visual character.",
   },
   {
-    num: "03 / Keluar",
-    title: "Keluar & teraudit",
-    desc: "Setiap barang yang keluar tercatat lengkap dengan alasannya. Laporan siap diunduh kapan pun dibutuhkan.",
-    width: "40%",
+    icon: <FaFigma />,
+    title: "Creative experiments",
+    description: "Small ideas, prototypes, and visual studies that explore what the web can become.",
   },
 ];
 
-function LogoMark({ size = 28 }) {
+const STACK = ["React", "JavaScript", "Vite", "Figma", "Supabase", "CSS", "Git", "Vercel"];
+
+function BrandMark() {
   return (
-    <svg className="logo-mark" viewBox="0 0 28 28" fill="none" style={{ width: size, height: size }}>
-      <rect x="2" y="8" width="10" height="10" rx="2" fill="var(--accent)" />
-      <rect x="16" y="8" width="10" height="10" rx="2" fill="var(--border)" />
-      <rect x="9" y="18" width="10" height="8" rx="2" fill="var(--ink)" />
-    </svg>
+    <span className="brand-mark" aria-hidden="true">
+      <span />
+      <span />
+    </span>
   );
 }
 
+function ThemeIcon({ theme }) {
+  return theme === "dark" ? <FaSun /> : <FaMoon />;
+}
+
 export default function LandingPage() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("desktopalie-theme");
+    if (savedTheme) return savedTheme;
+    return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  });
 
   useEffect(() => {
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-      setTheme("light");
-    }
-  }, []);
+    localStorage.setItem("desktopalie-theme", theme);
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
 
-  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+  const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
 
   return (
-    <div className="landing" data-theme={theme}>
-      <header className="nav">
-        <div className="wrap nav-inner">
-          <div className="logo">
-            <LogoMark />
-            Inventory
-          </div>
-          <nav className="nav-links">
-            <a href="#fitur">Fitur</a>
-            <a href="#produk">Produk</a>
-            <a href="#cara-kerja">Cara Kerja</a>
-            <a href="#mulai">Harga</a>
+    <div className="desktopalie" data-theme={theme}>
+      <div className="page-noise" aria-hidden="true" />
+
+      <header className="site-header">
+        <div className="site-wrap header-inner">
+          <a href="#top" className="brand" aria-label="Desktopalie home">
+            <BrandMark />
+            <span>desktopalie</span>
+          </a>
+
+          <nav className="site-nav" aria-label="Primary navigation">
+            <a href="#work">Work</a>
+            <a href="#about">About</a>
+            <a href="#capabilities">Capabilities</a>
           </nav>
-          <div className="nav-right">
-            <button className="theme-toggle" onClick={toggleTheme} aria-label="Ganti tema">
-              {theme === "dark" ? (
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round">
-                  <circle cx="12" cy="12" r="4.2" />
-                  <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round">
-                  <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" />
-                </svg>
-              )}
+
+          <div className="header-actions">
+            <button className="theme-button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
+              <ThemeIcon theme={theme} />
             </button>
-            <Link to="/login" className="btn btn-primary btn-sm">
-              Login
-            </Link>
+            <a className="availability" href="#contact">
+              <span /> Available for projects
+            </a>
           </div>
         </div>
       </header>
 
-      {/* 1. HERO */}
-      <section className="hero">
-        <div className="wrap hero-inner">
-          <div className="eyebrow">Manajemen Gudang Real-Time</div>
-          <h1>
-            Setiap barang punya jejak.
-            <br />
-            Setiap gudang, <span>satu dashboard.</span>
-          </h1>
-          <p className="lead">
-            Catat barang masuk, pantau stok di seluruh gudang, dan audit setiap pergerakan barang —
-            tanpa spreadsheet, tanpa tebak-tebakan.
-          </p>
-          <div className="hero-actions">
-            <Link to="/login" className="btn btn-primary">
-              Coba Gratis 14 Hari
-            </Link>
-            <a href="#cara-kerja" className="btn btn-ghost">
-              Lihat Cara Kerja
-            </a>
-          </div>
-        </div>
-        <div className="ticker-wrap">
-          <div className="ticker-track">
-            {[...TICKER_ENTRIES, ...TICKER_ENTRIES].map((e, i) => (
-              <div className="ticker-item" key={i}>
-                <span className={`stamp ${e.type}`}>{e.type === "in" ? "MASUK" : "KELUAR"}</span>
-                <b>{e.sku}</b>
-                <span>{e.wh}</span>
-                <span>{e.qty}</span>
+      <main id="top">
+        <section className="hero-section">
+          <div className="hero-glow hero-glow-one" aria-hidden="true" />
+          <div className="hero-glow hero-glow-two" aria-hidden="true" />
+          <div className="site-wrap hero-grid">
+            <div className="hero-copy">
+              <div className="status-pill"><span /> Independent designer & developer</div>
+              <h1>Ideas, crafted into <span>digital experiences.</span></h1>
+              <p>
+                Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.
+              </p>
+              <div className="hero-actions">
+                <a className="primary-button" href="#work">Explore my work <FaArrowRight /></a>
+                <a className="text-button" href="#about">More about me</a>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 2. FITUR */}
-      <section className="section" id="fitur">
-        <div className="wrap">
-          <div className="section-head center">
-            <div className="eyebrow" style={{ justifyContent: "center" }}>
-              Fitur
+              <div className="hero-note">
+                <span className="note-line" />
+                Currently exploring creative interfaces, thoughtful motion, and useful AI.
+              </div>
             </div>
-            <h2>Semua yang gudang Anda butuhkan, dalam satu layar</h2>
-            <p>Dari pindai barang sampai laporan audit — tiga alat inti yang dipakai tim gudang setiap hari.</p>
-          </div>
-          <div className="feature-grid">
-            {FEATURES.map((f) => (
-              <div className="feature-card" key={f.tag}>
-                <span className="feature-tag">{f.tag}</span>
-                <div className="feature-icon">
-                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round">
-                    {f.icon}
-                  </svg>
+
+            <div className="hero-visual" aria-label="Desktopalie creative workspace preview">
+              <div className="visual-orbit orbit-one" />
+              <div className="visual-orbit orbit-two" />
+              <div className="browser-window">
+                <div className="browser-topbar">
+                  <div className="browser-dots"><i /><i /><i /></div>
+                  <div className="browser-url">desktopalie.my.id/lab</div>
+                  <span className="browser-plus">+</span>
                 </div>
-                <h3>{f.title}</h3>
-                <p>{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. PRODUK */}
-      <section className="section section-alt" id="produk">
-        <div className="wrap">
-          <div className="section-head">
-            <div className="eyebrow">Produk</div>
-            <h2>Dashboard yang menunjukkan kondisi gudang Anda sebenarnya</h2>
-            <p>Bukan angka perkiraan akhir bulan — stok yang tampil adalah stok yang benar-benar ada di rak, saat ini juga.</p>
-          </div>
-          <div className="preview-shell">
-            <div className="preview-bar">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="path">inventory.app/dashboard/stok</span>
-            </div>
-            <table className="stock">
-              <thead>
-                <tr>
-                  <th>SKU</th>
-                  <th>Nama Barang</th>
-                  <th>Gudang</th>
-                  <th>Stok</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {STOCK_ROWS.map((r) => (
-                  <tr key={r.sku}>
-                    <td className="sku">{r.sku}</td>
-                    <td>{r.nama}</td>
-                    <td className="gudang">{r.gudang}</td>
-                    <td className="qty">{r.stok}</td>
-                    <td>
-                      <span className={`badge ${r.status}`}>
-                        {r.status === "in" ? "↓ Masuk" : "↑ Keluar"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. CARA KERJA */}
-      <section className="section" id="cara-kerja">
-        <div className="wrap">
-          <div className="section-head">
-            <div className="eyebrow">Cara Kerja</div>
-            <h2>Dari barang masuk sampai laporan, dalam tiga langkah</h2>
-            <p>Alur kerja yang sama seperti di gudang — hanya lebih cepat, dan tercatat otomatis.</p>
-          </div>
-          <div className="steps">
-            {STEPS.map((s) => (
-              <div className="step" key={s.num}>
-                <span className="step-num">{s.num}</span>
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-                <div className="step-visual">
-                  <span style={{ width: s.width }}></span>
+                <div className="browser-content">
+                  <div className="mini-sidebar">
+                    <BrandMark />
+                    <span className="side-active" />
+                    <span />
+                    <span />
+                  </div>
+                  <div className="mini-canvas">
+                    <div className="canvas-label">EXPERIMENT / 024</div>
+                    <div className="canvas-title">Make it useful.<br />Make it <em>memorable.</em></div>
+                    <div className="canvas-art">
+                      <div className="art-disc" />
+                      <div className="art-card art-card-one">UI</div>
+                      <div className="art-card art-card-two">01</div>
+                    </div>
+                    <div className="canvas-footer"><span>Creative development</span><span>2026 ↗</span></div>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. CTA + FOOTER */}
-      <section className="section" id="mulai" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="cta-box">
-            <h2>Gudang Anda, akhirnya bisa diandalkan</h2>
-            <p>Coba gratis 14 hari, tanpa kartu kredit. Aktif dalam hitungan menit.</p>
-            <div className="cta-actions">
-              <Link to="/login" className="btn btn-primary">
-                Coba Gratis 14 Hari
-              </Link>
-              <a href="#" className="btn btn-ghost">
-                Jadwalkan Demo
-              </a>
+              <div className="floating-code">
+                <span>const</span> ideas = <b>await</b> create();
+              </div>
+              <div className="floating-tag">DESIGN × CODE</div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <footer>
-        <div className="wrap footer-inner">
-          <div className="logo" style={{ fontSize: 15 }}>
-            <LogoMark size={20} />
-            Inventory
+        <div className="stack-strip" aria-label="Tools and technologies">
+          <div className="stack-track">
+            {[...STACK, ...STACK].map((item, index) => <span key={`${item}-${index}`}>{item}<i>✦</i></span>)}
           </div>
-          <div className="footer-links">
-            <a href="#fitur">Fitur</a>
-            <a href="#produk">Produk</a>
-            <a href="#cara-kerja">Cara Kerja</a>
+        </div>
+
+        <section className="section" id="work">
+          <div className="site-wrap">
+            <div className="section-heading split-heading">
+              <div><span className="section-index">01 / SELECTED WORK</span><h2>Things I have<br />been building.</h2></div>
+              <p>A selection of digital products and visual experiments where strategy, design, and code meet.</p>
+            </div>
+
+            <div className="project-list">
+              {PROJECTS.map((project) => (
+                <article className="project-card" key={project.title}>
+                  <div className={`project-visual ${project.className}`}>
+                    <span className="project-number">{project.number}</span>
+                    <div className="project-window">
+                      <div className="project-window-bar"><span /><span /><span /></div>
+                      <div className="project-window-body">
+                        <i /><i /><i /><i />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="project-info">
+                    <span className="project-type">{project.type}</span>
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                    <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+                  </div>
+                  <button className="project-arrow" aria-label={`View ${project.title}`}><FaArrowRight /></button>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="footer-copy">© 2026 INVENTORY.APP</div>
+        </section>
+
+        <section className="section about-section" id="about">
+          <div className="site-wrap about-grid">
+            <div className="about-visual">
+              <div className="portrait-card">
+                <div className="portrait-grid" />
+                <div className="portrait-monogram">FA</div>
+                <span className="portrait-caption">Based in Indonesia<br />Working worldwide</span>
+              </div>
+              <span className="about-sticker">Curious by default ✦</span>
+            </div>
+            <div className="about-copy">
+              <span className="section-index">02 / ABOUT</span>
+              <h2>I build to learn,<br />and share what I discover.</h2>
+              <p className="large-copy">I am Faiz, a designer and developer interested in the space between technology and human experience.</p>
+              <p>Desktopalie is where I collect the projects, lessons, and experiments that shape my creative journey. I care about simple ideas, precise details, and digital work with a clear reason to exist.</p>
+              <div className="about-stats">
+                <div><strong>4+</strong><span>Years exploring the web</span></div>
+                <div><strong>20+</strong><span>Projects & experiments</span></div>
+                <div><strong>∞</strong><span>Ideas still in progress</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" id="capabilities">
+          <div className="site-wrap">
+            <div className="section-heading centered-heading">
+              <span className="section-index">03 / CAPABILITIES</span>
+              <h2>From first sketch<br />to final interaction.</h2>
+            </div>
+            <div className="services-grid">
+              {SERVICES.map((service, index) => (
+                <article className="service-card" key={service.title}>
+                  <span className="service-number">0{index + 1}</span>
+                  <div className="service-icon">{service.icon}</div>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="contact-section" id="contact">
+          <div className="site-wrap contact-inner">
+            <span className="section-index">HAVE AN IDEA?</span>
+            <h2>Let&apos;s make something<br /><em>worth remembering.</em></h2>
+            <a className="contact-link" href="mailto:hello@desktopalie.my.id">hello@desktopalie.my.id <FaArrowRight /></a>
+            <div className="contact-login">Already part of the studio? <Link to="/login">Sign in</Link></div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="site-wrap footer-inner">
+          <a href="#top" className="brand"><BrandMark /><span>desktopalie</span></a>
+          <p>Projects, experiments, and digital creations.</p>
+          <div className="social-links">
+            <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
+          </div>
+          <span className="copyright">© {new Date().getFullYear()} DESKTOPALIE</span>
         </div>
       </footer>
     </div>
