@@ -1,23 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaCode, FaFigma, FaFlask, FaMoon, FaPalette, FaSun } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaCode, FaFigma, FaFlask, FaMoon, FaPalette, FaSun, FaSpinner } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import "./PublicPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
-
-const PROJECTS = {
-  "orbit-analytics": { number: "01", title: "Orbit Analytics", type: "Web application", summary: "A focused analytics experience that turns complex product data into clear, useful decisions.", challenge: "Product teams had access to plenty of data, but the information was fragmented and difficult to act on.", outcome: "A calm, modular dashboard that prioritizes useful signals and makes complex trends easy to understand.", tags: ["React", "Data visualization", "Product design"], tone: "violet" },
-  "frame-archive": { number: "02", title: "Frame Archive", type: "Digital experience", summary: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.", challenge: "Traditional archive interfaces felt clinical and disconnected from the emotion of the work they contained.", outcome: "An immersive browsing system where typography, motion, and imagery create a more human path through the collection.", tags: ["Creative development", "UI/UX", "Motion"], tone: "teal" },
-  "mono-systems": { number: "03", title: "Mono Systems", type: "Design experiment", summary: "An exploration of modular interfaces, expressive typography, and reusable design systems.", challenge: "Explore how a strict visual system can still leave room for personality, rhythm, and expressive composition.", outcome: "A flexible collection of interface primitives that can shift from quiet utility to bold editorial layouts.", tags: ["Design system", "Prototype", "Art direction"], tone: "rose" },
-};
-
-const EXPERIMENTS = [
-  { id: "024", title: "Kinetic type studies", category: "Motion", description: "Small typographic interactions exploring rhythm, scale, and intent." },
-  { id: "023", title: "Ambient interface", category: "UI", description: "A responsive surface that changes character with time and context." },
-  { id: "022", title: "Generative grids", category: "Code", description: "Rule-based compositions created with CSS and lightweight JavaScript." },
-  { id: "021", title: "Spatial navigation", category: "Prototype", description: "An alternative way to move through connected digital content." },
-];
-
+import { fetchCollection, fetchItemBySlug } from "../services/workspaceService";
 
 function PublicShell({ children }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
@@ -49,15 +36,113 @@ export function PublicInfoPage({ type }) {
 }
 
 export function ProjectsPage() {
-  return <PublicShell><section className="public-hero"><span>01 / SELECTED WORK</span><h1>Projects shaped by curiosity and craft.</h1><p>A selection of product work, digital experiences, and visual systems.</p></section><section className="public-card-grid">{Object.entries(PROJECTS).map(([slug, project]) => <Link className={`public-project-card ${project.tone}`} to={`/projects/${slug}`} key={slug}><div className="public-project-art"><span>{project.number}</span><div>{project.title.slice(0,2).toUpperCase()}</div></div><span>{project.type}</span><h2>{project.title}</h2><p>{project.summary}</p><b>View case study <FaArrowRight /></b></Link>)}</section></PublicShell>;
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProjects() {
+      setLoading(true);
+      const data = await fetchCollection("projects");
+      setProjects(data);
+      setLoading(false);
+    }
+    loadProjects();
+  }, []);
+
+  return (
+    <PublicShell>
+      <section className="public-hero"><span>01 / SELECTED WORK</span><h1>Projects shaped by curiosity and craft.</h1><p>A selection of product work, digital experiences, and visual systems.</p></section>
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Fetching projects from Supabase...</p></div>
+      ) : (
+        <section className="public-card-grid">
+          {projects.map((project, index) => (
+            <Link className={`public-project-card ${project.tone || "violet"}`} to={`/projects/${project.slug}`} key={project.id || project.slug}>
+              <div className="public-project-art"><span>{String(index + 1).padStart(2, "0")}</span><div>{project.title.slice(0, 2).toUpperCase()}</div></div>
+              <span>{project.type}</span>
+              <h2>{project.title}</h2>
+              <p>{project.description}</p>
+              <b>View case study <FaArrowRight /></b>
+            </Link>
+          ))}
+        </section>
+      )}
+    </PublicShell>
+  );
 }
 
 export function ProjectDetailPage() {
-  const { slug } = useParams(); const project = PROJECTS[slug];
-  if (!project) return <PublicShell><section className="public-hero"><span>PROJECT NOT FOUND</span><h1>This project does not exist.</h1><Link className="public-back" to="/projects"><FaArrowLeft /> Back to projects</Link></section></PublicShell>;
-  return <PublicShell><section className={`case-hero ${project.tone}`}><Link to="/projects" className="public-back"><FaArrowLeft /> All projects</Link><span>{project.number} / {project.type}</span><h1>{project.title}</h1><p>{project.summary}</p><div>{project.tags.map((tag) => <i key={tag}>{tag}</i>)}</div></section><section className="case-content"><article><span>THE CHALLENGE</span><h2>Finding the useful signal inside the noise.</h2><p>{project.challenge}</p></article><div className={`case-visual ${project.tone}`}><div>{project.title.slice(0,2).toUpperCase()}</div></div><article><span>THE OUTCOME</span><h2>A clearer and more memorable experience.</h2><p>{project.outcome}</p></article><Link className="next-project" to="/projects">Explore more projects <FaArrowRight /></Link></section></PublicShell>;
+  const { slug } = useParams();
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProject() {
+      setLoading(true);
+      const data = await fetchItemBySlug("projects", slug);
+      setProject(data);
+      setLoading(false);
+    }
+    loadProject();
+  }, [slug]);
+
+  if (loading) {
+    return <PublicShell><section className="public-hero" style={{ textAlign: "center" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Loading case study from Supabase...</p></section></PublicShell>;
+  }
+
+  if (!project) {
+    return <PublicShell><section className="public-hero"><span>PROJECT NOT FOUND</span><h1>This project does not exist.</h1><Link className="public-back" to="/projects"><FaArrowLeft /> Back to projects</Link></section></PublicShell>;
+  }
+
+  return (
+    <PublicShell>
+      <section className={`case-hero ${project.tone || "violet"}`}>
+        <Link to="/projects" className="public-back"><FaArrowLeft /> All projects</Link>
+        <span>{project.type} / {project.status}</span>
+        <h1>{project.title}</h1>
+        <p>{project.description}</p>
+        <div><i>Progress: {project.progress}%</i></div>
+      </section>
+      <section className="case-content">
+        <article><span>THE CHALLENGE</span><h2>Finding the useful signal inside the noise.</h2><p>{project.description}</p></article>
+        <div className={`case-visual ${project.tone || "violet"}`}><div>{project.title.slice(0, 2).toUpperCase()}</div></div>
+        <article><span>THE OUTCOME</span><h2>A clearer and more memorable experience.</h2><p>Designed and built with modern web technologies, backed by Supabase PostgreSQL.</p></article>
+        <Link className="next-project" to="/projects">Explore more projects <FaArrowRight /></Link>
+      </section>
+    </PublicShell>
+  );
 }
 
 export function ExperimentsPage() {
-  return <PublicShell><section className="public-hero"><span>02 / THE LAB</span><h1>Small experiments. Useful discoveries.</h1><p>An open notebook of interface studies, prototypes, and creative code.</p></section><section className="experiment-list">{EXPERIMENTS.map((item) => <article id={`experiment-${item.id}`} key={item.id}><span>{item.id}</span><div><i>{item.category}</i><h2>{item.title}</h2><p>{item.description}</p></div><FaFlask /></article>)}</section></PublicShell>;
+  const [experiments, setExperiments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadExperiments() {
+      setLoading(true);
+      const data = await fetchCollection("experiments");
+      setExperiments(data);
+      setLoading(false);
+    }
+    loadExperiments();
+  }, []);
+
+  return (
+    <PublicShell>
+      <section className="public-hero"><span>02 / THE LAB</span><h1>Small experiments. Useful discoveries.</h1><p>An open notebook of interface studies, prototypes, and creative code.</p></section>
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Loading experiments from Supabase...</p></div>
+      ) : (
+        <section className="experiment-list">
+          {experiments.map((item, index) => (
+            <article id={`experiment-${item.slug}`} key={item.id || item.slug}>
+              <span>{String(index + 1).padStart(3, "0")}</span>
+              <div><i>{item.type}</i><h2>{item.title}</h2><p>{item.description}</p></div>
+              <FaFlask />
+            </article>
+          ))}
+        </section>
+      )}
+    </PublicShell>
+  );
 }

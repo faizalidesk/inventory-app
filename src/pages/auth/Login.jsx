@@ -21,6 +21,33 @@ export default function Login() {
     return `${requestedLocation.pathname}${requestedLocation.search || ""}`;
   }
 
+  async function syncProfile(user) {
+    if (!user) return;
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (!profile) {
+        // Automatically create a profile row if it doesn't exist yet
+        const name = user.user_metadata?.full_name || user.email?.split("@")[0] || "Creator";
+        const username = user.user_metadata?.username || user.email?.split("@")[0];
+        await supabase.from("profiles").upsert({
+          id: user.id,
+          full_name: name,
+          username: username,
+          bio: "Independent designer & developer",
+          location: "Indonesia",
+          created_at: new Date().toISOString(),
+        });
+      }
+    } catch (err) {
+      console.warn("Error syncing user profile on login:", err);
+    }
+  }
+
   async function login(event) {
     event.preventDefault();
     setError("");
@@ -38,13 +65,16 @@ export default function Login() {
       password,
     });
 
-    setLoading(false);
-
     if (authError || !data.session) {
+      setLoading(false);
       setError("Unable to sign in. Check your credentials and try again.");
       return;
     }
 
+    // Sync profile in 'profiles' table
+    await syncProfile(data.user);
+
+    setLoading(false);
     navigate(getSafeDestination(), { replace: true });
   }
 

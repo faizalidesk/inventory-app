@@ -25,6 +25,7 @@ import DesktopalieMark from "../component/DesktopalieMark";
 import AntigravityLogo from "../component/AntigravityLogo";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
+import { fetchCollection } from "../services/workspaceService";
 
 const PROJECTS = [
   {
@@ -97,11 +98,30 @@ export default function LandingPage() {
     if (savedTheme) return savedTheme;
     return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
   });
+  const [projectsList, setProjectsList] = useState(PROJECTS);
 
   useEffect(() => {
     localStorage.setItem("desktopalie-theme", theme);
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
+
+  useEffect(() => {
+    async function loadProjects() {
+      const data = await fetchCollection("projects");
+      if (data && data.length > 0) {
+        setProjectsList(data.map((p, i) => ({
+          number: String(i + 1).padStart(2, "0"),
+          slug: p.slug,
+          type: p.type,
+          title: p.title,
+          description: p.description,
+          tags: ["React", "Supabase", "UI/UX"],
+          className: p.tone === "teal" ? "project-frame" : p.tone === "rose" ? "project-mono" : "project-orbit"
+        })));
+      }
+    }
+    loadProjects();
+  }, []);
 
   const toggleTheme = (event) => toggleThemeWithTransition(event, theme, setTheme);
 
@@ -213,9 +233,9 @@ export default function LandingPage() {
             </div>
 
             <div className="project-list">
-              {PROJECTS.map((project) => (
-                <article className="project-card" key={project.title}>
-                  <div className={`project-visual ${project.className}`}>
+              {projectsList.map((project) => (
+                <article className="project-card" key={project.slug || project.title}>
+                  <div className={`project-visual ${project.className || "project-orbit"}`}>
                     <span className="project-number">{project.number}</span>
                     <div className="project-window">
                       <div className="project-window-bar"><span /><span /><span /></div>
@@ -228,7 +248,7 @@ export default function LandingPage() {
                     <span className="project-type">{project.type}</span>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
-                    <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+                    <div className="project-tags">{(project.tags || []).map((tag) => <span key={tag}>{tag}</span>)}</div>
                   </div>
                   <Link className="project-arrow" to={`/projects/${project.slug}`} aria-label={`View ${project.title}`}><FaArrowRight /></Link>
                 </article>

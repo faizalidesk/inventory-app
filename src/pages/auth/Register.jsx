@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
+import { FaAt, FaEnvelope, FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
 import { supabase } from "../../lib/supabase";
 import AuthLayout from "./AuthLayout";
 
@@ -25,7 +25,7 @@ function getPasswordStrength(password) {
 }
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", username: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -51,18 +51,42 @@ export default function Register() {
     }
 
     setLoading(true);
-    const { error: authError } = await supabase.auth.signUp({
+    const cleanUsername = (form.username.trim() || form.email.split("@")[0]).toLowerCase().replace(/[^a-z0-9_]/g, "");
+
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email: form.email.trim(),
       password: form.password,
-      options: { data: { full_name: form.name.trim() } },
+      options: {
+        data: {
+          full_name: form.name.trim(),
+          username: cleanUsername,
+        },
+      },
     });
-    setLoading(false);
 
     if (authError) {
+      setLoading(false);
       setError(authError.message);
       return;
     }
 
+    // Save/Sync profile record in 'profiles' table
+    if (authData?.user) {
+      try {
+        await supabase.from("profiles").upsert({
+          id: authData.user.id,
+          full_name: form.name.trim(),
+          username: cleanUsername,
+          bio: "Independent designer & developer",
+          location: "Indonesia",
+          created_at: new Date().toISOString(),
+        });
+      } catch (profileErr) {
+        console.warn("Could not insert profile record:", profileErr);
+      }
+    }
+
+    setLoading(false);
     navigate("/check-email");
   }
 
@@ -70,7 +94,7 @@ export default function Register() {
     <AuthLayout
       eyebrow="JOIN THE STUDIO"
       title="Create your account."
-      description="Get access to private experiments, notes, and project stories."
+      description="Get access to your personal Desktopalie creative workspace."
     >
       {error && <div className="auth-alert" role="alert"><span>!</span><span>{error}</span></div>}
 
@@ -87,6 +111,24 @@ export default function Register() {
               autoComplete="name"
               placeholder="Your name"
               value={form.name}
+              onChange={updateField}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="auth-field">
+          <label htmlFor="register-username">Username</label>
+          <div className="auth-input-shell">
+            <FaAt />
+            <input
+              id="register-username"
+              className="auth-input"
+              name="username"
+              type="text"
+              autoComplete="username"
+              placeholder="username (e.g. faizali)"
+              value={form.username}
               onChange={updateField}
               required
             />

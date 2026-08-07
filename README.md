@@ -1,278 +1,74 @@
-# Inventory Management System
+# ✦ Desktopalie — Personal Creative Workspace
 
-A modern **Inventory Management System** built with **React + Vite** and powered by **Supabase** as backend services.
-
-Project ini dirancang untuk membantu perusahaan mengelola stok barang, gudang, transaksi masuk/keluar, serta monitoring inventory secara real-time.
-
-Menggunakan konsep **Single Codebase with Multi-Tenant Flavoring**, satu aplikasi dapat digunakan oleh beberapa tenant/perusahaan dengan konfigurasi tampilan, fitur, dan data yang berbeda.
+> **Desktopalie** is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.
 
 ---
 
-## 🚀 Features
+## 🚀 Overview
 
-### Authentication
-- User registration
-- User login
-- Secure authentication menggunakan Supabase Auth
-- Protected route untuk halaman dashboard
-- Role-based access (Admin / User)
-
----
-
-### Inventory Management
-
-- Management data barang
-- Monitoring jumlah stok
-- Tracking barang masuk
-- Tracking barang keluar
-- Status inventory secara real-time
-- Multi warehouse support
+Desktopalie adalah platform personal workspace yang dirancang untuk mengelola dan mempublikasikan karya kreatif:
+- **Projects**: Portofolio karya, case studies, dan aplikasi web pilihan.
+- **Experiments**: Prototipe kecil, eksperimen UI/UX, animasi, dan studi teknologi.
+- **Notes**: Catatan ide, prinsip desain, dan jurnal pembelajaran.
+- **Bookmarks**: Koleksi referensi web dan dokumentasi berharga.
 
 ---
 
-### Dashboard
+## 🏗️ Tech Stack
 
-- Overview inventory
-- Total barang
-- Stok tersedia
-- Aktivitas transaksi terbaru
-- Monitoring kondisi gudang
+### Frontend
+- **React 19** + **Vite 8**
+- **React Router DOM v7** (Multi-page & Protected Routing)
+- **Vanilla CSS** dengan Design System Kustom (Dark/Light Mode dengan **View Transitions API**)
+- **React Icons** & **Custom SVG Components**
+
+### Backend & Database
+- **Supabase**
+  - **Auth**: Autentikasi dengan PKCE Flow & Auto Idle Timeout (30 min)
+  - **PostgreSQL Database**: Menyimpan data real-time `projects`, `experiments`, `notes`, dan `bookmarks`
+  - **Row Level Security (RLS)**: Keamanan data per pengguna
+
+### Tooling & Deployment
+- **OxLint** (Fast JavaScript/React Linting)
+- **Vercel** (Deployment Hosting)
+- **Cloudflare DNS**
 
 ---
 
-### Multi-Tenant Flavoring
-
-Project menggunakan konsep:
+## 📂 Project Structure
 
 ```
-Single Codebase
-        |
-        |
-        ├── Tenant A
-        |     ├── Custom Logo
-        |     ├── Custom Theme
-        |     ├── Custom Feature
-        |
-        ├── Tenant B
-        |     ├── Custom Branding
-        |     ├── Custom Configuration
-        |
-        └── Tenant C
-```
-
-Keuntungan:
-
-- Satu source code untuk banyak perusahaan
-- Custom branding setiap tenant
-- Data terisolasi berdasarkan tenant
-- Mudah dikembangkan menjadi SaaS Application
-
----
-
-# 🏗️ Tech Stack
-
-## Frontend
-
-- React.js
-- Vite
-- React Router DOM
-- CSS / Custom Styling
-
-
-## Backend Service
-
-- Supabase
-  - Authentication
-  - PostgreSQL Database
-  - Row Level Security (RLS)
-
-
-## Deployment
-
-- GitHub
-- Vercel
-- Cloudflare DNS
-
-
-Architecture:
-
-```
-User
- |
-Domain
- |
-Cloudflare DNS
- |
-Vercel Hosting
- |
-React + Vite
- |
-Supabase
- |
-PostgreSQL Database
-```
-
----
-
-# 📂 Project Structure
-
-```
-src
-│
-├── assets
-│
-├── components
-│
-├── config
-│   ├── tenants.js
-│   └── themes.js
-│
-├── pages
+src/
+├── assets/
+├── component/        # DesktopalieMark, UserAvatar, AntigravityLogo
+├── context/          # AuthContext (Supabase Auth & Session Timeout)
+├── lib/              # Supabase Client Configuration
+├── pages/
+│   ├── auth/         # Login, Register, Recovery
+│   ├── dashboard/    # Workspace Dashboard, Overview, Settings, Profile
 │   ├── LandingPage.jsx
-│   │
-│   ├── auth
-│   │   ├── Login.jsx
-│   │   └── Register.jsx
-│   │
-│   └── dashboard
-│       └── Dashboard.jsx
-│
-├── routes
-│   └── ProtectedRoute.jsx
-│
-├── supabase.js
-├── App.jsx
-└── main.jsx
+│   ├── PublicPage.jsx
+│   └── NotFound.jsx
+├── routes/           # ProtectedRoute & PublicOnlyRoute
+├── services/         # Workspace Real-Time Supabase Service
+└── utils/            # Circular Theme View Transition Utility
 ```
 
 ---
 
-# 🔐 Authentication Flow
+## 🔐 Database Schema (Supabase)
 
-```
-User
- |
-Register/Login
- |
-Supabase Auth
- |
-Create Session
- |
-Protected Route
- |
-Dashboard
-```
+Aplikasi terhubung langsung ke database PostgreSQL Supabase dengan tabel-tabel utama:
 
-User yang belum login tidak dapat mengakses halaman dashboard.
+- `public.projects` — Data karya dan case studies
+- `public.experiments` — Data prototipe dan eksperimen
+- `public.notes` — Data catatan dan ide
+- `public.bookmarks` — Data referensi favorit
+
+Script skema awal dan RLS tersedia di [`supabase_schema.sql`](file:///d:/faizali/desktop-alie/supabase_schema.sql).
 
 ---
 
-# 🗄️ Database Design
-
-Database menggunakan PostgreSQL dari Supabase.
-
-
-## Users
-
-Menyimpan data pengguna.
-
-```
-users
- |
- ├── id
- ├── email
- ├── password
- └── role
-```
-
-
-## Tenants
-
-Menyimpan informasi perusahaan.
-
-```
-tenants
- |
- ├── id
- ├── name
- ├── domain
- ├── logo
- └── theme
-```
-
-
-## Profiles
-
-Relasi user dengan tenant.
-
-```
-profiles
- |
- ├── id
- ├── user_id
- ├── tenant_id
- └── role
-```
-
-
-## Products
-
-Data barang.
-
-```
-products
- |
- ├── id
- ├── tenant_id
- ├── name
- ├── sku
- ├── stock
- └── warehouse_id
-```
-
-
-## Transactions
-
-Riwayat barang masuk dan keluar.
-
-```
-transactions
- |
- ├── id
- ├── tenant_id
- ├── product_id
- ├── type
- ├── quantity
- └── created_at
-```
-
----
-
-# 🔒 Security
-
-Menggunakan Supabase Row Level Security (RLS).
-
-Setiap tenant hanya dapat melihat data miliknya sendiri.
-
-Contoh:
-
-```
-Tenant A
-
-Products:
-- Laptop
-- Mouse
-
-
-Tenant B
-
-Products:
-- Printer
-- Scanner
-```
-
-
-
-# 👨‍💻 Author
+## 👨‍💻 Author
 
 Developed by **Faiz Ali**

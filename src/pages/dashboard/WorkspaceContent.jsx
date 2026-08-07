@@ -1,68 +1,315 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaCheckCircle, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaPlus, FaSave, FaStickyNote, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaCheckCircle, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaPlus, FaSave, FaSpinner, FaStickyNote, FaTrash } from "react-icons/fa";
 import UserAvatar from "../../component/UserAvatar";
 import "./WorkspaceContent.css";
 import { toggleThemeWithTransition } from "../../utils/theme";
-
-const SEED_PROJECTS = [
-  { slug: "orbit-analytics", title: "Orbit Analytics", type: "Web application", description: "A focused analytics experience that turns complex product data into clear decisions.", progress: 84, status: "In progress", tone: "violet" },
-  { slug: "frame-archive", title: "Frame Archive", type: "Digital experience", description: "A cinematic digital archive designed around discovery and thoughtful interaction.", progress: 100, status: "Published", tone: "teal" },
-  { slug: "mono-systems", title: "Mono Systems", type: "Design experiment", description: "An exploration of modular interfaces and expressive typography.", progress: 62, status: "Exploring", tone: "rose" },
-];
-const SEED_EXPERIMENTS = [
-  { slug: "kinetic-type", title: "Kinetic type studies", type: "Motion", description: "Typographic interactions exploring rhythm, scale, and intent.", status: "Published", tone: "violet" },
-  { slug: "ambient-interface", title: "Ambient interface", type: "UI", description: "A responsive surface that changes character with context.", status: "Draft", tone: "teal" },
-];
-const SEED_NOTES = [
-  { slug: "designing-with-constraints", title: "Designing with constraints", type: "Design note", description: "Constraints can create a clearer and more recognizable visual language.", status: "May 20" },
-  { slug: "motion-with-purpose", title: "Motion with purpose", type: "Interaction note", description: "A checklist for using animation to explain change rather than decorate it.", status: "May 18" },
-];
-
-function getStoredItems(type) {
-  try { return JSON.parse(localStorage.getItem(`desktopalie-${type}`) || "[]"); } catch { return []; }
-}
+import { createItem, deleteItem, fetchCollection, fetchItemBySlug } from "../../services/workspaceService";
+import { supabase } from "../../lib/supabase";
 
 export function OverviewContent({ firstName }) {
+  const [stats, setStats] = useState({ projects: 0, experiments: 0, notes: 0 });
   const weekly = [42, 68, 47, 82, 58, 92, 72];
+
+  useEffect(() => {
+    async function loadStats() {
+      const [projects, experiments, notes] = await Promise.all([
+        fetchCollection("projects"),
+        fetchCollection("experiments"),
+        fetchCollection("notes"),
+      ]);
+      setStats({
+        projects: projects.length,
+        experiments: experiments.length,
+        notes: notes.length,
+      });
+    }
+    loadStats();
+  }, []);
+
   return <>
     <section className="welcome-row"><div><span className="dashboard-kicker">PERSONAL WORKSPACE / 2026</span><h1>Good to see you, {firstName}.</h1><p>Here is what is happening across your creative workspace today.</p></div><Link className="new-project-button" to="/dashboard/projects/new"><FaPlus /> New project</Link></section>
-    <section className="stats-grid"><article className="stat-card"><div className="stat-head"><span>Active projects</span><i className="violet"><FaFolderOpen /></i></div><strong>06</strong><p><b>+2</b> this month</p></article><article className="stat-card"><div className="stat-head"><span>Experiments</span><i className="teal"><FaFlask /></i></div><strong>24</strong><p><b>4</b> waiting to publish</p></article><article className="stat-card"><div className="stat-head"><span>Creative notes</span><i className="amber"><FaStickyNote /></i></div><strong>128</strong><p><b>+12</b> this week</p></article><article className="stat-card stat-progress-card"><div className="stat-head"><span>Weekly momentum</span><i className="rose"><FaClock /></i></div><div className="mini-bars">{weekly.map((height,index)=><span key={index} style={{height:`${height}%`}} />)}</div><p><b>18h 42m</b> focused time</p></article></section>
-    <div className="dashboard-grid"><section className="dashboard-panel projects-panel"><div className="panel-heading"><div><span className="dashboard-kicker">RECENT WORK</span><h2>Projects in motion</h2></div><Link to="/dashboard/projects">View all <FaArrowRight /></Link></div><div className="dashboard-projects">{SEED_PROJECTS.map(project=><article className="dashboard-project" key={project.slug}><div className={`project-thumb ${project.tone}`}><span>{project.title.slice(0,2).toUpperCase()}</span><div className="thumb-window"><i/><i/><i/></div></div><div className="dashboard-project-copy"><span className="project-meta">{project.type}</span><h3>{project.title}</h3><div className="progress-row"><div><span style={{width:`${project.progress}%`}}/></div><b>{project.progress}%</b></div><div className="project-bottom"><span className={`status-chip ${project.tone}`}>{project.status}</span><span>Updated recently</span></div></div><Link className="project-open" to={`/dashboard/projects/${project.slug}`}><FaExternalLinkAlt /></Link></article>)}</div></section>
-    <aside className="right-column"><section className="dashboard-panel quick-panel"><div className="panel-heading"><div><span className="dashboard-kicker">QUICK START</span><h2>Create something</h2></div></div><div className="quick-actions"><Link to="/dashboard/projects/new"><i className="violet"><FaFolderOpen /></i><span><strong>New project</strong><small>Start a new case study</small></span><FaArrowRight /></Link><Link to="/dashboard/experiments/new"><i className="teal"><FaFlask /></i><span><strong>New experiment</strong><small>Capture a prototype</small></span><FaArrowRight /></Link><Link to="/dashboard/notes/new"><i className="amber"><FaStickyNote /></i><span><strong>Quick note</strong><small>Save an idea for later</small></span><FaArrowRight /></Link></div></section><section className="dashboard-panel activity-panel"><div className="panel-heading"><div><span className="dashboard-kicker">ACTIVITY</span><h2>Latest updates</h2></div></div><div className="activity-list">{[[FaCheckCircle,"Updated Frame Archive","Today, 10:32","violet"],[FaFlask,"Published a new experiment","Yesterday, 16:08","teal"],[FaStickyNote,"Added four creative notes","May 18, 09:24","amber"]].map(([Icon,title,time,tone])=><div className="activity-item" key={title}><i className={tone}><Icon/></i><div><strong>{title}</strong><span>{time}</span></div></div>)}</div></section></aside></div>
+    <section className="stats-grid">
+      <article className="stat-card"><div className="stat-head"><span>Active projects</span><i className="violet"><FaFolderOpen /></i></div><strong>{String(stats.projects).padStart(2, "0")}</strong><p><b>Real-time</b> from Supabase</p></article>
+      <article className="stat-card"><div className="stat-head"><span>Experiments</span><i className="teal"><FaFlask /></i></div><strong>{String(stats.experiments).padStart(2, "0")}</strong><p><b>Real-time</b> from Supabase</p></article>
+      <article className="stat-card"><div className="stat-head"><span>Creative notes</span><i className="amber"><FaStickyNote /></i></div><strong>{String(stats.notes).padStart(2, "0")}</strong><p><b>Real-time</b> from Supabase</p></article>
+      <article className="stat-card stat-progress-card"><div className="stat-head"><span>Weekly momentum</span><i className="rose"><FaClock /></i></div><div className="mini-bars">{weekly.map((height,index)=><span key={index} style={{height:`${height}%`}} />)}</div><p><b>18h 42m</b> focused time</p></article>
+    </section>
   </>;
 }
 
-function CollectionPage({ type, title, description, seed, icon: Icon }) {
-  const items = useMemo(() => [...seed, ...getStoredItems(type)], [type, seed]);
-  return <section className="workspace-page"><div className="workspace-heading"><div><span className="dashboard-kicker">WORKSPACE / {type.toUpperCase()}</span><h1>{title}</h1><p>{description}</p></div><Link className="new-project-button" to={`/dashboard/${type}/new`}><FaPlus /> New {type === "notes" ? "note" : type.slice(0,-1)}</Link></div><div className="workspace-list">{items.map((item,index)=><Link to={`/dashboard/${type}/${item.slug}`} className="workspace-card" key={`${item.slug}-${index}`}><i className={item.tone || "violet"}><Icon/></i><div><span>{item.type}</span><h2>{item.title}</h2><p>{item.description}</p></div><b>{item.status || "Draft"}</b><FaArrowRight /></Link>)}</div></section>;
+function CollectionPage({ type, title, description, icon: Icon }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadData() {
+      setLoading(true);
+      const data = await fetchCollection(type);
+      if (isMounted) {
+        setItems(data);
+        setLoading(false);
+      }
+    }
+    loadData();
+    return () => { isMounted = false; };
+  }, [type]);
+
+  return <section className="workspace-page">
+    <div className="workspace-heading">
+      <div><span className="dashboard-kicker">WORKSPACE / {type.toUpperCase()}</span><h1>{title}</h1><p>{description}</p></div>
+      <Link className="new-project-button" to={`/dashboard/${type}/new`}><FaPlus /> New {type === "notes" ? "note" : type.slice(0,-1)}</Link>
+    </div>
+    {loading ? (
+      <div className="empty-state" style={{ padding: "40px 0" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Loading {type} from Supabase...</p></div>
+    ) : (
+      <div className="workspace-list">
+        {items.length === 0 ? (
+          <div className="empty-state"><h2>No {type} found.</h2><p>Click below to add your first item.</p><Link className="new-project-button" to={`/dashboard/${type}/new`}><FaPlus /> Create {type.slice(0,-1)}</Link></div>
+        ) : (
+          items.map((item) => (
+            <Link to={`/dashboard/${type}/${item.slug}`} className="workspace-card" key={item.id || item.slug}>
+              <i className={item.tone || "violet"}><Icon/></i>
+              <div><span>{item.type}</span><h2>{item.title}</h2><p>{item.description}</p></div>
+              <b>{item.status || "Draft"}</b>
+              <FaArrowRight />
+            </Link>
+          ))
+        )}
+      </div>
+    )}
+  </section>;
 }
 
-function NewItemPage({ type }) {
-  const singular = type === "notes" ? "note" : type.slice(0,-1); const navigate = useNavigate();
-  const [form,setForm]=useState({title:"",type:"",description:""});
-  function submit(event){event.preventDefault();const slug=form.title.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");const current=getStoredItems(type);localStorage.setItem(`desktopalie-${type}`,JSON.stringify([...current,{...form,slug,status:"Draft",tone:"violet",createdAt:new Date().toISOString()}]));navigate(`/dashboard/${type}`)}
-  return <section className="workspace-page narrow-workspace"><Link className="workspace-back" to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link><div className="workspace-heading"><div><span className="dashboard-kicker">NEW {singular.toUpperCase()}</span><h1>Create a {singular}.</h1><p>Capture the idea now. You can refine the details whenever you are ready.</p></div></div><form className="workspace-form" onSubmit={submit}><label>Title<input value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder={`Name your ${singular}`} required/></label><label>Category<input value={form.type} onChange={e=>setForm({...form,type:e.target.value})} placeholder="Design, Development, Research..." required/></label><label>Description<textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="What is this about?" rows="7" required/></label><button className="new-project-button" type="submit"><FaSave/> Save {singular}</button></form></section>;
+function NewItemPage({ type, user }) {
+  const singular = type === "notes" ? "note" : type.slice(0,-1);
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ title: "", type: "", description: "" });
+  const [saving, setSaving] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  async function submit(event) {
+    event.preventDefault();
+    setSaving(true);
+    setErrorMsg(null);
+    try {
+      const slug = form.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + Date.now().toString().slice(-4);
+      await createItem(type, {
+        title: form.title,
+        type: form.type,
+        description: form.description,
+        slug,
+        status: "Draft",
+        tone: "violet"
+      }, user?.id);
+
+      navigate(`/dashboard/${type}`);
+    } catch (err) {
+      setErrorMsg(err.message || "Failed to save to Supabase.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return <section className="workspace-page narrow-workspace">
+    <Link className="workspace-back" to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link>
+    <div className="workspace-heading"><div><span className="dashboard-kicker">NEW {singular.toUpperCase()}</span><h1>Create a {singular}.</h1><p>Saved directly to your Supabase database.</p></div></div>
+    {errorMsg && <div style={{ color: "var(--rose)", marginBottom: "16px", fontSize: "14px" }}>{errorMsg}</div>}
+    <form className="workspace-form" onSubmit={submit}>
+      <label>Title<input value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder={`Name your ${singular}`} required/></label>
+      <label>Category<input value={form.type} onChange={e=>setForm({...form,type:e.target.value})} placeholder="Design, Development, Research..." required/></label>
+      <label>Description<textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="What is this about?" rows="7" required/></label>
+      <button className="new-project-button" type="submit" disabled={saving}>
+        {saving ? <><FaSpinner className="fa-spin" /> Saving...</> : <><FaSave/> Save {singular}</>}
+      </button>
+    </form>
+  </section>;
 }
 
 function DetailPage({ type, slug }) {
-  const seeds=type==="projects"?SEED_PROJECTS:type==="experiments"?SEED_EXPERIMENTS:SEED_NOTES; const item=[...seeds,...getStoredItems(type)].find(value=>value.slug===slug);
-  if(!item)return <section className="workspace-page"><div className="empty-state"><h1>Item not found.</h1><p>It may have been removed or the address is incorrect.</p><Link to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link></div></section>;
-  const hasPublicPage = type === "projects" && SEED_PROJECTS.some((project) => project.slug === slug);
-  return <section className="workspace-page narrow-workspace"><Link className="workspace-back" to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link><div className={`workspace-detail-art ${item.tone||"violet"}`}><span>{item.title.slice(0,2).toUpperCase()}</span></div><span className="dashboard-kicker">{item.type} / {item.status}</span><h1>{item.title}</h1><p className="workspace-detail-copy">{item.description}</p><div className="detail-actions">{hasPublicPage&&<Link to={`/projects/${slug}`}><FaExternalLinkAlt/> Open public view</Link>}<Link to={`/dashboard/${type}/new`}><FaPlus/> Create another</Link></div></section>;
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function loadItem() {
+      setLoading(true);
+      const data = await fetchItemBySlug(type, slug);
+      setItem(data);
+      setLoading(false);
+    }
+    loadItem();
+  }, [type, slug]);
+
+  async function handleDelete() {
+    if (!window.confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) return;
+    setDeleting(true);
+    try {
+      await deleteItem(type, "id", item.id);
+      navigate(`/dashboard/${type}`);
+    } catch (err) {
+      alert("Failed to delete item: " + err.message);
+      setDeleting(false);
+    }
+  }
+
+  if (loading) return <section className="workspace-page"><div className="empty-state"><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Loading details from Supabase...</p></div></section>;
+
+  if (!item) return <section className="workspace-page"><div className="empty-state"><h1>Item not found.</h1><p>It may have been removed or the address is incorrect.</p><Link to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link></div></section>;
+
+  const hasPublicPage = type === "projects";
+  return <section className="workspace-page narrow-workspace">
+    <Link className="workspace-back" to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link>
+    <div className={`workspace-detail-art ${item.tone||"violet"}`}><span>{item.title.slice(0,2).toUpperCase()}</span></div>
+    <span className="dashboard-kicker">{item.type} / {item.status}</span>
+    <h1>{item.title}</h1>
+    <p className="workspace-detail-copy">{item.description}</p>
+    <div className="detail-actions">
+      {hasPublicPage && <Link to={`/projects/${item.slug}`}><FaExternalLinkAlt/> Open public view</Link>}
+      <Link to={`/dashboard/${type}/new`}><FaPlus/> Create another</Link>
+      <button onClick={handleDelete} disabled={deleting} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "7px", border: "1px solid var(--rose)", background: "transparent", color: "var(--rose)", cursor: "pointer", fontWeight: 700 }}>
+        <FaTrash /> {deleting ? "Deleting..." : "Delete"}
+      </button>
+    </div>
+  </section>;
 }
 
-function BookmarksPage(){const initial=[{title:"Designing Better Interfaces",url:"https://www.designbetter.co",source:"Design Better"},{title:"Web Content Accessibility Guidelines",url:"https://www.w3.org/WAI/standards-guidelines/wcag/",source:"W3C"},{title:"React documentation",url:"https://react.dev",source:"React"}];const [items,setItems]=useState(initial);return <section className="workspace-page"><div className="workspace-heading"><div><span className="dashboard-kicker">LIBRARY</span><h1>Bookmarks</h1><p>Useful references and resources saved for later.</p></div></div><div className="workspace-list">{items.map(item=><article className="workspace-card" key={item.url}><i className="violet"><FaBookmark/></i><div><span>{item.source}</span><h2>{item.title}</h2><p>{item.url}</p></div><a href={item.url} target="_blank" rel="noreferrer"><FaExternalLinkAlt/></a><button onClick={()=>setItems(current=>current.filter(value=>value.url!==item.url))} aria-label={`Remove ${item.title}`}><FaTrash/></button></article>)}</div></section>}
+function BookmarksPage({ user }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadBookmarks() {
+      setLoading(true);
+      const data = await fetchCollection("bookmarks");
+      setItems(data);
+      setLoading(false);
+    }
+    loadBookmarks();
+  }, []);
+
+  async function removeBookmark(id) {
+    try {
+      await deleteItem("bookmarks", "id", id);
+      setItems(current => current.filter(item => item.id !== id));
+    } catch (err) {
+      console.error("Failed to delete bookmark:", err);
+    }
+  }
+
+  return <section className="workspace-page">
+    <div className="workspace-heading">
+      <div><span className="dashboard-kicker">LIBRARY</span><h1>Bookmarks</h1><p>Useful references and resources saved in Supabase.</p></div>
+    </div>
+    {loading ? (
+      <div className="empty-state"><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Loading bookmarks...</p></div>
+    ) : (
+      <div className="workspace-list">
+        {items.map(item => (
+          <article className="workspace-card" key={item.id || item.url}>
+            <i className="violet"><FaBookmark/></i>
+            <div><span>{item.source}</span><h2>{item.title}</h2><p>{item.url}</p></div>
+            <a href={item.url} target="_blank" rel="noreferrer"><FaExternalLinkAlt/></a>
+            <button onClick={() => removeBookmark(item.id)} aria-label={`Remove ${item.title}`}><FaTrash/></button>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>;
+}
+
 function NotificationsPage(){return <section className="workspace-page"><div className="workspace-heading"><div><span className="dashboard-kicker">INBOX</span><h1>Notifications</h1><p>Updates from across your creative workspace.</p></div></div><div className="workspace-list">{["Frame Archive is ready to publish","Your weekly creative summary is available","A new sign-in was detected"].map((title,index)=><article className="workspace-card" key={title}><i className={index===2?"amber":"teal"}><FaBell/></i><div><span>{index===0?"PROJECT":"SYSTEM"}</span><h2>{title}</h2><p>{index===0?"The project has completed all publishing checks.":"Open this update to review the details."}</p></div><b>{index===0?"Now":`${index}d`}</b></article>)}</div></section>}
 function SettingsPage({theme,setTheme,user}){return <section className="workspace-page narrow-workspace"><div className="workspace-heading"><div><span className="dashboard-kicker">PREFERENCES</span><h1>Settings</h1><p>Control how your Desktopalie workspace looks and behaves.</p></div></div><div className="settings-list"><div><span><strong>Color theme</strong><small>Choose the workspace appearance.</small></span><select value={theme} onChange={e=>toggleThemeWithTransition(e, theme, setTheme, e.target.value)}><option value="dark">Dark</option><option value="light">Light</option></select></div><div><span><strong>Email notifications</strong><small>Receive a weekly summary at {user?.email}.</small></span><input type="checkbox" defaultChecked/></div><div><span><strong>Reduce visual motion</strong><small>Minimize non-essential interface animation.</small></span><input type="checkbox"/></div></div></section>}
-function ProfilePage({user}){const name=user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"Creator";return <section className="workspace-page narrow-workspace"><div className="workspace-heading"><div><span className="dashboard-kicker">ACCOUNT</span><h1>Your profile</h1><p>The identity connected to your Desktopalie workspace.</p></div></div><div className="profile-page-card"><UserAvatar user={user} className="profile-page-avatar"/><div><small>FULL NAME</small><strong>{name}</strong><small>EMAIL ADDRESS</small><strong>{user?.email}</strong><small>USER ID</small><code>{user?.id}</code></div></div></section>}
-function SearchPage(){const location=useLocation();const query=new URLSearchParams(location.search).get("q")||"";const all=[...SEED_PROJECTS.map(item=>({...item,section:"projects"})),...SEED_EXPERIMENTS.map(item=>({...item,section:"experiments"})),...SEED_NOTES.map(item=>({...item,section:"notes"}))];const results=all.filter(item=>`${item.title} ${item.description} ${item.type}`.toLowerCase().includes(query.toLowerCase()));return <section className="workspace-page"><div className="workspace-heading"><div><span className="dashboard-kicker">SEARCH</span><h1>Results for “{query}”</h1><p>{results.length} matching items found.</p></div></div><div className="workspace-list">{results.map(item=><Link className="workspace-card" to={`/dashboard/${item.section}/${item.slug}`} key={`${item.section}-${item.slug}`}><i className="violet"><FaFolderOpen/></i><div><span>{item.type}</span><h2>{item.title}</h2><p>{item.description}</p></div><FaArrowRight/></Link>)}</div></section>}
+function ProfilePage({ user }) {
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    async function loadProfile() {
+      if (!user) return;
+      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+      if (data) setProfile(data);
+    }
+    loadProfile();
+  }, [user]);
+
+  const name = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Creator";
+  const username = profile?.username || user?.user_metadata?.username || user?.email?.split("@")[0];
+
+  return (
+    <section className="workspace-page narrow-workspace">
+      <div className="workspace-heading">
+        <div><span className="dashboard-kicker">ACCOUNT</span><h1>Your profile</h1><p>The identity connected to your Desktopalie workspace.</p></div>
+      </div>
+      <div className="profile-page-card">
+        <UserAvatar user={user} className="profile-page-avatar"/>
+        <div>
+          <small>FULL NAME</small><strong>{name}</strong>
+          <small>USERNAME</small><strong>@{username}</strong>
+          <small>EMAIL ADDRESS</small><strong>{user?.email}</strong>
+          <small>LOCATION</small><strong>{profile?.location || "Indonesia"}</strong>
+          <small>BIO</small><p style={{ fontSize: "12px", color: "var(--muted)", margin: "4px 0 12px" }}>{profile?.bio || "Independent designer & developer"}</p>
+          <small>USER ID</small><code>{user?.id}</code>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SearchPage() {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search).get("q") || "";
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function performSearch() {
+      setLoading(true);
+      const [projects, experiments, notes] = await Promise.all([
+        fetchCollection("projects"),
+        fetchCollection("experiments"),
+        fetchCollection("notes"),
+      ]);
+      const all = [
+        ...projects.map(item => ({ ...item, section: "projects" })),
+        ...experiments.map(item => ({ ...item, section: "experiments" })),
+        ...notes.map(item => ({ ...item, section: "notes" })),
+      ];
+      const filtered = all.filter(item => `${item.title} ${item.description} ${item.type}`.toLowerCase().includes(query.toLowerCase()));
+      setResults(filtered);
+      setLoading(false);
+    }
+    performSearch();
+  }, [query]);
+
+  return <section className="workspace-page">
+    <div className="workspace-heading"><div><span className="dashboard-kicker">SEARCH</span><h1>Results for “{query}”</h1><p>{loading ? "Searching..." : `${results.length} matching items found.`}</p></div></div>
+    <div className="workspace-list">
+      {results.map(item => (
+        <Link className="workspace-card" to={`/dashboard/${item.section}/${item.slug}`} key={`${item.section}-${item.id || item.slug}`}>
+          <i className="violet"><FaFolderOpen/></i>
+          <div><span>{item.type}</span><h2>{item.title}</h2><p>{item.description}</p></div>
+          <FaArrowRight/>
+        </Link>
+      ))}
+    </div>
+  </section>;
+}
 
 export default function WorkspaceContent({ path, theme, setTheme, user }) {
-  const segments=path.replace(/^\/dashboard\/?/,"").split("/").filter(Boolean);const section=segments[0]||"overview";const action=segments[1];
-  if(section==="projects")return action==="new"?<NewItemPage type="projects"/>:action?<DetailPage type="projects" slug={action}/>:<CollectionPage type="projects" title="Projects" description="Case studies, products, and client work in every stage." seed={SEED_PROJECTS} icon={FaFolderOpen}/>;
-  if(section==="experiments")return action==="new"?<NewItemPage type="experiments"/>:action?<DetailPage type="experiments" slug={action}/>:<CollectionPage type="experiments" title="Experiments" description="Prototypes and small ideas created to learn something new." seed={SEED_EXPERIMENTS} icon={FaFlask}/>;
-  if(section==="notes")return action==="new"?<NewItemPage type="notes"/>:action?<DetailPage type="notes" slug={action}/>:<CollectionPage type="notes" title="Creative notes" description="Thoughts, lessons, and references worth keeping." seed={SEED_NOTES} icon={FaStickyNote}/>;
-  if(section==="bookmarks")return <BookmarksPage/>;if(section==="notifications")return <NotificationsPage/>;if(section==="settings")return <SettingsPage theme={theme} setTheme={setTheme} user={user}/>;if(section==="profile")return <ProfilePage user={user}/>;if(section==="search")return <SearchPage/>;
+  const segments = path.replace(/^\/dashboard\/?/,"").split("/").filter(Boolean);
+  const section = segments[0] || "overview";
+  const action = segments[1];
+
+  if (section === "projects") return action === "new" ? <NewItemPage type="projects" user={user} /> : action ? <DetailPage type="projects" slug={action}/> : <CollectionPage type="projects" title="Projects" description="Case studies, products, and client work in every stage." icon={FaFolderOpen}/>;
+  if (section === "experiments") return action === "new" ? <NewItemPage type="experiments" user={user} /> : action ? <DetailPage type="experiments" slug={action}/> : <CollectionPage type="experiments" title="Experiments" description="Prototypes and small ideas created to learn something new." icon={FaFlask}/>;
+  if (section === "notes") return action === "new" ? <NewItemPage type="notes" user={user} /> : action ? <DetailPage type="notes" slug={action}/> : <CollectionPage type="notes" title="Creative notes" description="Thoughts, lessons, and references worth keeping." icon={FaStickyNote}/>;
+  if (section === "bookmarks") return <BookmarksPage user={user} />;
+  if (section === "notifications") return <NotificationsPage/>;
+  if (section === "settings") return <SettingsPage theme={theme} setTheme={setTheme} user={user}/>;
+  if (section === "profile") return <ProfilePage user={user}/>;
+  if (section === "search") return <SearchPage/>;
+
   return null;
 }
