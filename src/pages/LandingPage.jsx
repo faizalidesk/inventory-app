@@ -21,6 +21,7 @@ import {
   SiVercel,
   SiVite,
 } from "react-icons/si";
+import DesktopalieMark from "../component/DesktopalieMark";
 import "./LandingPage.css";
 
 const PROJECTS = [
@@ -82,14 +83,6 @@ const STACK = [
   { name: "Vercel", icon: SiVercel, className: "vercel" },
 ];
 
-function BrandMark() {
-  return (
-    <span className="brand-mark" aria-hidden="true">
-      <span />
-      <span />
-    </span>
-  );
-}
 
 function ThemeIcon({ theme }) {
   return theme === "dark" ? <FaSun /> : <FaMoon />;
@@ -116,8 +109,8 @@ export default function LandingPage() {
       <header className="site-header">
         <div className="site-wrap header-inner">
           <Link to="/" className="brand" aria-label="Desktopalie home">
-            <BrandMark />
-            <span>desktopalie</span>
+            <DesktopalieMark className="brand-mark" />
+            <span>Desktopalie</span>
           </Link>
 
           <nav className="site-nav" aria-label="Primary navigation">
@@ -172,7 +165,7 @@ export default function LandingPage() {
                 </div>
                 <div className="browser-content">
                   <div className="mini-sidebar">
-                    <BrandMark />
+                    <DesktopalieMark className="brand-mark" />
                     <span className="side-active" />
                     <span />
                     <span />
@@ -296,7 +289,7 @@ export default function LandingPage() {
 
       <footer className="site-footer">
         <div className="site-wrap footer-inner">
-          <Link to="/" className="brand"><BrandMark /><span>desktopalie</span></Link>
+          <Link to="/" className="brand"><DesktopalieMark className="brand-mark" /><span>Desktopalie</span></Link>
           <p>Projects, experiments, and digital creations.</p>
           <div className="social-links">
             <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>

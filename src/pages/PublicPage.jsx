@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaCode, FaFigma, FaFlask, FaMoon, FaPalette, FaSun } from "react-icons/fa";
+import DesktopalieMark from "../component/DesktopalieMark";
 import "./PublicPage.css";
 
 const PROJECTS = {
@@ -16,7 +17,6 @@ const EXPERIMENTS = [
   { id: "021", title: "Spatial navigation", category: "Prototype", description: "An alternative way to move through connected digital content." },
 ];
 
-function BrandMark() { return <span className="public-brand-mark" aria-hidden="true"><span /><span /></span>; }
 
 function PublicShell({ children }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
@@ -24,14 +24,14 @@ function PublicShell({ children }) {
   return (
     <div className="public-page" data-theme={theme}>
       <header className="public-header">
-        <Link to="/" className="public-brand"><BrandMark /><span>desktopalie</span></Link>
+        <Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie</span></Link>
         <nav>
           <Link to="/projects">Projects</Link><Link to="/experiments">Experiments</Link><Link to="/about">About</Link><Link to="/services">Services</Link><Link to="/contact">Contact</Link>
         </nav>
         <div className="public-actions"><button onClick={() => setTheme((value) => value === "dark" ? "light" : "dark")} aria-label="Toggle theme">{theme === "dark" ? <FaSun /> : <FaMoon />}</button><Link to="/login">Login <FaArrowRight /></Link></div>
       </header>
       <main>{children}</main>
-      <footer className="public-footer"><Link to="/" className="public-brand"><BrandMark /><span>desktopalie</span></Link><span>Projects, experiments, and digital creations.</span><span>© {new Date().getFullYear()} DESKTOPALIE</span></footer>
+      <footer className="public-footer"><Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie</span></Link><span>Projects, experiments, and digital creations.</span><span>© {new Date().getFullYear()} DESKTOPALIE</span></footer>
     </div>
   );
 }

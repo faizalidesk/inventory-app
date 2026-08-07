@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaMoon, FaSun } from "react-icons/fa";
+import DesktopalieMark from "../../component/DesktopalieMark";
 import "./Auth.css";
-
-function BrandMark() {
-  return <span className="auth-brand-mark" aria-hidden="true"><span /><span /></span>;
-}
 
 export default function AuthLayout({ eyebrow, title, description, children }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
@@ -19,7 +16,7 @@ export default function AuthLayout({ eyebrow, title, description, children }) {
     <main className="auth-page" data-theme={theme}>
       <div className="auth-grid-pattern" aria-hidden="true" />
       <header className="auth-topbar">
-        <Link to="/" className="auth-brand"><BrandMark /><span>desktopalie</span></Link>
+        <Link to="/" className="auth-brand"><DesktopalieMark className="auth-brand-mark" /><span>desktopalie</span></Link>
         <div className="auth-top-actions">
           <Link to="/" className="auth-back"><FaArrowLeft /> Back to website</Link>
           <button onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")} className="auth-theme" aria-label="Toggle color theme">
