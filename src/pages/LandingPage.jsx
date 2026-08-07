@@ -22,6 +22,7 @@ import {
   SiVite,
 } from "react-icons/si";
 import DesktopalieMark from "../component/DesktopalieMark";
+import AntigravityLogo from "../component/AntigravityLogo";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 
@@ -79,6 +80,7 @@ const STACK = [
   { name: "Vite", icon: SiVite, className: "vite" },
   { name: "Figma", icon: SiFigma, className: "figma" },
   { name: "Supabase", icon: SiSupabase, className: "supabase" },
+  { name: "Antigravity", icon: AntigravityLogo, className: "antigravity" },
   { name: "CSS", icon: FaCss3Alt, className: "css" },
   { name: "Git", icon: SiGit, className: "git" },
   { name: "Vercel", icon: SiVercel, className: "vercel" },
