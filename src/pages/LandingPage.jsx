@@ -99,18 +99,21 @@ export default function LandingPage() {
           </a>
 
           <nav className="site-nav" aria-label="Primary navigation">
-            <a href="#work">Work</a>
+            <a href="#top">Home</a>
+            <a href="#work">Projects</a>
+            <a href="#experiments">Experiments</a>
             <a href="#about">About</a>
-            <a href="#capabilities">Capabilities</a>
+            <a href="#capabilities">Services</a>
+            <a href="#contact">Contact</a>
           </nav>
 
           <div className="header-actions">
             <button className="theme-button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
               <ThemeIcon theme={theme} />
             </button>
-            <a className="availability" href="#contact">
-              <span /> Available for projects
-            </a>
+            <Link className="nav-login" to="/login">
+              Login <FaArrowRight />
+            </Link>
           </div>
         </div>
       </header>
@@ -136,7 +139,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="hero-visual" aria-label="Desktopalie creative workspace preview">
+            <div className="hero-visual" id="experiments" aria-label="Desktopalie creative workspace preview">
               <div className="visual-orbit orbit-one" />
               <div className="visual-orbit orbit-two" />
               <div className="browser-window">

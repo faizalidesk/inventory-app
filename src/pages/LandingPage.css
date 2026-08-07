@@ -53,14 +53,17 @@
 .desktopalie .brand-mark span:last-child { right: 1px; bottom: 1px; background: var(--accent-2); mix-blend-mode: screen; }
 .desktopalie .brand:hover .brand-mark span:first-child { transform: translate(-2px,-2px); }
 .desktopalie .brand:hover .brand-mark span:last-child { transform: translate(2px,2px); }
-.desktopalie .site-nav { display: flex; gap: 34px; color: var(--muted); font-size: 13px; font-weight: 600; }
+.desktopalie .site-nav { display: flex; gap: 22px; color: var(--muted); font-size: 12px; font-weight: 600; }
 .desktopalie .site-nav a { transition: color .2s ease; }
 .desktopalie .site-nav a:hover { color: var(--text); }
 .desktopalie .header-actions { display: flex; align-items: center; gap: 12px; }
 .desktopalie .theme-button { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--text); background: var(--surface); cursor: pointer; transition: transform .35s ease, background-color .5s ease, border-color .5s ease; }
 .desktopalie .theme-button:hover { transform: rotate(16deg); border-color: var(--accent); }
-.desktopalie .availability { display: flex; align-items: center; gap: 8px; height: 39px; padding: 0 15px; border: 1px solid var(--line); border-radius: 99px; font-size: 11px; font-weight: 700; }
-.desktopalie .availability span, .desktopalie .status-pill span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-2) 12%, transparent); animation: status-pulse 2s ease infinite; }
+.desktopalie .nav-login { display: inline-flex; align-items: center; gap: 9px; height: 39px; padding: 0 17px; border-radius: 7px; background: var(--text); color: var(--page); font-size: 11px; font-weight: 800; transition: transform .2s ease, box-shadow .2s ease; }
+.desktopalie .nav-login:hover { transform: translateY(-2px); box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 20%, transparent); }
+.desktopalie .nav-login svg { font-size: 9px; transition: transform .2s ease; }
+.desktopalie .nav-login:hover svg { transform: translateX(3px); }
+.desktopalie .status-pill span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-2) 12%, transparent); animation: status-pulse 2s ease infinite; }
 
 .desktopalie .hero-section { position: relative; padding: 164px 0 100px; min-height: 820px; display: flex; align-items: center; }
 .desktopalie .hero-glow { position: absolute; border-radius: 50%; filter: blur(10px); pointer-events: none; }
@@ -180,6 +183,7 @@
 @keyframes reveal-up { from { opacity: 0; transform: translateY(35px); } }
 
 @media (max-width: 980px) {
+  .desktopalie .site-nav { display: none; }
   .desktopalie .hero-section { padding-top: 135px; }
   .desktopalie .hero-grid { grid-template-columns: 1fr; gap: 80px; }.desktopalie .hero-copy { text-align: center; }.desktopalie .hero-copy > p,.desktopalie .hero-note { margin-inline: auto; }.desktopalie .hero-actions { justify-content: center; }.desktopalie .hero-visual { width: min(650px,100%); margin: auto; }
   .desktopalie .split-heading { grid-template-columns: 1fr; gap: 25px; }.desktopalie .project-card { grid-template-columns: 1fr 1fr 42px; gap: 30px; }
@@ -187,7 +191,7 @@
 }
 
 @media (max-width: 720px) {
-  .desktopalie .site-wrap { width: min(100% - 32px,1180px); }.desktopalie .site-nav,.desktopalie .availability { display:none; }.desktopalie .header-inner { height: 65px; }
+  .desktopalie .site-wrap { width: min(100% - 32px,1180px); }.desktopalie .site-nav { display:none; }.desktopalie .header-inner { height: 65px; }.desktopalie .nav-login { height: 36px; padding-inline: 14px; }
   .desktopalie .hero-section { min-height: auto; padding: 125px 0 80px; }.desktopalie .hero-copy h1 { font-size: clamp(44px,15vw,65px); }.desktopalie .hero-copy > p { font-size: 14px; }.desktopalie .hero-actions { flex-direction: column; gap: 18px; }.desktopalie .hero-note { margin-top: 38px; }.desktopalie .browser-content { height: 310px; }.desktopalie .mini-canvas { padding: 30px 20px; }.desktopalie .floating-code { left: -8px; bottom: -30px; }.desktopalie .floating-tag { right: -5px; top: -27px; }.desktopalie .canvas-art { inset: 100px 5px 20px 25px; }.desktopalie .art-disc { width: 210px;height:210px; }.desktopalie .art-card-one { right:140px; }.desktopalie .canvas-footer { inset-inline: 18px; }
   .desktopalie .section { padding: 90px 0; }.desktopalie .section-heading h2,.desktopalie .about-copy h2 { font-size: 40px; }.desktopalie .project-card { grid-template-columns: 1fr; padding: 30px 0; }.desktopalie .project-visual { height: 235px; }.desktopalie .project-arrow { position: absolute; right: 0; bottom: 33px; }.desktopalie .project-info { padding-right: 55px; }
   .desktopalie .about-grid { grid-template-columns: 1fr; }.desktopalie .about-visual { width: 86%; }.desktopalie .about-sticker { right: -35px; }.desktopalie .about-stats { gap: 10px; }.desktopalie .about-stats strong { font-size: 25px; }
