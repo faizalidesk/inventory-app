@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaArrowLeft, FaMoon, FaSun } from "react-icons/fa";
 import DesktopalieMark from "../../component/DesktopalieMark";
 import "./Auth.css";
+import { toggleThemeWithTransition } from "../../utils/theme";
 
 export default function AuthLayout({ eyebrow, title, description, children }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
@@ -19,7 +20,7 @@ export default function AuthLayout({ eyebrow, title, description, children }) {
         <Link to="/" className="auth-brand"><DesktopalieMark className="auth-brand-mark" /><span>desktopalie</span></Link>
         <div className="auth-top-actions">
           <Link to="/" className="auth-back"><FaArrowLeft /> Back to website</Link>
-          <button onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")} className="auth-theme" aria-label="Toggle color theme">
+          <button onClick={(event) => toggleThemeWithTransition(event, theme, setTheme)} className="auth-theme" aria-label="Toggle color theme">
             {theme === "dark" ? <FaSun /> : <FaMoon />}
           </button>
         </div>

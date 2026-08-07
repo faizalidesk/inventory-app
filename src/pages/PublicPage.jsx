@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaCode, FaFigma, FaFlask, FaMoon, FaPalette, FaSun } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import "./PublicPage.css";
+import { toggleThemeWithTransition } from "../utils/theme";
 
 const PROJECTS = {
   "orbit-analytics": { number: "01", title: "Orbit Analytics", type: "Web application", summary: "A focused analytics experience that turns complex product data into clear, useful decisions.", challenge: "Product teams had access to plenty of data, but the information was fragmented and difficult to act on.", outcome: "A calm, modular dashboard that prioritizes useful signals and makes complex trends easy to understand.", tags: ["React", "Data visualization", "Product design"], tone: "violet" },
@@ -28,7 +29,7 @@ function PublicShell({ children }) {
         <nav>
           <Link to="/projects">Projects</Link><Link to="/experiments">Experiments</Link><Link to="/about">About</Link><Link to="/services">Services</Link><Link to="/contact">Contact</Link>
         </nav>
-        <div className="public-actions"><button onClick={() => setTheme((value) => value === "dark" ? "light" : "dark")} aria-label="Toggle theme">{theme === "dark" ? <FaSun /> : <FaMoon />}</button><Link to="/login">Login <FaArrowRight /></Link></div>
+        <div className="public-actions"><button onClick={(event) => toggleThemeWithTransition(event, theme, setTheme)} aria-label="Toggle theme">{theme === "dark" ? <FaSun /> : <FaMoon />}</button><Link to="/login">Login <FaArrowRight /></Link></div>
       </header>
       <main>{children}</main>
       <footer className="public-footer"><Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie</span></Link><span>Projects, experiments, and digital creations.</span><span>© {new Date().getFullYear()} DESKTOPALIE</span></footer>

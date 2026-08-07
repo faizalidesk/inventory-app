@@ -23,6 +23,7 @@ import {
 } from "react-icons/si";
 import DesktopalieMark from "../component/DesktopalieMark";
 import "./LandingPage.css";
+import { toggleThemeWithTransition } from "../utils/theme";
 
 const PROJECTS = [
   {
@@ -100,7 +101,7 @@ export default function LandingPage() {
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
-  const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
+  const toggleTheme = (event) => toggleThemeWithTransition(event, theme, setTheme);
 
   return (
     <div className="desktopalie" data-theme={theme}>
