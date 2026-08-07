@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaBell, FaBookmark, FaCog, FaEllipsisH, FaFlask, FaFolderOpen, FaHome, FaMoon, FaSearch, FaSignOutAlt, FaStickyNote, FaSun, FaThLarge, FaTimes } from "react-icons/fa";
 import DesktopalieMark from "../../component/DesktopalieMark";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/auth-context";
 import WorkspaceContent, { OverviewContent } from "./WorkspaceContent";
 import "./Dashboard.css";
 
@@ -20,7 +20,13 @@ export default function Dashboard(){
   useEffect(()=>{localStorage.setItem("desktopalie-theme",theme);document.documentElement.style.colorScheme=theme},[theme]);
   useEffect(()=>{function shortcut(event){if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault();searchRef.current?.focus()}}window.addEventListener("keydown",shortcut);return()=>window.removeEventListener("keydown",shortcut)},[]);
   const fullName=user?.user_metadata?.full_name||user?.email?.split("@")[0]||"Creator";const firstName=fullName.split(" ")[0];const initials=fullName.split(" ").slice(0,2).map(part=>part[0]).join("").toUpperCase();
-  async function handleLogout(){await logout();navigate("/")}
+  async function handleLogout(){
+    try {
+      await logout();
+    } finally {
+      navigate("/", { replace: true });
+    }
+  }
   function submitSearch(event){event.preventDefault();if(query.trim())navigate(`/dashboard/search?q=${encodeURIComponent(query.trim())}`)}
   const overview=location.pathname==="/dashboard"||location.pathname==="/dashboard/";
   return <div className="studio-dashboard" data-theme={theme}>

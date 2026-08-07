@@ -7,6 +7,7 @@ import Register from "./pages/auth/Register";
 import { CheckEmail, ForgotPassword, ResetPassword } from "./pages/auth/AuthRecovery";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 
 function App() {
   return <BrowserRouter><Routes>
@@ -18,11 +19,11 @@ function App() {
     <Route path="/about" element={<PublicInfoPage type="about" />} />
     <Route path="/services" element={<PublicInfoPage type="services" />} />
     <Route path="/contact" element={<PublicInfoPage type="contact" />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
-    <Route path="/forgot-password" element={<ForgotPassword />} />
+    <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+    <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+    <Route path="/forgot-password" element={<PublicOnlyRoute><ForgotPassword /></PublicOnlyRoute>} />
     <Route path="/reset-password" element={<ResetPassword />} />
-    <Route path="/check-email" element={<CheckEmail />} />
+    <Route path="/check-email" element={<PublicOnlyRoute><CheckEmail /></PublicOnlyRoute>} />
     <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
     <Route path="*" element={<NotFound />} />
   </Routes></BrowserRouter>;
