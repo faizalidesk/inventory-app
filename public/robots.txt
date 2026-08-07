@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /check-email
 
 Sitemap: https://desktopalie.my.id/sitemap.xml

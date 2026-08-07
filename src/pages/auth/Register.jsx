@@ -63,7 +63,7 @@ export default function Register() {
       return;
     }
 
-    navigate("/login");
+    navigate("/check-email");
   }
 
   return (

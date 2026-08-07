@@ -119,8 +119,18 @@
 
 .desktopalie .stack-strip { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface); transition: background-color .5s ease, border-color .5s ease; }
 .desktopalie .stack-track { display: flex; width: max-content; animation: ticker 28s linear infinite; }
-.desktopalie .stack-track span { display: flex; align-items: center; gap: 32px; padding: 18px 25px; color: var(--muted); font: 500 10px "DM Mono", monospace; letter-spacing: .1em; text-transform: uppercase; }
-.desktopalie .stack-track i { color: var(--accent); font-style: normal; }
+.desktopalie .stack-track .stack-item { display: flex; align-items: center; gap: 10px; padding: 17px 25px; color: var(--muted); font: 500 10px "DM Mono", monospace; letter-spacing: .1em; text-transform: uppercase; }
+.desktopalie .stack-logo { width: 19px; height: 19px; flex: 0 0 auto; transition: transform .25s ease, filter .25s ease; }
+.desktopalie .stack-item:hover .stack-logo { transform: translateY(-2px) scale(1.08); filter: drop-shadow(0 4px 7px currentColor); }
+.desktopalie .stack-logo.react { color: #61dafb; }
+.desktopalie .stack-logo.javascript { color: #f7df1e; }
+.desktopalie .stack-logo.vite { color: #a277ff; }
+.desktopalie .stack-logo.figma { color: #f24e1e; }
+.desktopalie .stack-logo.supabase { color: #3ecf8e; }
+.desktopalie .stack-logo.css { color: #1572b6; }
+.desktopalie .stack-logo.git { color: #f05032; }
+.desktopalie .stack-logo.vercel { color: var(--text); }
+.desktopalie .stack-track i { margin-left: 22px; color: var(--accent); font-style: normal; }
 
 .desktopalie .section { padding: 130px 0; }
 .desktopalie .section-index { display: inline-block; margin-bottom: 22px; color: var(--accent); font: 500 10px "DM Mono", monospace; letter-spacing: .14em; }

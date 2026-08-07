@@ -97,7 +97,7 @@ export default function Login() {
 
         <div className="auth-row">
           <label className="auth-check"><input type="checkbox" /> Keep me signed in</label>
-          <a href="mailto:hello@desktopalie.my.id?subject=Password reset">Forgot password?</a>
+          <Link to="/forgot-password">Forgot password?</Link>
         </div>
 
         <button className="auth-submit" type="submit" disabled={loading}>

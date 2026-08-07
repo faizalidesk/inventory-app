@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   FaArrowRight,
   FaCode,
+  FaCss3Alt,
   FaFigma,
   FaGithub,
   FaInstagram,
@@ -11,11 +12,21 @@ import {
   FaPalette,
   FaSun,
 } from "react-icons/fa";
+import {
+  SiFigma,
+  SiGit,
+  SiJavascript,
+  SiReact,
+  SiSupabase,
+  SiVercel,
+  SiVite,
+} from "react-icons/si";
 import "./LandingPage.css";
 
 const PROJECTS = [
   {
     number: "01",
+    slug: "orbit-analytics",
     type: "Web application",
     title: "Orbit Analytics",
     description: "A focused analytics experience that turns complex product data into clear, useful decisions.",
@@ -24,6 +35,7 @@ const PROJECTS = [
   },
   {
     number: "02",
+    slug: "frame-archive",
     type: "Digital experience",
     title: "Frame Archive",
     description: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
@@ -32,6 +44,7 @@ const PROJECTS = [
   },
   {
     number: "03",
+    slug: "mono-systems",
     type: "Design experiment",
     title: "Mono Systems",
     description: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
@@ -58,7 +71,16 @@ const SERVICES = [
   },
 ];
 
-const STACK = ["React", "JavaScript", "Vite", "Figma", "Supabase", "CSS", "Git", "Vercel"];
+const STACK = [
+  { name: "React", icon: SiReact, className: "react" },
+  { name: "JavaScript", icon: SiJavascript, className: "javascript" },
+  { name: "Vite", icon: SiVite, className: "vite" },
+  { name: "Figma", icon: SiFigma, className: "figma" },
+  { name: "Supabase", icon: SiSupabase, className: "supabase" },
+  { name: "CSS", icon: FaCss3Alt, className: "css" },
+  { name: "Git", icon: SiGit, className: "git" },
+  { name: "Vercel", icon: SiVercel, className: "vercel" },
+];
 
 function BrandMark() {
   return (
@@ -93,18 +115,18 @@ export default function LandingPage() {
 
       <header className="site-header">
         <div className="site-wrap header-inner">
-          <a href="#top" className="brand" aria-label="Desktopalie home">
+          <Link to="/" className="brand" aria-label="Desktopalie home">
             <BrandMark />
             <span>desktopalie</span>
-          </a>
+          </Link>
 
           <nav className="site-nav" aria-label="Primary navigation">
-            <a href="#top">Home</a>
-            <a href="#work">Projects</a>
-            <a href="#experiments">Experiments</a>
-            <a href="#about">About</a>
-            <a href="#capabilities">Services</a>
-            <a href="#contact">Contact</a>
+            <Link to="/">Home</Link>
+            <Link to="/projects">Projects</Link>
+            <Link to="/experiments">Experiments</Link>
+            <Link to="/about">About</Link>
+            <Link to="/services">Services</Link>
+            <Link to="/contact">Contact</Link>
           </nav>
 
           <div className="header-actions">
@@ -130,8 +152,8 @@ export default function LandingPage() {
                 Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.
               </p>
               <div className="hero-actions">
-                <a className="primary-button" href="#work">Explore my work <FaArrowRight /></a>
-                <a className="text-button" href="#about">More about me</a>
+                <Link className="primary-button" to="/projects">Explore my work <FaArrowRight /></Link>
+                <Link className="text-button" to="/about">More about me</Link>
               </div>
               <div className="hero-note">
                 <span className="note-line" />
@@ -177,7 +199,13 @@ export default function LandingPage() {
 
         <div className="stack-strip" aria-label="Tools and technologies">
           <div className="stack-track">
-            {[...STACK, ...STACK].map((item, index) => <span key={`${item}-${index}`}>{item}<i>✦</i></span>)}
+            {[...STACK, ...STACK].map(({ name, icon: Icon, className }, index) => (
+              <span className="stack-item" key={`${name}-${index}`}>
+                <Icon className={`stack-logo ${className}`} aria-hidden="true" />
+                {name}
+                <i>✦</i>
+              </span>
+            ))}
           </div>
         </div>
 
@@ -206,7 +234,7 @@ export default function LandingPage() {
                     <p>{project.description}</p>
                     <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
                   </div>
-                  <button className="project-arrow" aria-label={`View ${project.title}`}><FaArrowRight /></button>
+                  <Link className="project-arrow" to={`/projects/${project.slug}`} aria-label={`View ${project.title}`}><FaArrowRight /></Link>
                 </article>
               ))}
             </div>
@@ -268,7 +296,7 @@ export default function LandingPage() {
 
       <footer className="site-footer">
         <div className="site-wrap footer-inner">
-          <a href="#top" className="brand"><BrandMark /><span>desktopalie</span></a>
+          <Link to="/" className="brand"><BrandMark /><span>desktopalie</span></Link>
           <p>Projects, experiments, and digital creations.</p>
           <div className="social-links">
             <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>

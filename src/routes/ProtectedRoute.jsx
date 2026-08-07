@@ -38,7 +38,7 @@ if(!user){
 return (
 
 <Navigate
-to="/"
+to="/login"
 />
 
 );
