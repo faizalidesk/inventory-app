@@ -1,24 +1,45 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   FaBell,
   FaCheckCircle,
-  FaCog,
-  FaGlobe,
+  FaCss3Alt,
+  FaGithub,
+  FaInstagram,
+  FaLinkedinIn,
   FaLock,
-  FaMicrochip,
   FaMoon,
   FaPaperPlane,
   FaPause,
   FaPlay,
-  FaRocket,
-  FaServer,
-  FaShieldAlt,
   FaSun,
   FaTerminal,
 } from "react-icons/fa";
+import {
+  SiFigma,
+  SiGit,
+  SiJavascript,
+  SiReact,
+  SiSupabase,
+  SiVercel,
+  SiVite,
+} from "react-icons/si";
 import DesktopalieMark from "../component/DesktopalieMark";
+import AntigravityLogo from "../component/AntigravityLogo";
 import { toggleThemeWithTransition } from "../utils/theme";
 import "./MaintenancePage.css";
+
+const STACK = [
+  { name: "React", icon: SiReact, className: "react" },
+  { name: "JavaScript", icon: SiJavascript, className: "javascript" },
+  { name: "Vite", icon: SiVite, className: "vite" },
+  { name: "Figma", icon: SiFigma, className: "figma" },
+  { name: "Supabase", icon: SiSupabase, className: "supabase" },
+  { name: "Antigravity", icon: AntigravityLogo, className: "antigravity" },
+  { name: "CSS", icon: FaCss3Alt, className: "css" },
+  { name: "Git", icon: SiGit, className: "git" },
+  { name: "Vercel", icon: SiVercel, className: "vercel" },
+];
 
 const INITIAL_LOGS = [
   "[SYSTEM] Maintenance mode initiated globally.",
@@ -29,14 +50,16 @@ const INITIAL_LOGS = [
 ];
 
 export default function MaintenancePage() {
-  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("desktopalie-theme");
+    if (savedTheme) return savedTheme;
+    return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  });
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
-  const [mode, setMode] = useState("turbo"); // 'turbo' | 'quantum'
   const [logs, setLogs] = useState(INITIAL_LOGS);
   const [isLogStreaming, setIsLogStreaming] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 45, seconds: 30 });
-  const canvasRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem("desktopalie-theme", theme);
@@ -69,155 +92,12 @@ export default function MaintenancePage() {
     const stream = setInterval(() => {
       const nextLog = pool[Math.floor(Math.random() * pool.length)];
       const timestamp = new Date().toLocaleTimeString();
-      setLogs((prev) => [...prev.slice(-6), `[${timestamp}] ${nextLog.replace(/\[.*?\]\s*/, "")}`]);
+      setLogs((prev) => [...prev.slice(-5), `[${timestamp}] ${nextLog.replace(/\[.*?\]\s*/, "")}`]);
     }, 3200);
     return () => clearInterval(stream);
   }, [isLogStreaming]);
 
-  // Interactive Particle Warp & Ripple Canvas
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let animationFrameId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", handleResize);
-
-    const speedMultiplier = mode === "quantum" ? 1.8 : 0.8;
-    const mainColor = mode === "quantum" ? "#06b6d4" : "#8b5cf6";
-    const accentColor = mode === "quantum" ? "#3b82f6" : "#ec4899";
-
-    const particles = Array.from({ length: 60 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      z: Math.random() * width,
-      radius: Math.random() * 2 + 1,
-      vx: (Math.random() - 0.5) * speedMultiplier,
-      vy: (Math.random() - 0.5) * speedMultiplier,
-      color: Math.random() > 0.5 ? mainColor : accentColor,
-    }));
-
-    let ripples = [];
-    const handleCanvasClick = (e) => {
-      ripples.push({
-        x: e.clientX,
-        y: e.clientY,
-        radius: 0,
-        maxRadius: 180,
-        alpha: 1,
-        color: mainColor,
-      });
-    };
-    window.addEventListener("click", handleCanvasClick);
-
-    let mouse = { x: width / 2, y: height / 2 };
-    const handleMouseMove = (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
-    const render = () => {
-      try {
-        ctx.clearRect(0, 0, width, height);
-
-        // Safe radial gradient
-        const safeX = Number.isFinite(mouse.x) && mouse.x > 0 ? mouse.x : width / 2;
-        const safeY = Number.isFinite(mouse.y) && mouse.y > 0 ? mouse.y : height / 2;
-        const safeRadius = Math.max(50, width * 0.6);
-
-        const grad = ctx.createRadialGradient(safeX, safeY, 5, safeX, safeY, safeRadius);
-        if (theme === "dark") {
-          grad.addColorStop(0, mode === "quantum" ? "rgba(6, 182, 212, 0.12)" : "rgba(139, 92, 246, 0.12)");
-          grad.addColorStop(1, "rgba(11, 15, 25, 0)");
-        } else {
-          grad.addColorStop(0, "rgba(99, 102, 241, 0.08)");
-          grad.addColorStop(1, "rgba(248, 250, 252, 0)");
-        }
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, width, height);
-
-        // Render & update ripples
-        ripples.forEach((r, i) => {
-          r.radius += 4;
-          r.alpha -= 0.015;
-          if (r.alpha <= 0) {
-            ripples.splice(i, 1);
-            return;
-          }
-          ctx.beginPath();
-          ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = r.color;
-          ctx.globalAlpha = Math.max(0, r.alpha);
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        });
-
-        // Render & connect particles
-        particles.forEach((p, i) => {
-          p.x += p.vx;
-          p.y += p.vy;
-
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
-
-          // Subtle attraction to mouse
-          const dx = safeX - p.x;
-          const dy = safeY - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist > 0 && dist < 150) {
-            p.x += (dx / dist) * 0.4;
-            p.y += (dy / dist) * 0.4;
-          }
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = mode === "quantum" ? 0.8 : 0.5;
-          ctx.shadowBlur = mode === "quantum" ? 12 : 6;
-          ctx.shadowColor = p.color;
-          ctx.fill();
-
-          // Lines connecting close particles
-          for (let j = i + 1; j < particles.length; j++) {
-            const p2 = particles[j];
-            const pdx = p.x - p2.x;
-            const pdy = p.y - p2.y;
-            const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
-            if (pdist < 100) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = p.color;
-              ctx.globalAlpha = (1 - pdist / 100) * 0.12;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          }
-        });
-
-        ctx.globalAlpha = 1;
-      } catch (err) {
-        console.error("Canvas render error:", err);
-      }
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("click", handleCanvasClick);
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [theme, mode]);
+  const toggleTheme = (event) => toggleThemeWithTransition(event, theme, setTheme);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -226,187 +106,201 @@ export default function MaintenancePage() {
   };
 
   return (
-    <div className="maintenance-cyber-wrapper" data-theme={theme} data-mode={mode}>
-      <canvas ref={canvasRef} className="cyber-canvas" />
+    <div className="desktopalie maintenance-landing" data-theme={theme}>
+      <div className="page-noise" aria-hidden="true" />
 
-      {/* Top Header Navigation */}
-      <header className="cyber-header">
-        <div className="cyber-brand">
-          <DesktopalieMark className="brand-mark" />
-          <span className="brand-title">desktopalie</span>
-          <span className="version-tag">v2.5 REFACTOR</span>
-        </div>
+      {/* Unified Site Header */}
+      <header className="site-header">
+        <div className="site-wrap header-inner">
+          <Link to="/" className="brand" aria-label="Desktopalie home">
+            <DesktopalieMark className="brand-mark" />
+            <span>Desktopalie</span>
+          </Link>
 
-        <div className="cyber-header-controls">
-          {/* Quantum / Turbo Mode Switcher */}
-          <div className="mode-switcher">
+          <nav className="site-nav" aria-label="Primary navigation">
+            <Link to="/">Home</Link>
+            <Link to="/projects">Projects</Link>
+            <Link to="/experiments">Experiments</Link>
+            <Link to="/about">About</Link>
+            <Link to="/services">Services</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
+
+          <div className="header-actions">
             <button
-              className={`mode-btn ${mode === "turbo" ? "active" : ""}`}
-              onClick={() => setMode("turbo")}
-              title="Turbo Engine Mode"
+              className="theme-button"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
-              <FaRocket /> <span>Turbo</span>
+              {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
-            <button
-              className={`mode-btn ${mode === "quantum" ? "active" : ""}`}
-              onClick={() => setMode("quantum")}
-              title="Quantum Speed Mode"
-            >
-              <FaMicrochip /> <span>Quantum</span>
-            </button>
+            <span className="maint-locked-chip">
+              <FaLock /> Routes Locked
+            </span>
           </div>
-
-          <button
-            className="theme-btn"
-            onClick={(e) => toggleThemeWithTransition(e, theme, setTheme)}
-            aria-label="Toggle Theme"
-          >
-            {theme === "dark" ? <FaSun /> : <FaMoon />}
-          </button>
         </div>
       </header>
 
-      {/* Central Content Split */}
-      <main className="cyber-main">
-        <div className="cyber-split-container">
-          {/* Left Column: Hero & Hologram & Timer */}
-          <div className="cyber-glass-panel cyber-col-left">
-            <div className="holo-core-container">
-              <div className="holo-ring ring-outer" />
-              <div className="holo-ring ring-inner" />
-              <div className="holo-center">
-                <FaCog className="holo-gear" />
+      <main id="top">
+        {/* Hero Section matching Landing Page */}
+        <section className="hero-section maint-hero-section">
+          <div className="hero-glow hero-glow-one" aria-hidden="true" />
+          <div className="hero-glow hero-glow-two" aria-hidden="true" />
+          <div className="site-wrap maint-hero-wrap">
+            <div className="maint-hero-copy">
+              <div className="status-pill">
+                <span /> PLATFORM SYSTEM UPGRADE IN PROGRESS
+              </div>
+              <h1>
+                We are upgrading <span>our workspace.</span>
+              </h1>
+              <p>
+                Desktopalie is currently undergoing a core architecture refactor, database maintenance, and UI v2.5 performance enhancements. We will be back online shortly with a faster and more responsive digital experience.
+              </p>
+
+              {/* Countdown Timer Widget */}
+              <div className="maint-timer-box">
+                <span className="timer-tag">ESTIMATED TIME UNTIL COMPLETION</span>
+                <div className="timer-display">
+                  <div className="t-unit">
+                    <strong>{String(timeLeft.hours).padStart(2, "0")}</strong>
+                    <span>HOURS</span>
+                  </div>
+                  <span className="t-colon">:</span>
+                  <div className="t-unit">
+                    <strong>{String(timeLeft.minutes).padStart(2, "0")}</strong>
+                    <span>MINUTES</span>
+                  </div>
+                  <span className="t-colon">:</span>
+                  <div className="t-unit">
+                    <strong>{String(timeLeft.seconds).padStart(2, "0")}</strong>
+                    <span>SECONDS</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress Steps */}
+              <div className="maint-steps-row">
+                <div className="step-badge done">
+                  <FaCheckCircle /> <span>Database Indexing</span>
+                </div>
+                <div className="step-badge done">
+                  <FaCheckCircle /> <span>Security Audit</span>
+                </div>
+                <div className="step-badge active">
+                  <span className="pulse-circle" /> <span>UI v2.5 Deployment</span>
+                </div>
+              </div>
+
+              {/* Email Subscription Form */}
+              <div className="maint-subscribe-card">
+                <h3>Get notified when we are back online</h3>
+                {subscribed ? (
+                  <div className="sub-success">
+                    <FaCheckCircle />
+                    <span>Thank you! We will email you as soon as the upgrade is complete.</span>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubscribe} className="maint-sub-form">
+                    <div className="sub-input-row">
+                      <FaBell className="sub-icon" />
+                      <input
+                        type="email"
+                        required
+                        placeholder="Enter your email address..."
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <button type="submit" className="primary-button sub-btn">
+                        Notify me <FaPaperPlane />
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             </div>
 
-            <div className="cyber-badge-wrap">
-              <span className="cyber-badge">
-                <span className="cyber-pulse" /> SYSTEM UPGRADE IN PROGRESS
-              </span>
-            </div>
-
-            <h1 className="cyber-headline">Under Maintenance</h1>
-
-            <p className="cyber-subtext">
-              Desktopalie workspace is currently undergoing a core architecture upgrade.
-              Click anywhere on the screen to trigger shockwave ripples or switch engine modes.
-            </p>
-
-            {/* Digital Timer Display */}
-            <div className="timer-section">
-              <span className="timer-label">ESTIMATED BACK ONLINE IN</span>
-              <div className="timer-digits">
-                <div className="digit-box">
-                  <span className="digit-val">{String(timeLeft.hours).padStart(2, "0")}</span>
-                  <span className="digit-unit">HOURS</span>
+            {/* Visual Browser Window & Live Terminal */}
+            <div className="maint-visual-wrap">
+              <div className="browser-window">
+                <div className="browser-topbar">
+                  <div className="browser-dots">
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                  <div className="browser-url">desktopalie.my.id/maintenance</div>
+                  <span className="browser-plus">+</span>
                 </div>
-                <span className="digit-colon">:</span>
-                <div className="digit-box">
-                  <span className="digit-val">{String(timeLeft.minutes).padStart(2, "0")}</span>
-                  <span className="digit-unit">MINS</span>
-                </div>
-                <span className="digit-colon">:</span>
-                <div className="digit-box">
-                  <span className="digit-val">{String(timeLeft.seconds).padStart(2, "0")}</span>
-                  <span className="digit-unit">SECS</span>
+
+                <div className="browser-content maint-browser-content">
+                  <div className="maint-terminal-panel">
+                    <div className="terminal-header">
+                      <div className="t-left">
+                        <FaTerminal />
+                        <span>System Refactor Logs</span>
+                      </div>
+                      <button
+                        className="t-stream-toggle"
+                        onClick={() => setIsLogStreaming(!isLogStreaming)}
+                      >
+                        {isLogStreaming ? <FaPause /> : <FaPlay />}
+                        <span>{isLogStreaming ? "Pause" : "Live"}</span>
+                      </button>
+                    </div>
+                    <div className="terminal-logs-body">
+                      {logs.map((logLine, idx) => (
+                        <div key={idx} className="terminal-log-line">
+                          <span className="t-prefix">&gt;</span> {logLine}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <div className="floating-code">
+                <span>await</span> system.upgrade(<b>v2.5</b>);
+              </div>
+              <div className="floating-tag">MAINTENANCE MODE ✦</div>
             </div>
           </div>
+        </section>
 
-          {/* Right Column: Terminal & Health Metrics & Subscription */}
-          <div className="cyber-glass-panel cyber-col-right">
-            <div className="col-right-header">
-              <h3>System Refactor Monitor</h3>
-              <p>Real-time telemetry and engine upgrade logs.</p>
-            </div>
-
-            {/* Interactive Live Log Terminal */}
-            <div className="cyber-terminal">
-              <div className="terminal-top">
-                <div className="terminal-left">
-                  <FaTerminal className="terminal-icon" />
-                  <span>Live Refactor Logs</span>
-                </div>
-                <button
-                  className="terminal-stream-btn"
-                  onClick={() => setIsLogStreaming(!isLogStreaming)}
-                >
-                  {isLogStreaming ? <FaPause /> : <FaPlay />}
-                  <span>{isLogStreaming ? "Pause" : "Live"}</span>
-                </button>
-              </div>
-              <div className="terminal-body">
-                {logs.map((logLine, idx) => (
-                  <div key={idx} className="terminal-line">
-                    <span className="line-prefix">&gt;</span> {logLine}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* System Health Indicators */}
-            <div className="health-metrics-grid">
-              <div className="metric-card">
-                <FaShieldAlt className="metric-icon" />
-                <div>
-                  <strong>SSL & Auth</strong>
-                  <span>Encrypted (OK)</span>
-                </div>
-              </div>
-              <div className="metric-card">
-                <FaServer className="metric-icon" />
-                <div>
-                  <strong>Database</strong>
-                  <span>Indexed 100%</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Subscription Section */}
-            <div className="cyber-subscribe">
-              <h3>Get notified when we launch</h3>
-              {subscribed ? (
-                <div className="sub-success">
-                  <FaCheckCircle />
-                  <span>Notification registered! We will email you the moment we launch.</span>
-                </div>
-              ) : (
-                <form onSubmit={handleSubscribe} className="sub-form">
-                  <div className="sub-input-wrap">
-                    <FaBell className="sub-icon" />
-                    <input
-                      type="email"
-                      required
-                      placeholder="Enter email to get notified..."
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button type="submit" className="sub-submit-btn">
-                      <span>Subscribe</span>
-                      <FaPaperPlane />
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
+        {/* Unified Tech Stack Ticker Strip */}
+        <div className="stack-strip" aria-label="Tools and technologies">
+          <div className="stack-track">
+            {[...STACK, ...STACK].map(({ name, icon: Icon, className }, index) => (
+              <span className="stack-item" key={`${name}-${index}`}>
+                <Icon className={`stack-logo ${className}`} aria-hidden="true" />
+                {name}
+                <i>✦</i>
+              </span>
+            ))}
           </div>
         </div>
       </main>
 
-      {/* Cyber Footer */}
-      <footer className="cyber-footer">
-        <div className="footer-chip">
-          <FaShieldAlt /> <span>Encrypted Session</span>
-        </div>
-        <div className="footer-chip">
-          <FaServer /> <span>Node: ap-southeast-1</span>
-        </div>
-        <div className="footer-chip">
-          <FaGlobe /> <span>Status: Maintenance</span>
-        </div>
-        <div className="footer-chip lock-chip">
-          <FaLock /> <span>Routes Locked</span>
+      {/* Unified Site Footer */}
+      <footer className="site-footer">
+        <div className="site-wrap footer-inner">
+          <Link to="/" className="brand">
+            <DesktopalieMark className="brand-mark" />
+            <span>Desktopalie</span>
+          </Link>
+          <p>Projects, experiments, and digital creations.</p>
+          <div className="social-links">
+            <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub">
+              <FaGithub />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+              <FaLinkedinIn />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <FaInstagram />
+            </a>
+          </div>
+          <span className="copyright">© {new Date().getFullYear()} DESKTOPALIE</span>
         </div>
       </footer>
     </div>
