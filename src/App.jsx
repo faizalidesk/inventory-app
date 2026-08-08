@@ -11,7 +11,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 
 // Set to true to lock the entire site under maintenance mode
-const IS_MAINTENANCE = false;
+const IS_MAINTENANCE = true;
 
 function App() {
   if (IS_MAINTENANCE) {
