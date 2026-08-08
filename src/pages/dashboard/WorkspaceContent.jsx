@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaCheckCircle, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaPlus, FaSave, FaSpinner, FaStickyNote, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaPlus, FaSave, FaSpinner, FaStickyNote, FaTrash } from "react-icons/fa";
 import UserAvatar from "../../component/UserAvatar";
 import "./WorkspaceContent.css";
 import { toggleThemeWithTransition } from "../../utils/theme";
@@ -176,7 +176,7 @@ function DetailPage({ type, slug }) {
   </section>;
 }
 
-function BookmarksPage({ user }) {
+function BookmarksPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 

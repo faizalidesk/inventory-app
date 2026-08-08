@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
+import MaintenancePage from "./pages/MaintenancePage";
 import { ExperimentsPage, ProjectDetailPage, ProjectsPage, PublicInfoPage } from "./pages/PublicPage";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
@@ -11,7 +12,8 @@ import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 
 function App() {
   return <BrowserRouter><Routes>
-    <Route path="/" element={<LandingPage />} />
+    <Route path="/" element={<MaintenancePage />} />
+    <Route path="/landing" element={<LandingPage />} />
     <Route path="/landingpage" element={<Navigate to="/" replace />} />
     <Route path="/projects" element={<ProjectsPage />} />
     <Route path="/projects/:slug" element={<ProjectDetailPage />} />
