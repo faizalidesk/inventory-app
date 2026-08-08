@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   FaBell,
   FaCheckCircle,
@@ -300,9 +299,9 @@ export default function MaintenancePage() {
           <span>© {new Date().getFullYear()} Desktopalie Workspace by Faiz Ali</span>
         </div>
         <div className="footer-right">
-          <Link to="/login" className="dev-bypass-link">
-            <FaLock /> <span>Dev / Admin Access</span>
-          </Link>
+          <span className="dev-bypass-link" style={{ cursor: "default" }}>
+            <FaLock /> <span>All Access Points Locked</span>
+          </span>
         </div>
       </footer>
     </div>

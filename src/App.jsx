@@ -10,10 +10,22 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 
+// Set to true to lock the entire site under maintenance mode
+const IS_MAINTENANCE = true;
+
 function App() {
+  if (IS_MAINTENANCE) {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<MaintenancePage />} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+
   return <BrowserRouter><Routes>
-    <Route path="/" element={<MaintenancePage />} />
-    <Route path="/landing" element={<LandingPage />} />
+    <Route path="/" element={<LandingPage />} />
     <Route path="/landingpage" element={<Navigate to="/" replace />} />
     <Route path="/projects" element={<ProjectsPage />} />
     <Route path="/projects/:slug" element={<ProjectDetailPage />} />
