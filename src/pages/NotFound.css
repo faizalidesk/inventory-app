@@ -1,1 +1,425 @@
-.not-found{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;flex-direction:column;padding:10vw;background:#08080b;color:#f7f5ff;font-family:"Manrope",system-ui,sans-serif}.not-found span{color:#9d7cff;font:500 10px "DM Mono",monospace;letter-spacing:.14em}.not-found h1{max-width:800px;margin:24px 0 0;color:inherit;font-size:clamp(50px,8vw,100px);line-height:.95;letter-spacing:-.07em}.not-found p{max-width:520px;margin-top:25px;color:#9693a1;line-height:1.7}.not-found a{margin-top:35px;padding-bottom:7px;border-bottom:1px solid #f7f5ff;color:inherit;text-decoration:none;font-size:12px;font-weight:700}
+.not-found-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.not-found-wrapper[data-theme="dark"] {
+  background-color: #080b14;
+  color: #f1f5f9;
+  --nf-glass: rgba(15, 23, 42, 0.85);
+  --nf-border: rgba(255, 255, 255, 0.12);
+  --nf-muted: #94a3b8;
+  --nf-accent: #8b5cf6;
+  --nf-accent-glow: rgba(139, 92, 246, 0.3);
+  --nf-card-bg: rgba(255, 255, 255, 0.04);
+}
+
+.not-found-wrapper[data-theme="light"] {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  --nf-glass: rgba(255, 255, 255, 0.9);
+  --nf-border: rgba(0, 0, 0, 0.1);
+  --nf-muted: #64748b;
+  --nf-accent: #6366f1;
+  --nf-accent-glow: rgba(99, 102, 241, 0.2);
+  --nf-card-bg: #ffffff;
+}
+
+/* Background Ambient Orbs */
+.nf-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.nf-orb-1 {
+  width: 400px;
+  height: 400px;
+  top: -80px;
+  left: -80px;
+  background: var(--nf-accent-glow);
+}
+
+.nf-orb-2 {
+  width: 450px;
+  height: 450px;
+  bottom: -100px;
+  right: -100px;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Header */
+.nf-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.nf-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nf-brand-mark {
+  width: 32px;
+  height: 32px;
+}
+
+.nf-brand-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.nf-theme-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nf-card-bg);
+  border: 1px solid var(--nf-border);
+  color: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nf-theme-btn:hover {
+  border-color: var(--nf-accent);
+  color: var(--nf-accent);
+}
+
+/* Main Content */
+.nf-main {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  flex: 1;
+}
+
+.nf-glass-card {
+  width: 100%;
+  max-width: 680px;
+  background: var(--nf-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--nf-border);
+  border-radius: 28px;
+  padding: 40px 36px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.nf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  margin-bottom: 14px;
+}
+
+.nf-warning-icon {
+  font-size: 13px;
+}
+
+.nf-code {
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -3px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ef4444;
+}
+
+.nf-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+  color: inherit;
+}
+
+.nf-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--nf-muted);
+  max-width: 480px;
+  margin: 0 auto 24px;
+}
+
+/* Mini Arcade Game Styling */
+.mini-game-container {
+  background: var(--nf-card-bg);
+  border: 1px solid var(--nf-border);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.game-icon {
+  color: var(--nf-accent);
+  font-size: 16px;
+}
+
+.game-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--nf-border);
+}
+
+.trophy-icon {
+  color: #eab308;
+}
+
+.score-chip {
+  color: #06b6d4;
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.combo-chip {
+  color: #ec4899;
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.lives-chip {
+  gap: 3px;
+}
+
+.heart-icon {
+  color: #ef4444;
+  font-size: 11px;
+}
+
+/* Game Board & Canvas */
+.game-board-wrap {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(3, 7, 18, 0.9);
+  border: 1px solid var(--nf-border);
+}
+
+.game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(8, 11, 20, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  z-index: 5;
+}
+
+.game-overlay h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.game-overlay p {
+  font-size: 13px;
+  color: var(--nf-muted);
+  margin-bottom: 16px;
+}
+
+.game-start-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--nf-accent), #4f46e5);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 16px var(--nf-accent-glow);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.game-start-btn:hover {
+  transform: scale(1.04);
+  opacity: 0.95;
+}
+
+.high-score-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #eab308;
+  margin-bottom: 12px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+/* Actions */
+.nf-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.nf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nf-btn.primary {
+  background: linear-gradient(135deg, var(--nf-accent), #4f46e5);
+  color: #ffffff;
+  box-shadow: 0 4px 14px var(--nf-accent-glow);
+}
+
+.nf-btn.primary:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.nf-btn.secondary {
+  background: var(--nf-card-bg);
+  border: 1px solid var(--nf-border);
+  color: inherit;
+}
+
+.nf-btn.secondary:hover {
+  border-color: var(--nf-accent);
+  color: var(--nf-accent);
+}
+
+/* Footer */
+.nf-footer {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  font-size: 12px;
+  color: var(--nf-muted);
+}
+
+.nf-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--nf-card-bg);
+  border: 1px solid var(--nf-border);
+}
+
+@media (max-width: 640px) {
+  .nf-header,
+  .nf-footer {
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .nf-glass-card {
+    padding: 28px 18px;
+  }
+
+  .nf-code {
+    font-size: 56px;
+  }
+
+  .nf-title {
+    font-size: 20px;
+  }
+}

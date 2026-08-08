@@ -15,10 +15,31 @@ const IS_MAINTENANCE = true;
 
 function App() {
   if (IS_MAINTENANCE) {
+    const realRoutes = [
+      "/",
+      "/landing",
+      "/landingpage",
+      "/projects",
+      "/projects/:slug",
+      "/experiments",
+      "/about",
+      "/services",
+      "/contact",
+      "/login",
+      "/register",
+      "/forgot-password",
+      "/reset-password",
+      "/check-email",
+      "/dashboard/*",
+    ];
+
     return (
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<MaintenancePage />} />
+          {realRoutes.map((path) => (
+            <Route key={path} path={path} element={<MaintenancePage />} />
+          ))}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     );
