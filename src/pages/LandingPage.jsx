@@ -167,12 +167,28 @@ export default function LandingPage() {
     loadProjects();
   }, []);
 
+  const sanitizeMaint = (data) => {
+    if (!data) return null;
+    let title = data.title || "System Under Maintenance";
+    let message = data.message || "We are performing system upgrades and performance enhancements. Please check back shortly.";
+
+    if (title.toLowerCase().includes("situs sedang") || title.toLowerCase().includes("pemeliharaan")) {
+      title = "System Under Maintenance";
+    }
+    if (message.toLowerCase().includes("kami sedang") || message.toLowerCase().includes("pembaruan sistem")) {
+      message = "We are performing system upgrades and performance enhancements. Please check back shortly.";
+    }
+
+    return { ...data, title, message };
+  };
+
   // Load & Listen to Maintenance Settings from Supabase & LocalStorage
   useEffect(() => {
     async function loadMaintenance() {
       const settings = await fetchMaintenanceSettings();
-      if (settings) {
-        setMaintenance(settings);
+      const sanitized = sanitizeMaint(settings);
+      if (sanitized) {
+        setMaintenance(sanitized);
       }
     }
     loadMaintenance();
@@ -182,7 +198,10 @@ export default function LandingPage() {
       .channel('site_settings_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
         if (payload.new && payload.new.key === 'maintenance') {
-          setMaintenance(payload.new.value);
+          const sanitized = sanitizeMaint(payload.new.value);
+          if (sanitized) {
+            setMaintenance(sanitized);
+          }
         }
       })
       .subscribe();
@@ -192,7 +211,8 @@ export default function LandingPage() {
       const localData = localStorage.getItem('desktopalie_maintenance_settings');
       if (localData) {
         try {
-          setMaintenance(JSON.parse(localData));
+          const sanitized = sanitizeMaint(JSON.parse(localData));
+          if (sanitized) setMaintenance(sanitized);
         } catch (e) {}
       }
     };

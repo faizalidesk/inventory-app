@@ -53,17 +53,33 @@ export default function MaintenancePage() {
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
+  const sanitizeSettings = (data) => {
+    if (!data) return null;
+    let title = data.title || "System Under Maintenance";
+    let message = data.message || "Desktopalie is currently undergoing a core architecture refactor, database maintenance, and UI v2.5 performance enhancements. We will be back online shortly with a faster and more responsive digital experience.";
+
+    if (title.toLowerCase().includes("situs sedang") || title.toLowerCase().includes("pemeliharaan")) {
+      title = "System Under Maintenance";
+    }
+    if (message.toLowerCase().includes("kami sedang") || message.toLowerCase().includes("pembaruan sistem")) {
+      message = "We are performing system upgrades and performance enhancements. Please check back shortly.";
+    }
+
+    return {
+      title,
+      message,
+      end_time: data.end_time || data.target_date || null,
+      allow_admin_bypass: data.allow_admin_bypass !== false
+    };
+  };
+
   // Fetch Maintenance settings from Backoffice / Supabase
   useEffect(() => {
     async function loadSettings() {
       const data = await fetchMaintenanceSettings();
-      if (data) {
-        setSettings({
-          title: data.title || "We are upgrading our workspace.",
-          message: data.message || "Desktopalie is currently undergoing maintenance. We will be back online shortly.",
-          end_time: data.end_time || data.target_date || null,
-          allow_admin_bypass: data.allow_admin_bypass !== false
-        });
+      const sanitized = sanitizeSettings(data);
+      if (sanitized) {
+        setSettings(sanitized);
       }
     }
     loadSettings();
@@ -73,13 +89,10 @@ export default function MaintenancePage() {
       .channel('site_settings_maint_page')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
         if (payload.new && payload.new.key === 'maintenance') {
-          const val = payload.new.value;
-          setSettings({
-            title: val.title || "We are upgrading our workspace.",
-            message: val.message || "Desktopalie is currently undergoing maintenance.",
-            end_time: val.end_time || val.target_date || null,
-            allow_admin_bypass: val.allow_admin_bypass !== false
-          });
+          const sanitized = sanitizeSettings(payload.new.value);
+          if (sanitized) {
+            setSettings(sanitized);
+          }
         }
       })
       .subscribe();
