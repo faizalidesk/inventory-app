@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
+import MaintenancePage from "./pages/MaintenancePage";
 import { ExperimentsPage, ProjectDetailPage, ProjectsPage, PublicInfoPage } from "./pages/PublicPage";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
@@ -9,7 +10,41 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 
+// Set to true to lock the entire site under maintenance mode
+const IS_MAINTENANCE = true;
+
 function App() {
+  if (IS_MAINTENANCE) {
+    const realRoutes = [
+      "/",
+      "/landing",
+      "/landingpage",
+      "/projects",
+      "/projects/:slug",
+      "/experiments",
+      "/about",
+      "/services",
+      "/contact",
+      "/login",
+      "/register",
+      "/forgot-password",
+      "/reset-password",
+      "/check-email",
+      "/dashboard/*",
+    ];
+
+    return (
+      <BrowserRouter>
+        <Routes>
+          {realRoutes.map((path) => (
+            <Route key={path} path={path} element={<MaintenancePage />} />
+          ))}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+
   return <BrowserRouter><Routes>
     <Route path="/" element={<LandingPage />} />
     <Route path="/landingpage" element={<Navigate to="/" replace />} />

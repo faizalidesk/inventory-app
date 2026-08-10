@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import {
   FaArrowRight,
   FaCode,
-  FaCss3Alt,
   FaFigma,
   FaGithub,
   FaInstagram,
@@ -12,17 +11,7 @@ import {
   FaPalette,
   FaSun,
 } from "react-icons/fa";
-import {
-  SiFigma,
-  SiGit,
-  SiJavascript,
-  SiReact,
-  SiSupabase,
-  SiVercel,
-  SiVite,
-} from "react-icons/si";
 import DesktopalieMark from "../component/DesktopalieMark";
-import AntigravityLogo from "../component/AntigravityLogo";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection } from "../services/workspaceService";
@@ -74,19 +63,6 @@ const SERVICES = [
     description: "Small ideas, prototypes, and visual studies that explore what the web can become.",
   },
 ];
-
-const STACK = [
-  { name: "React", icon: SiReact, className: "react" },
-  { name: "JavaScript", icon: SiJavascript, className: "javascript" },
-  { name: "Vite", icon: SiVite, className: "vite" },
-  { name: "Figma", icon: SiFigma, className: "figma" },
-  { name: "Supabase", icon: SiSupabase, className: "supabase" },
-  { name: "Antigravity", icon: AntigravityLogo, className: "antigravity" },
-  { name: "CSS", icon: FaCss3Alt, className: "css" },
-  { name: "Git", icon: SiGit, className: "git" },
-  { name: "Vercel", icon: SiVercel, className: "vercel" },
-];
-
 
 function ThemeIcon({ theme }) {
   return theme === "dark" ? <FaSun /> : <FaMoon />;
@@ -212,18 +188,6 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
-        <div className="stack-strip" aria-label="Tools and technologies">
-          <div className="stack-track">
-            {[...STACK, ...STACK].map(({ name, icon: Icon, className }, index) => (
-              <span className="stack-item" key={`${name}-${index}`}>
-                <Icon className={`stack-logo ${className}`} aria-hidden="true" />
-                {name}
-                <i>✦</i>
-              </span>
-            ))}
-          </div>
-        </div>
 
         <section className="section" id="work">
           <div className="site-wrap">
