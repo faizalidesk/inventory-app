@@ -176,3 +176,26 @@ VALUES
   ('Web Content Accessibility Guidelines', 'https://www.w3.org/WAI/standards-guidelines/wcag/', 'W3C'),
   ('React documentation', 'https://react.dev', 'React')
 ON CONFLICT DO NOTHING;
+
+-- ---------------------------------------------------
+-- TABEL 5: SITE SETTINGS (Maintenance & System Config)
+-- ---------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  key TEXT PRIMARY KEY,
+  value JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS for Site Settings
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow select site_settings" ON public.site_settings;
+DROP POLICY IF EXISTS "Allow insert site_settings" ON public.site_settings;
+DROP POLICY IF EXISTS "Allow update site_settings" ON public.site_settings;
+DROP POLICY IF EXISTS "Allow delete site_settings" ON public.site_settings;
+
+CREATE POLICY "Allow select site_settings" ON public.site_settings FOR SELECT USING (true);
+CREATE POLICY "Allow insert site_settings" ON public.site_settings FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow update site_settings" ON public.site_settings FOR UPDATE USING (true);
+CREATE POLICY "Allow delete site_settings" ON public.site_settings FOR DELETE USING (true);
+
