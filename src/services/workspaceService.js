@@ -136,7 +136,8 @@ export async function fetchMaintenanceSettings() {
       .maybeSingle();
 
     if (data?.value) {
-      return data.value;
+      const val = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
+      return val;
     }
   } catch (err) {
     console.error("Error fetching maintenance settings:", err);
@@ -150,5 +151,3 @@ export async function fetchMaintenanceSettings() {
   }
   return null;
 }
-
-

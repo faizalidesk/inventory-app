@@ -22,7 +22,11 @@ export default function App() {
       try {
         const settings = await fetchMaintenanceSettings();
         if (settings) {
-          setIsMaintenance(!!settings.is_enabled);
+          const val = typeof settings === "string" ? JSON.parse(settings) : settings;
+          const active = val?.is_enabled === true || val?.is_enabled === "true" || val?.is_enabled === 1;
+          setIsMaintenance(active);
+        } else {
+          setIsMaintenance(false);
         }
       } catch (err) {
         console.error("Error loading maintenance settings:", err);
@@ -33,8 +37,8 @@ export default function App() {
 
     checkMaintenance();
 
-    // Poll every 2.5s for instant sync across tabs and devices
-    const pollInterval = setInterval(checkMaintenance, 2500);
+    // Poll every 2s for instant sync across devices & tabs
+    const pollInterval = setInterval(checkMaintenance, 2000);
 
     // Listen to Supabase Realtime changes on site_settings table
     const channel = supabase
@@ -44,19 +48,23 @@ export default function App() {
         { event: "*", schema: "public", table: "site_settings" },
         (payload) => {
           if (payload.new && payload.new.key === "maintenance") {
-            setIsMaintenance(!!payload.new.value?.is_enabled);
+            const rawVal = payload.new.value;
+            const val = typeof rawVal === "string" ? JSON.parse(rawVal) : rawVal;
+            const active = val?.is_enabled === true || val?.is_enabled === "true" || val?.is_enabled === 1;
+            setIsMaintenance(active);
           }
         }
       )
       .subscribe();
 
-    // Listen to storage events for local testing
+    // Listen to storage events for local tab sync
     const handleStorageChange = () => {
       const localData = localStorage.getItem("desktopalie_maintenance_settings");
       if (localData) {
         try {
           const parsed = JSON.parse(localData);
-          setIsMaintenance(!!parsed.is_enabled);
+          const active = parsed?.is_enabled === true || parsed?.is_enabled === "true" || parsed?.is_enabled === 1;
+          setIsMaintenance(active);
         } catch (e) {}
       }
     };
