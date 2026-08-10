@@ -124,6 +124,25 @@ export async function updateProfile(userId, profileData) {
   return data;
 }
 
+const sanitizeMaintData = (val) => {
+  if (!val) return val;
+  let obj = typeof val === "string" ? JSON.parse(val) : val;
+  if (!obj || typeof obj !== "object") return val;
+
+  let title = obj.title || "System Under Maintenance";
+  let message = obj.message || "We are performing system upgrades and performance enhancements. Please check back shortly.";
+
+  const indonesianKeywords = ["situs", "pemeliharaan", "kami", "sedang", "melakukan", "peningkatan", "pembaruan", "beberapa", "saat", "kembali"];
+  if (indonesianKeywords.some(kw => String(title).toLowerCase().includes(kw))) {
+    title = "System Under Maintenance";
+  }
+  if (indonesianKeywords.some(kw => String(message).toLowerCase().includes(kw))) {
+    message = "We are performing system upgrades and performance enhancements. Please check back shortly.";
+  }
+
+  return { ...obj, title, message };
+};
+
 /**
  * Fetch Maintenance & Countdown settings for public site
  */
@@ -137,7 +156,7 @@ export async function fetchMaintenanceSettings() {
 
     if (data?.value) {
       const val = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
-      return val;
+      return sanitizeMaintData(val);
     }
   } catch (err) {
     console.error("Error fetching maintenance settings:", err);
@@ -146,7 +165,7 @@ export async function fetchMaintenanceSettings() {
   const localData = localStorage.getItem("desktopalie_maintenance_settings");
   if (localData) {
     try {
-      return JSON.parse(localData);
+      return sanitizeMaintData(JSON.parse(localData));
     } catch (e) {}
   }
   return null;
