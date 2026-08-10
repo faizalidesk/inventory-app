@@ -2,19 +2,23 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FaArrowRight,
+  FaClock,
   FaCode,
   FaFigma,
   FaGithub,
   FaInstagram,
   FaLinkedinIn,
+  FaLock,
   FaMoon,
   FaPalette,
   FaSun,
+  FaTools,
 } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
-import { fetchCollection } from "../services/workspaceService";
+import { fetchCollection, fetchMaintenanceSettings } from "../services/workspaceService";
+import { supabase } from "../lib/supabase";
 
 const PROJECTS = [
   {
@@ -75,12 +79,15 @@ export default function LandingPage() {
     return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
   });
   const [projectsList, setProjectsList] = useState(PROJECTS);
+  const [maintenance, setMaintenance] = useState(null);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     localStorage.setItem("desktopalie-theme", theme);
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
+  // Load Projects from Supabase
   useEffect(() => {
     async function loadProjects() {
       const data = await fetchCollection("projects");
@@ -99,7 +106,136 @@ export default function LandingPage() {
     loadProjects();
   }, []);
 
+  // Load & Listen to Maintenance Settings from Supabase & LocalStorage
+  useEffect(() => {
+    async function loadMaintenance() {
+      const settings = await fetchMaintenanceSettings();
+      if (settings) {
+        setMaintenance(settings);
+      }
+    }
+    loadMaintenance();
+
+    // Listen to Supabase Realtime changes on site_settings
+    const channel = supabase
+      .channel('site_settings_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
+        if (payload.new && payload.new.key === 'maintenance') {
+          setMaintenance(payload.new.value);
+        }
+      })
+      .subscribe();
+
+    // Listen to window storage events for local testing
+    const handleStorageChange = () => {
+      const localData = localStorage.getItem('desktopalie_maintenance_settings');
+      if (localData) {
+        try {
+          setMaintenance(JSON.parse(localData));
+        } catch (e) {}
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  // Calculate live countdown matching Backoffice end_time / target_date
+  useEffect(() => {
+    if (!maintenance?.is_enabled) return;
+
+    const calculateTimeLeft = () => {
+      const targetStr = maintenance.end_time || maintenance.target_date;
+      if (!targetStr) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const target = new Date(targetStr).getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeLeft({ days, hours, minutes, seconds });
+    };
+
+    calculateTimeLeft();
+    const interval = setInterval(calculateTimeLeft, 1000);
+    return () => clearInterval(interval);
+  }, [maintenance]);
+
   const toggleTheme = (event) => toggleThemeWithTransition(event, theme, setTheme);
+
+  // IF MAINTENANCE MODE IS ENABLED IN BACKOFFICE
+  if (maintenance && maintenance.is_enabled) {
+    return (
+      <div className="desktopalie" data-theme={theme} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", padding: "2rem" }}>
+        <div className="page-noise" aria-hidden="true" />
+        
+        {/* Background glow */}
+        <div style={{ position: "absolute", width: "450px", height: "450px", borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%)", top: "15%", pointerEvents: "none" }} />
+
+        <div style={{ maxWidth: "680px", width: "100%", textAlign: "center", zIndex: 2, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "20px", padding: "3rem 2rem", boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}>
+          <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "linear-gradient(135deg, var(--accent), var(--accent2))", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.75rem", marginBottom: "1.5rem", boxShadow: "0 10px 20px rgba(139,92,246,0.3)" }}>
+            <FaTools />
+          </div>
+
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "4px 14px", borderRadius: "99px", background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)", color: "#F59E0B", fontSize: "11px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "1.25rem" }}>
+            <FaClock /> SYSTEM MAINTENANCE & COUNTDOWN
+          </div>
+
+          <h1 style={{ fontSize: "clamp(28px, 4vw, 42px)", fontWeight: "800", letterSpacing: "-0.04em", marginBottom: "1rem", color: "var(--text)" }}>
+            {maintenance.title || "Situs Sedang Dalam Pemeliharaan"}
+          </h1>
+
+          <p style={{ color: "var(--muted)", fontSize: "15px", lineHeight: "1.7", maxWidth: "540px", margin: "0 auto 2.5rem" }}>
+            {maintenance.message || "Kami sedang melakukan peningkatan sistem dan optimasi performa. Kembali lagi dalam beberapa saat."}
+          </p>
+
+          {/* Real-time Live Countdown Cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", maxWidth: "480px", margin: "0 auto 2.5rem" }}>
+            {[
+              { label: "HARI", value: timeLeft.days },
+              { label: "JAM", value: timeLeft.hours },
+              { label: "MENIT", value: timeLeft.minutes },
+              { label: "DETIK", value: timeLeft.seconds }
+            ].map((item, index) => (
+              <div key={index} style={{ background: "var(--raised)", border: "1px solid var(--line)", borderRadius: "12px", padding: "1rem 0.5rem" }}>
+                <div style={{ fontSize: "clamp(22px, 3.5vw, 32px)", fontWeight: "800", color: "var(--accent)", fontFamily: "'DM Mono', monospace" }}>
+                  {String(item.value).padStart(2, "0")}
+                </div>
+                <div style={{ fontSize: "10px", fontWeight: "700", color: "var(--muted)", letterSpacing: "0.08em", marginTop: "4px" }}>
+                  {item.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Admin Bypass Link if allowed */}
+          {maintenance.allow_admin_bypass !== false && (
+            <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1.5rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+              <span style={{ fontSize: "12px", color: "var(--muted)" }}>Administrator Backoffice?</span>
+              <Link to="/login" style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "var(--accent)", fontWeight: "700", fontSize: "12px", textDecoration: "none" }}>
+                <FaLock /> Sign In to Backoffice
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="desktopalie" data-theme={theme}>

@@ -128,16 +128,27 @@ export async function updateProfile(userId, profileData) {
  * Fetch Maintenance & Countdown settings for public site
  */
 export async function fetchMaintenanceSettings() {
-  const { data, error } = await supabase
-    .from("site_settings")
-    .select("*")
-    .eq("key", "maintenance")
-    .maybeSingle();
+  try {
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("key", "maintenance")
+      .maybeSingle();
 
-  if (error) {
-    console.error("Error fetching maintenance settings:", error);
-    return null;
+    if (data?.value) {
+      return data.value;
+    }
+  } catch (err) {
+    console.error("Error fetching maintenance settings:", err);
   }
-  return data?.value || null;
+
+  const localData = localStorage.getItem("desktopalie_maintenance_settings");
+  if (localData) {
+    try {
+      return JSON.parse(localData);
+    } catch (e) {}
+  }
+  return null;
 }
+
 
