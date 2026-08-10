@@ -54,7 +54,7 @@
 .desktopalie .site-nav a { transition: color .2s ease; }
 .desktopalie .site-nav a:hover { color: var(--text); }
 .desktopalie .header-actions { display: flex; align-items: center; gap: 12px; }
-.desktopalie .theme-button { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--text); background: var(--surface); cursor: pointer; transition: transform .35s ease, background-color .5s ease, border-color .5s ease; }
+.desktopalie .theme-button { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--text); background: var(--surface); cursor: pointer; -webkit-tap-highlight-color: transparent; outline: none; transition: transform .35s ease, background-color .5s ease, border-color .5s ease; }
 .desktopalie .theme-button:hover { transform: rotate(16deg); border-color: var(--accent); }
 .desktopalie .nav-login { display: inline-flex; align-items: center; gap: 9px; height: 39px; padding: 0 17px; border-radius: 7px; background: var(--text); color: var(--page); font-size: 11px; font-weight: 800; transition: transform .2s ease, box-shadow .2s ease; }
 .desktopalie .nav-login:hover { transform: translateY(-2px); box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 20%, transparent); }

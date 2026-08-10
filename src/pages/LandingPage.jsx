@@ -270,7 +270,7 @@ export default function LandingPage() {
             <div className="about-copy">
               <span className="section-index">02 / ABOUT</span>
               <h2>I build to learn,<br />and share what I discover.</h2>
-              <p className="large-copy">I am Faiz, a designer and developer interested in the space between technology and human experience.</p>
+              <p className="large-copy">I am Ali, a designer and developer interested in the space between technology and human experience.</p>
               <p>Desktopalie is where I collect the projects, lessons, and experiments that shape my creative journey. I care about simple ideas, precise details, and digital work with a clear reason to exist.</p>
               <div className="about-stats">
                 <div><strong>4+</strong><span>Years exploring the web</span></div>

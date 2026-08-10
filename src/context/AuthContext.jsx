@@ -20,16 +20,9 @@ export function AuthProvider({ children }) {
 
         if (!sessionData.session) return;
 
-        // Verify the locally stored session against the Supabase Auth server.
-        const { data: userData, error: userError } = await supabase.auth.getUser();
-        if (userError || !userData.user) {
-          await supabase.auth.signOut({ scope: "local" });
-          return;
-        }
-
         if (active) {
-          setSession({ ...sessionData.session, user: userData.user });
-          setUser(userData.user);
+          setSession(sessionData.session);
+          setUser(sessionData.session.user);
         }
       } catch (error) {
         if (active) setAuthError(error);

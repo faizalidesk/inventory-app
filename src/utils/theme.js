@@ -2,9 +2,9 @@ import { flushSync } from "react-dom";
 
 /**
  * Utility to toggle theme with a circular wave/reveal transition.
- * Uses the View Transitions API if supported and not disabled by prefers-reduced-motion.
+ * Optimized for mobile devices (including Redmi Note 12 / MIUI / HyperOS).
  * 
- * @param {MouseEvent} event - The click event triggering the toggle.
+ * @param {MouseEvent|TouchEvent} event - The click or touch event triggering the toggle.
  * @param {string} theme - The current theme ('light' or 'dark').
  * @param {Function} setTheme - React state setter function for the theme.
  * @param {string} [targetTheme] - The target theme to switch to ('light' or 'dark'). Optional.
@@ -14,28 +14,51 @@ export function toggleThemeWithTransition(event, theme, setTheme, targetTheme) {
   
   if (theme === newTheme) return;
 
-  // Check support for View Transitions API and respects user's motion preferences
-  if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  // Fallback for browsers that do not support View Transitions API
+  if (!document.startViewTransition) {
     setTheme(newTheme);
     return;
   }
 
-  // Get coordinates of the click, fallback to viewport center
-  const x = event?.clientX ?? window.innerWidth / 2;
-  const y = event?.clientY ?? window.innerHeight / 2;
-  
-  // Calculate distance to the furthest corner
-  const endRadius = Math.hypot(
-    Math.max(x, window.innerWidth - x),
-    Math.max(y, window.innerHeight - y)
+  // Calculate exact center coordinates of the button (works for SVG path targets, touch events, and mobile viewports)
+  let x = Math.round(window.innerWidth / 2);
+  let y = Math.round(window.innerHeight / 2);
+
+  const rawTarget = event?.currentTarget || event?.target;
+  const buttonEl = rawTarget?.closest ? (rawTarget.closest("button") || rawTarget.closest("a") || rawTarget) : rawTarget;
+
+  if (buttonEl && typeof buttonEl.getBoundingClientRect === "function") {
+    const rect = buttonEl.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      x = Math.round(rect.left + rect.width / 2);
+      y = Math.round(rect.top + rect.height / 2);
+    }
+  } else if (event?.touches?.[0] || event?.changedTouches?.[0]) {
+    const touch = event.touches?.[0] || event.changedTouches?.[0];
+    x = Math.round(touch.clientX);
+    y = Math.round(touch.clientY);
+  } else if (typeof event?.clientX === "number" && typeof event?.clientY === "number" && (event.clientX > 0 || event.clientY > 0)) {
+    x = Math.round(event.clientX);
+    y = Math.round(event.clientY);
+  }
+
+  // Calculate distance to the furthest corner of the viewport
+  const endRadius = Math.ceil(
+    Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    )
   );
+
+  // Set CSS custom properties on document element for mobile CSS engine support
+  document.documentElement.style.setProperty("--theme-x", `${x}px`);
+  document.documentElement.style.setProperty("--theme-y", `${y}px`);
+  document.documentElement.style.setProperty("--theme-r", `${endRadius}px`);
 
   // Disable standard CSS transitions during the view transition to prevent conflicts
   document.documentElement.classList.add("theme-transitioning");
 
   const transition = document.startViewTransition(() => {
-    // flushSync is used to ensure React updates the DOM synchronously
-    // so that the new state is captured in the "new" screenshot immediately.
     flushSync(() => {
       setTheme(newTheme);
     });
@@ -47,7 +70,6 @@ export function toggleThemeWithTransition(event, theme, setTheme, targetTheme) {
       `circle(${endRadius}px at ${x}px ${y}px)`
     ];
     
-    // Animate the new root snapshot on top of the old one
     document.documentElement.animate(
       {
         clipPath: clipPath
