@@ -251,10 +251,10 @@ export default function NotFound() {
           </div>
 
           <h1 className="nf-code">404</h1>
-          <h2 className="nf-title">Halaman Tidak Ditemukan</h2>
+          <h2 className="nf-title">Page Not Found</h2>
 
           <p className="nf-desc">
-            Halaman yang Anda cari tidak tersedia. Sambil menunggu, coba basmi quantum bug pada mini-game di bawah ini!
+            The page you are looking for does not exist. While you are here, try zapping quantum bugs in the mini-game below!
           </p>
 
           {/* Mini Arcade Game Container */}
@@ -293,7 +293,7 @@ export default function NotFound() {
               {gameState === "idle" && (
                 <div className="game-overlay">
                   <h3>Zap the Cyan Bugs, Avoid Red Viruses!</h3>
-                  <p>Klik/Tap sebanyak mungkin bug sebelum mereka lenyap.</p>
+                  <p>Click or tap as many bugs as you can before they escape.</p>
                   <button className="game-start-btn" onClick={startGame}>
                     <FaGamepad /> <span>Start Mini-Game</span>
                   </button>
@@ -303,12 +303,12 @@ export default function NotFound() {
               {gameState === "gameover" && (
                 <div className="game-overlay gameover">
                   <h3>Game Over!</h3>
-                  <p>Skor Akhir Anda: <strong>{score}</strong></p>
+                  <p>Your Final Score: <strong>{score}</strong></p>
                   {score >= highScore && score > 0 && (
                     <span className="high-score-badge">🏆 New High Score!</span>
                   )}
                   <button className="game-start-btn" onClick={startGame}>
-                    <FaRedo /> <span>Main Lagi</span>
+                    <FaRedo /> <span>Play Again</span>
                   </button>
                 </div>
               )}
@@ -317,10 +317,10 @@ export default function NotFound() {
 
           <div className="nf-actions">
             <Link to="/" className="nf-btn primary">
-              <FaHome /> <span>Kembali ke Halaman Utama</span>
+              <FaHome /> <span>Back to Home</span>
             </Link>
             <Link to="/" className="nf-btn secondary">
-              <FaArrowLeft /> <span>Cek Status Pemeliharaan</span>
+              <FaArrowLeft /> <span>Check Maintenance Status</span>
             </Link>
           </div>
         </div>

@@ -258,20 +258,20 @@ export default function LandingPage() {
           </div>
 
           <h1 style={{ fontSize: "clamp(28px, 4vw, 42px)", fontWeight: "800", letterSpacing: "-0.04em", marginBottom: "1rem", color: "var(--text)" }}>
-            {maintenance.title || "Situs Sedang Dalam Pemeliharaan"}
+            {maintenance.title || "System Under Maintenance"}
           </h1>
 
           <p style={{ color: "var(--muted)", fontSize: "15px", lineHeight: "1.7", maxWidth: "540px", margin: "0 auto 2.5rem" }}>
-            {maintenance.message || "Kami sedang melakukan peningkatan sistem dan optimasi performa. Kembali lagi dalam beberapa saat."}
+            {maintenance.message || "We are performing system upgrades and performance enhancements. Please check back shortly."}
           </p>
 
           {/* Real-time Live Countdown Cards */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", maxWidth: "480px", margin: "0 auto 2.5rem" }}>
             {[
-              { label: "HARI", value: timeLeft.days },
-              { label: "JAM", value: timeLeft.hours },
-              { label: "MENIT", value: timeLeft.minutes },
-              { label: "DETIK", value: timeLeft.seconds }
+              { label: "DAYS", value: timeLeft.days },
+              { label: "HOURS", value: timeLeft.hours },
+              { label: "MINUTES", value: timeLeft.minutes },
+              { label: "SECONDS", value: timeLeft.seconds }
             ].map((item, index) => (
               <div key={index} style={{ background: "var(--raised)", border: "1px solid var(--line)", borderRadius: "12px", padding: "1rem 0.5rem" }}>
                 <div style={{ fontSize: "clamp(22px, 3.5vw, 32px)", fontWeight: "800", color: "var(--accent)", fontFamily: "'DM Mono', monospace" }}>
