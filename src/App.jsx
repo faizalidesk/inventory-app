@@ -93,37 +93,12 @@ export default function App() {
     );
   }
 
-  // IF MAINTENANCE MODE IS ENABLED FROM BACKOFFICE
+  // IF MAINTENANCE MODE IS ENABLED FROM BACKOFFICE -> LOCK ALL ROUTES TOTALLY (INCLUDING /login & /register)
   if (isMaintenance) {
-    const publicRoutes = [
-      "/",
-      "/landing",
-      "/landingpage",
-      "/projects",
-      "/projects/:slug",
-      "/experiments",
-      "/about",
-      "/services",
-      "/contact",
-    ];
-
     return (
       <BrowserRouter>
         <Routes>
-          {/* Public pages display MaintenancePage */}
-          {publicRoutes.map((path) => (
-            <Route key={path} path={path} element={<MaintenancePage />} />
-          ))}
-
-          {/* Admin routes remain accessible so admins can log in & manage Backoffice */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/check-email" element={<CheckEmail />} />
-          <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<MaintenancePage />} />
         </Routes>
       </BrowserRouter>
     );

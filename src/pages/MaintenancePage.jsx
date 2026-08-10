@@ -170,9 +170,9 @@ export default function MaintenancePage() {
             >
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
-            <Link to="/login" className="maint-locked-chip" style={{ textDecoration: "none" }}>
-              <FaLock /> Admin Login
-            </Link>
+            <span className="maint-locked-chip">
+              <FaLock /> Site Locked
+            </span>
           </div>
         </div>
       </header>
