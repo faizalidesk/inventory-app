@@ -16,6 +16,8 @@ import {
 } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import { toggleThemeWithTransition } from "../utils/theme";
+import { fetchMaintenanceSettings } from "../services/workspaceService";
+import { supabase } from "../lib/supabase";
 import "./MaintenancePage.css";
 
 const INITIAL_LOGS = [
@@ -36,25 +38,82 @@ export default function MaintenancePage() {
   const [subscribed, setSubscribed] = useState(false);
   const [logs, setLogs] = useState(INITIAL_LOGS);
   const [isLogStreaming, setIsLogStreaming] = useState(true);
-  const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 45, seconds: 30 });
+  
+  const [settings, setSettings] = useState({
+    title: "We are upgrading our workspace.",
+    message: "Desktopalie is currently undergoing a core architecture refactor, database maintenance, and UI v2.5 performance enhancements. We will be back online shortly with a faster and more responsive digital experience.",
+    end_time: null,
+    allow_admin_bypass: true
+  });
+
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 2, minutes: 45, seconds: 30 });
 
   useEffect(() => {
     localStorage.setItem("desktopalie-theme", theme);
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
-  // Countdown timer effect
+  // Fetch Maintenance settings from Backoffice / Supabase
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return prev;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
+    async function loadSettings() {
+      const data = await fetchMaintenanceSettings();
+      if (data) {
+        setSettings({
+          title: data.title || "We are upgrading our workspace.",
+          message: data.message || "Desktopalie is currently undergoing maintenance. We will be back online shortly.",
+          end_time: data.end_time || data.target_date || null,
+          allow_admin_bypass: data.allow_admin_bypass !== false
+        });
+      }
+    }
+    loadSettings();
+
+    // Listen to Supabase Realtime changes
+    const channel = supabase
+      .channel('site_settings_maint_page')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
+        if (payload.new && payload.new.key === 'maintenance') {
+          const val = payload.new.value;
+          setSettings({
+            title: val.title || "We are upgrading our workspace.",
+            message: val.message || "Desktopalie is currently undergoing maintenance.",
+            end_time: val.end_time || val.target_date || null,
+            allow_admin_bypass: val.allow_admin_bypass !== false
+          });
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
+
+  // Dynamic Live Countdown Timer Effect
+  useEffect(() => {
+    const calculateTime = () => {
+      if (!settings.end_time) return;
+      const target = new Date(settings.end_time).getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeLeft({ days, hours, minutes, seconds });
+    };
+
+    calculateTime();
+    const timer = setInterval(calculateTime, 1000);
+    return () => clearInterval(timer);
+  }, [settings.end_time]);
 
   // Simulated Live Log Stream
   useEffect(() => {
@@ -111,9 +170,9 @@ export default function MaintenancePage() {
             >
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
-            <span className="maint-locked-chip">
-              <FaLock /> Routes Locked
-            </span>
+            <Link to="/login" className="maint-locked-chip" style={{ textDecoration: "none" }}>
+              <FaLock /> Admin Login
+            </Link>
           </div>
         </div>
       </header>
@@ -129,16 +188,25 @@ export default function MaintenancePage() {
                 <span /> PLATFORM SYSTEM UPGRADE IN PROGRESS
               </div>
               <h1>
-                We are upgrading <span>our workspace.</span>
+                {settings.title}
               </h1>
               <p>
-                Desktopalie is currently undergoing a core architecture refactor, database maintenance, and UI v2.5 performance enhancements. We will be back online shortly with a faster and more responsive digital experience.
+                {settings.message}
               </p>
 
               {/* Countdown Timer Widget */}
               <div className="maint-timer-box">
                 <span className="timer-tag">ESTIMATED TIME UNTIL COMPLETION</span>
                 <div className="timer-display">
+                  {timeLeft.days > 0 && (
+                    <>
+                      <div className="t-unit">
+                        <strong>{String(timeLeft.days).padStart(2, "0")}</strong>
+                        <span>DAYS</span>
+                      </div>
+                      <span className="t-colon">:</span>
+                    </>
+                  )}
                   <div className="t-unit">
                     <strong>{String(timeLeft.hours).padStart(2, "0")}</strong>
                     <span>HOURS</span>
