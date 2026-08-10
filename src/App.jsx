@@ -33,6 +33,9 @@ export default function App() {
 
     checkMaintenance();
 
+    // Poll every 2.5s for instant sync across tabs and devices
+    const pollInterval = setInterval(checkMaintenance, 2500);
+
     // Listen to Supabase Realtime changes on site_settings table
     const channel = supabase
       .channel("app_site_settings_changes")
@@ -60,6 +63,7 @@ export default function App() {
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
+      clearInterval(pollInterval);
       supabase.removeChannel(channel);
       window.removeEventListener("storage", handleStorageChange);
     };
