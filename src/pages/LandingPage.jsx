@@ -17,7 +17,7 @@ import {
 import DesktopalieMark from "../component/DesktopalieMark";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
-import { fetchCollection, fetchMaintenanceSettings } from "../services/workspaceService";
+import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 
 const PROJECTS = [
@@ -82,10 +82,71 @@ export default function LandingPage() {
   const [maintenance, setMaintenance] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+  const [landingContent, setLandingContent] = useState({
+    hero_badge: 'Independent designer & developer',
+    hero_title: 'Ideas, crafted into digital experiences.',
+    hero_description: 'Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.',
+    hero_cta_text: 'Explore my work',
+    hero_secondary_cta_text: 'More about me',
+    hero_note: 'Currently exploring creative interfaces, thoughtful motion, and useful AI.',
+    about_title: 'I build to learn, and share what I discover.',
+    about_large_copy: 'I am Ali, a designer and developer interested in the space between technology and human experience.',
+    about_description: 'Desktopalie is where I collect the projects, lessons, and experiments that shape my creative journey. I care about simple ideas, precise details, and digital work with a clear reason to exist.',
+    about_location: 'Based in Indonesia • Working worldwide',
+    stat_1_value: '4+',
+    stat_1_label: 'Years exploring the web',
+    stat_2_value: '20+',
+    stat_2_label: 'Projects & experiments',
+    stat_3_value: '∞',
+    stat_3_label: 'Ideas still in progress',
+    contact_title: "Let's make something worth remembering.",
+    contact_email: 'hello@desktopalie.my.id',
+    github_url: 'https://github.com',
+    linkedin_url: 'https://linkedin.com',
+    instagram_url: 'https://instagram.com'
+  });
+
   useEffect(() => {
     localStorage.setItem("desktopalie-theme", theme);
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
+
+  // Load Landing Content from Supabase
+  useEffect(() => {
+    async function loadLandingContent() {
+      const data = await fetchLandingPageSettings();
+      if (data) {
+        setLandingContent(prev => ({ ...prev, ...data }));
+      }
+    }
+    loadLandingContent();
+
+    // Listen to Supabase Realtime changes on site_settings
+    const channel = supabase
+      .channel('landing_settings_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
+        if (payload.new && payload.new.key === 'landing_page') {
+          const val = typeof payload.new.value === 'string' ? JSON.parse(payload.new.value) : payload.new.value;
+          setLandingContent(prev => ({ ...prev, ...val }));
+        }
+      })
+      .subscribe();
+
+    const handleStorage = () => {
+      const local = localStorage.getItem('desktopalie_landing_settings');
+      if (local) {
+        try {
+          setLandingContent(prev => ({ ...prev, ...JSON.parse(local) }));
+        } catch (e) {}
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
 
   // Load Projects from Supabase
   useEffect(() => {
@@ -274,18 +335,18 @@ export default function LandingPage() {
           <div className="hero-glow hero-glow-two" aria-hidden="true" />
           <div className="site-wrap hero-grid">
             <div className="hero-copy">
-              <div className="status-pill"><span /> Independent designer & developer</div>
-              <h1>Ideas, crafted into <span>digital experiences.</span></h1>
+              <div className="status-pill"><span /> {landingContent.hero_badge}</div>
+              <h1>{landingContent.hero_title}</h1>
               <p>
-                Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.
+                {landingContent.hero_description}
               </p>
               <div className="hero-actions">
-                <Link className="primary-button" to="/projects">Explore my work <FaArrowRight /></Link>
-                <Link className="text-button" to="/about">More about me</Link>
+                <Link className="primary-button" to="/projects">{landingContent.hero_cta_text} <FaArrowRight /></Link>
+                <Link className="text-button" to="/about">{landingContent.hero_secondary_cta_text}</Link>
               </div>
               <div className="hero-note">
                 <span className="note-line" />
-                Currently exploring creative interfaces, thoughtful motion, and useful AI.
+                {landingContent.hero_note}
               </div>
             </div>
 
@@ -363,19 +424,19 @@ export default function LandingPage() {
               <div className="portrait-card">
                 <div className="portrait-grid" />
                 <div className="portrait-monogram">FA</div>
-                <span className="portrait-caption">Based in Indonesia<br />Working worldwide</span>
+                <span className="portrait-caption">{landingContent.about_location}</span>
               </div>
               <span className="about-sticker">Curious by default ✦</span>
             </div>
             <div className="about-copy">
               <span className="section-index">02 / ABOUT</span>
-              <h2>I build to learn,<br />and share what I discover.</h2>
-              <p className="large-copy">I am Ali, a designer and developer interested in the space between technology and human experience.</p>
-              <p>Desktopalie is where I collect the projects, lessons, and experiments that shape my creative journey. I care about simple ideas, precise details, and digital work with a clear reason to exist.</p>
+              <h2>{landingContent.about_title}</h2>
+              <p className="large-copy">{landingContent.about_large_copy}</p>
+              <p>{landingContent.about_description}</p>
               <div className="about-stats">
-                <div><strong>4+</strong><span>Years exploring the web</span></div>
-                <div><strong>20+</strong><span>Projects & experiments</span></div>
-                <div><strong>∞</strong><span>Ideas still in progress</span></div>
+                <div><strong>{landingContent.stat_1_value}</strong><span>{landingContent.stat_1_label}</span></div>
+                <div><strong>{landingContent.stat_2_value}</strong><span>{landingContent.stat_2_label}</span></div>
+                <div><strong>{landingContent.stat_3_value}</strong><span>{landingContent.stat_3_label}</span></div>
               </div>
             </div>
           </div>
@@ -403,8 +464,8 @@ export default function LandingPage() {
         <section className="contact-section" id="contact">
           <div className="site-wrap contact-inner">
             <span className="section-index">HAVE AN IDEA?</span>
-            <h2>Let&apos;s make something<br /><em>worth remembering.</em></h2>
-            <a className="contact-link" href="mailto:hello@desktopalie.my.id">hello@desktopalie.my.id <FaArrowRight /></a>
+            <h2>{landingContent.contact_title}</h2>
+            <a className="contact-link" href={`mailto:${landingContent.contact_email}`}>{landingContent.contact_email} <FaArrowRight /></a>
             <div className="contact-login">Already part of the studio? <Link to="/login">Sign in</Link></div>
           </div>
         </section>
@@ -415,9 +476,9 @@ export default function LandingPage() {
           <Link to="/" className="brand"><DesktopalieMark className="brand-mark" /><span>Desktopalie</span></Link>
           <p>Projects, experiments, and digital creations.</p>
           <div className="social-links">
-            <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
+            <a href={landingContent.github_url || "https://github.com"} target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a>
+            <a href={landingContent.linkedin_url || "https://linkedin.com"} target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
+            <a href={landingContent.instagram_url || "https://instagram.com"} target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
           </div>
           <span className="copyright">© {new Date().getFullYear()} DESKTOPALIE</span>
         </div>

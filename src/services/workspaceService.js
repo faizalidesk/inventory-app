@@ -151,3 +151,31 @@ export async function fetchMaintenanceSettings() {
   }
   return null;
 }
+
+/**
+ * Fetch Landing Page content settings
+ */
+export async function fetchLandingPageSettings() {
+  try {
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("key", "landing_page")
+      .maybeSingle();
+
+    if (data?.value) {
+      const val = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
+      return val;
+    }
+  } catch (err) {
+    console.error("Error fetching landing page settings:", err);
+  }
+
+  const localData = localStorage.getItem("desktopalie_landing_settings");
+  if (localData) {
+    try {
+      return JSON.parse(localData);
+    } catch (e) {}
+  }
+  return null;
+}
