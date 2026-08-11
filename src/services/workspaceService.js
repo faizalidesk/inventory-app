@@ -1,6 +1,45 @@
 import { supabase } from "../lib/supabase";
 
 /**
+ * Upload an image file to Supabase Storage or convert to Data URL fallback
+ */
+export async function uploadImage(file, bucket = "project-covers") {
+  if (!file) return null;
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+    const filePath = `covers/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, file, { cacheControl: "3600", upsert: true });
+
+    if (error) {
+      console.warn("Supabase storage upload failed, converting to Base64 data URL:", error.message);
+      return await fileToBase64(file);
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+
+    return publicUrlData?.publicUrl || (await fileToBase64(file));
+  } catch (err) {
+    console.warn("Storage exception, converting to Base64:", err);
+    return await fileToBase64(file);
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (err) => reject(err);
+  });
+}
+
+/**
  * Fetch all items from a given Supabase table (projects, experiments, notes, bookmarks)
  */
 export async function fetchCollection(type, userId = null) {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaPlus, FaSave, FaSpinner, FaStickyNote, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaImage, FaPlus, FaSave, FaSpinner, FaStickyNote, FaTrash } from "react-icons/fa";
 import UserAvatar from "../../component/UserAvatar";
 import "./WorkspaceContent.css";
 import { toggleThemeWithTransition } from "../../utils/theme";
-import { createItem, deleteItem, fetchCollection, fetchItemBySlug } from "../../services/workspaceService";
+import { createItem, deleteItem, fetchCollection, fetchItemBySlug, uploadImage } from "../../services/workspaceService";
 import { supabase } from "../../lib/supabase";
 
 export function OverviewContent({ firstName, user }) {
@@ -70,7 +70,13 @@ function CollectionPage({ type, title, description, icon: Icon, user }) {
         ) : (
           items.map((item) => (
             <Link to={`/dashboard/${type}/${item.slug}`} className="workspace-card" key={item.id || item.slug}>
-              <i className={item.tone || "violet"}><Icon/></i>
+              {item.cover_url ? (
+                <div style={{ width: "48px", height: "48px", borderRadius: "12px", overflow: "hidden", border: "1px solid var(--line)" }}>
+                  <img src={item.cover_url} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                </div>
+              ) : (
+                <i className={item.tone || "violet"}><Icon/></i>
+              )}
               <div><span>{item.type}</span><h2>{item.title}</h2><p>{item.description}</p></div>
               <b>{item.status || "Draft"}</b>
               <FaArrowRight />
@@ -86,19 +92,35 @@ function NewItemPage({ type, user }) {
   const singular = type === "notes" ? "note" : type.slice(0,-1);
   const navigate = useNavigate();
   const [form, setForm] = useState({ title: "", type: "", description: "" });
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  function handleFileChange(e) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCoverFile(file);
+      setCoverPreview(URL.createObjectURL(file));
+    }
+  }
 
   async function submit(event) {
     event.preventDefault();
     setSaving(true);
     setErrorMsg(null);
     try {
+      let coverUrl = null;
+      if (coverFile) {
+        coverUrl = await uploadImage(coverFile);
+      }
+
       const slug = form.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + Date.now().toString().slice(-4);
       await createItem(type, {
         title: form.title,
         type: form.type,
         description: form.description,
+        cover_url: coverUrl,
         slug,
         status: "Draft",
         tone: "violet"
@@ -117,11 +139,31 @@ function NewItemPage({ type, user }) {
     <div className="workspace-heading"><div><span className="dashboard-kicker">NEW {singular.toUpperCase()}</span><h1>Create a {singular}.</h1><p>Saved directly to your Supabase database.</p></div></div>
     {errorMsg && <div style={{ color: "var(--rose)", marginBottom: "16px", fontSize: "14px" }}>{errorMsg}</div>}
     <form className="workspace-form" onSubmit={submit}>
-      <label>Title<input value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder={`Name your ${singular}`} required/></label>
-      <label>Category<input value={form.type} onChange={e=>setForm({...form,type:e.target.value})} placeholder="Design, Development, Research..." required/></label>
-      <label>Description<textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="What is this about?" rows="7" required/></label>
+      <label><span>Title</span><input value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder={`Name your ${singular}`} required/></label>
+      <label><span>Category</span><input value={form.type} onChange={e=>setForm({...form,type:e.target.value})} placeholder="Design, Development, Research..." required/></label>
+      <label><span>Description</span><textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="What is this about?" rows="6" required/></label>
+      
+      <label>
+        <span>Project Cover Image</span>
+        {coverPreview ? (
+          <div style={{ position: "relative", marginTop: "8px", borderRadius: "12px", overflow: "hidden", border: "1px solid var(--line)", maxHeight: "220px" }}>
+            <img src={coverPreview} alt="Cover preview" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <button type="button" onClick={() => { setCoverFile(null); setCoverPreview(null); }} style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(0,0,0,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", padding: "6px 14px", borderRadius: "8px", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}>
+              Remove image
+            </button>
+          </div>
+        ) : (
+          <div style={{ marginTop: "8px", padding: "28px 20px", border: "2px dashed var(--line)", borderRadius: "12px", textAlign: "center", background: "var(--raised)", cursor: "pointer", position: "relative" }}>
+            <input type="file" accept="image/*" onChange={handleFileChange} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer", width: "100%", height: "100%" }} />
+            <FaImage style={{ fontSize: "28px", color: "var(--accent)", marginBottom: "8px" }} />
+            <div style={{ fontSize: "14px", fontWeight: "600", color: "var(--text)" }}>Click or drag an image file to upload cover</div>
+            <div style={{ fontSize: "12px", color: "var(--muted)", marginTop: "4px" }}>Supports PNG, JPG, WEBP, GIF</div>
+          </div>
+        )}
+      </label>
+
       <button className="new-project-button" type="submit" disabled={saving}>
-        {saving ? <><FaSpinner className="fa-spin" /> Saving...</> : <><FaSave/> Save {singular}</>}
+        {saving ? <><FaSpinner className="fa-spin" /> Uploading & Saving...</> : <><FaSave/> Save {singular}</>}
       </button>
     </form>
   </section>;
@@ -162,14 +204,20 @@ function DetailPage({ type, slug }) {
   const hasPublicPage = type === "projects";
   return <section className="workspace-page narrow-workspace">
     <Link className="workspace-back" to={`/dashboard/${type}`}><FaArrowLeft/> Back to {type}</Link>
-    <div className={`workspace-detail-art ${item.tone||"violet"}`}><span>{item.title.slice(0,2).toUpperCase()}</span></div>
+    <div className={`workspace-detail-art ${item.tone||"violet"}`} style={item.cover_url ? { padding: 0, overflow: "hidden" } : {}}>
+      {item.cover_url ? (
+        <img src={item.cover_url} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+      ) : (
+        <span>{item.title.slice(0,2).toUpperCase()}</span>
+      )}
+    </div>
     <span className="dashboard-kicker">{item.type} / {item.status}</span>
     <h1>{item.title}</h1>
     <p className="workspace-detail-copy">{item.description}</p>
     <div className="detail-actions">
       {hasPublicPage && <Link to={`/projects/${item.slug}`}><FaExternalLinkAlt/> Open public view</Link>}
       <Link to={`/dashboard/${type}/new`}><FaPlus/> Create another</Link>
-      <button onClick={handleDelete} disabled={deleting} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "7px", border: "1px solid var(--rose)", background: "transparent", color: "var(--rose)", cursor: "pointer", fontWeight: 700 }}>
+      <button onClick={handleDelete} disabled={deleting} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 18px", borderRadius: "10px", border: "1px solid var(--rose)", background: "transparent", color: "var(--rose)", cursor: "pointer", fontWeight: 700 }}>
         <FaTrash /> {deleting ? "Deleting..." : "Delete"}
       </button>
     </div>

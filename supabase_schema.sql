@@ -49,12 +49,16 @@ CREATE TABLE IF NOT EXISTS public.projects (
   title TEXT NOT NULL,
   type TEXT NOT NULL DEFAULT 'Web application',
   description TEXT,
+  cover_url TEXT,
   progress INTEGER DEFAULT 0,
   status TEXT DEFAULT 'In progress',
   tone TEXT DEFAULT 'violet',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration for existing database tables
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS cover_url TEXT;
 
 -- Enable RLS for Projects
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
