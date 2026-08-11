@@ -19,6 +19,7 @@ import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/auth-context";
 
 const PROJECTS = [
   {
@@ -73,6 +74,7 @@ function ThemeIcon({ theme }) {
 }
 
 export default function LandingPage() {
+  const { user } = useAuth();
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("desktopalie-theme");
     if (savedTheme) return savedTheme;
@@ -324,9 +326,15 @@ export default function LandingPage() {
             <button className="theme-button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
               <ThemeIcon theme={theme} />
             </button>
-            <Link className="nav-login" to="/login">
-              Login <FaArrowRight />
-            </Link>
+            {user ? (
+              <Link className="nav-login" to="/dashboard">
+                Dashboard <FaArrowRight />
+              </Link>
+            ) : (
+              <Link className="nav-login" to="/login">
+                Login <FaArrowRight />
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -468,7 +476,13 @@ export default function LandingPage() {
             <span className="section-index">HAVE AN IDEA?</span>
             <h2>{landingContent.contact_title}</h2>
             <a className="contact-link" href={`mailto:${landingContent.contact_email}`}>{landingContent.contact_email} <FaArrowRight /></a>
-            <div className="contact-login">Already part of the studio? <Link to="/login">Sign in</Link></div>
+            <div className="contact-login">
+              {user ? (
+                <>Welcome back, {user.email?.split("@")[0]}! <Link to="/dashboard">Go to Dashboard →</Link></>
+              ) : (
+                <>Already part of the studio? <Link to="/login">Sign in</Link></>
+              )}
+            </div>
           </div>
         </section>
       </main>
