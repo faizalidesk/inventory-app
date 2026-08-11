@@ -3,11 +3,16 @@ import { supabase } from "../lib/supabase";
 /**
  * Fetch all items from a given Supabase table (projects, experiments, notes, bookmarks)
  */
-export async function fetchCollection(type) {
-  const { data, error } = await supabase
+export async function fetchCollection(type, userId = null) {
+  let query = supabase
     .from(type)
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select("*");
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false });
 
   if (error) {
     console.error(`Error fetching ${type} from Supabase:`, error);

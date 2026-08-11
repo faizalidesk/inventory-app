@@ -78,7 +78,7 @@ export default function LandingPage() {
     if (savedTheme) return savedTheme;
     return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
   });
-  const [projectsList, setProjectsList] = useState(PROJECTS);
+  const projectsList = PROJECTS;
   const [maintenance, setMaintenance] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
@@ -148,24 +148,6 @@ export default function LandingPage() {
     };
   }, []);
 
-  // Load Projects from Supabase
-  useEffect(() => {
-    async function loadProjects() {
-      const data = await fetchCollection("projects");
-      if (data && data.length > 0) {
-        setProjectsList(data.map((p, i) => ({
-          number: String(i + 1).padStart(2, "0"),
-          slug: p.slug,
-          type: p.type,
-          title: p.title,
-          description: p.description,
-          tags: ["React", "Supabase", "UI/UX"],
-          className: p.tone === "teal" ? "project-frame" : p.tone === "rose" ? "project-mono" : "project-orbit"
-        })));
-      }
-    }
-    loadProjects();
-  }, []);
 
   const sanitizeMaint = (data) => {
     if (!data) return null;

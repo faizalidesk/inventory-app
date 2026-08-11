@@ -5,6 +5,7 @@ import DesktopalieMark from "../component/DesktopalieMark";
 import "./PublicPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection, fetchItemBySlug } from "../services/workspaceService";
+import { supabase } from "../lib/supabase";
 
 function PublicShell({ children }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
@@ -47,6 +48,17 @@ export function ProjectsPage() {
       setLoading(false);
     }
     loadProjects();
+
+    const channel = supabase
+      .channel("public_projects_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, () => {
+        loadProjects();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (

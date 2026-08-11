@@ -7,16 +7,16 @@ import { toggleThemeWithTransition } from "../../utils/theme";
 import { createItem, deleteItem, fetchCollection, fetchItemBySlug } from "../../services/workspaceService";
 import { supabase } from "../../lib/supabase";
 
-export function OverviewContent({ firstName }) {
+export function OverviewContent({ firstName, user }) {
   const [stats, setStats] = useState({ projects: 0, experiments: 0, notes: 0 });
   const weekly = [42, 68, 47, 82, 58, 92, 72];
 
   useEffect(() => {
     async function loadStats() {
       const [projects, experiments, notes] = await Promise.all([
-        fetchCollection("projects"),
-        fetchCollection("experiments"),
-        fetchCollection("notes"),
+        fetchCollection("projects", user?.id),
+        fetchCollection("experiments", user?.id),
+        fetchCollection("notes", user?.id),
       ]);
       setStats({
         projects: projects.length,
@@ -25,7 +25,7 @@ export function OverviewContent({ firstName }) {
       });
     }
     loadStats();
-  }, []);
+  }, [user?.id]);
 
   return <>
     <section className="welcome-row"><div><span className="dashboard-kicker">PERSONAL WORKSPACE / 2026</span><h1>Good to see you, {firstName}.</h1><p>Here is what is happening across your creative workspace today.</p></div><Link className="new-project-button" to="/dashboard/projects/new"><FaPlus /> New project</Link></section>
@@ -38,7 +38,7 @@ export function OverviewContent({ firstName }) {
   </>;
 }
 
-function CollectionPage({ type, title, description, icon: Icon }) {
+function CollectionPage({ type, title, description, icon: Icon, user }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +46,7 @@ function CollectionPage({ type, title, description, icon: Icon }) {
     let isMounted = true;
     async function loadData() {
       setLoading(true);
-      const data = await fetchCollection(type);
+      const data = await fetchCollection(type, user?.id);
       if (isMounted) {
         setItems(data);
         setLoading(false);
@@ -54,7 +54,7 @@ function CollectionPage({ type, title, description, icon: Icon }) {
     }
     loadData();
     return () => { isMounted = false; };
-  }, [type]);
+  }, [type, user?.id]);
 
   return <section className="workspace-page">
     <div className="workspace-heading">
@@ -176,19 +176,19 @@ function DetailPage({ type, slug }) {
   </section>;
 }
 
-function BookmarksPage() {
+function BookmarksPage({ user }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadBookmarks() {
       setLoading(true);
-      const data = await fetchCollection("bookmarks");
+      const data = await fetchCollection("bookmarks", user?.id);
       setItems(data);
       setLoading(false);
     }
     loadBookmarks();
-  }, []);
+  }, [user?.id]);
 
   async function removeBookmark(id) {
     try {
@@ -257,7 +257,7 @@ function ProfilePage({ user }) {
   );
 }
 
-function SearchPage() {
+function SearchPage({ user }) {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("q") || "";
   const [results, setResults] = useState([]);
@@ -267,9 +267,9 @@ function SearchPage() {
     async function performSearch() {
       setLoading(true);
       const [projects, experiments, notes] = await Promise.all([
-        fetchCollection("projects"),
-        fetchCollection("experiments"),
-        fetchCollection("notes"),
+        fetchCollection("projects", user?.id),
+        fetchCollection("experiments", user?.id),
+        fetchCollection("notes", user?.id),
       ]);
       const all = [
         ...projects.map(item => ({ ...item, section: "projects" })),
@@ -281,7 +281,7 @@ function SearchPage() {
       setLoading(false);
     }
     performSearch();
-  }, [query]);
+  }, [query, user?.id]);
 
   return <section className="workspace-page">
     <div className="workspace-heading"><div><span className="dashboard-kicker">SEARCH</span><h1>Results for “{query}”</h1><p>{loading ? "Searching..." : `${results.length} matching items found.`}</p></div></div>
@@ -302,14 +302,14 @@ export default function WorkspaceContent({ path, theme, setTheme, user }) {
   const section = segments[0] || "overview";
   const action = segments[1];
 
-  if (section === "projects") return action === "new" ? <NewItemPage type="projects" user={user} /> : action ? <DetailPage type="projects" slug={action}/> : <CollectionPage type="projects" title="Projects" description="Case studies, products, and client work in every stage." icon={FaFolderOpen}/>;
-  if (section === "experiments") return action === "new" ? <NewItemPage type="experiments" user={user} /> : action ? <DetailPage type="experiments" slug={action}/> : <CollectionPage type="experiments" title="Experiments" description="Prototypes and small ideas created to learn something new." icon={FaFlask}/>;
-  if (section === "notes") return action === "new" ? <NewItemPage type="notes" user={user} /> : action ? <DetailPage type="notes" slug={action}/> : <CollectionPage type="notes" title="Creative notes" description="Thoughts, lessons, and references worth keeping." icon={FaStickyNote}/>;
+  if (section === "projects") return action === "new" ? <NewItemPage type="projects" user={user} /> : action ? <DetailPage type="projects" slug={action}/> : <CollectionPage type="projects" title="Projects" description="Case studies, products, and client work in every stage." icon={FaFolderOpen} user={user} />;
+  if (section === "experiments") return action === "new" ? <NewItemPage type="experiments" user={user} /> : action ? <DetailPage type="experiments" slug={action}/> : <CollectionPage type="experiments" title="Experiments" description="Prototypes and small ideas created to learn something new." icon={FaFlask} user={user} />;
+  if (section === "notes") return action === "new" ? <NewItemPage type="notes" user={user} /> : action ? <DetailPage type="notes" slug={action}/> : <CollectionPage type="notes" title="Creative notes" description="Thoughts, lessons, and references worth keeping." icon={FaStickyNote} user={user} />;
   if (section === "bookmarks") return <BookmarksPage user={user} />;
   if (section === "notifications") return <NotificationsPage/>;
   if (section === "settings") return <SettingsPage theme={theme} setTheme={setTheme} user={user}/>;
   if (section === "profile") return <ProfilePage user={user}/>;
-  if (section === "search") return <SearchPage/>;
+  if (section === "search") return <SearchPage user={user}/>;
 
   return null;
 }

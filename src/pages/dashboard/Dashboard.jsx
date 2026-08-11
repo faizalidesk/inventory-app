@@ -41,7 +41,7 @@ export default function Dashboard(){
     </aside>
     <main className="studio-main">
       <header className="studio-topbar"><button className="mobile-menu" onClick={()=>setSidebarOpen(true)} aria-label="Open navigation"><FaBars/></button><form className="dashboard-search" onSubmit={submitSearch}><FaSearch/><input ref={searchRef} type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search projects, notes, experiments..."/><kbd>⌘ K</kbd></form><div className="topbar-actions"><Link to="/" className="view-site"><FaHome/><span>View website</span></Link><button className="topbar-icon" onClick={(event)=>toggleThemeWithTransition(event, theme, setTheme)} aria-label="Toggle color theme">{theme==="dark"?<FaSun/>:<FaMoon/>}</button><Link className="topbar-icon notification-button" to="/dashboard/notifications" aria-label="Notifications"><FaBell/><span/></Link><Link className="topbar-avatar-link" to="/dashboard/profile" aria-label="Open profile"><UserAvatar user={user} className="topbar-avatar"/></Link></div></header>
-      <div className="studio-content">{overview?<OverviewContent firstName={firstName}/>:<WorkspaceContent path={location.pathname} theme={theme} setTheme={setTheme} user={user}/>}</div>
+      <div className="studio-content">{overview?<OverviewContent firstName={firstName} user={user}/>:<WorkspaceContent path={location.pathname} theme={theme} setTheme={setTheme} user={user}/>}</div>
     </main>
   </div>
 }
