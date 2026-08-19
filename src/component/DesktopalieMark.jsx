@@ -1,13 +1,24 @@
 import { logoImg } from "../assets/index";
 
-export default function DesktopalieMark({ className = "", title, style, useImage = false }) {
+export default function DesktopalieMark({ className = "", title, style, useImage = true }) {
   if (useImage) {
     return (
-      <span className={className} style={style} aria-hidden={title ? undefined : "true"}>
+      <span
+        className={className}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          borderRadius: "8px",
+          ...style,
+        }}
+        aria-hidden={title ? undefined : "true"}
+      >
         <img
           src={logoImg}
-          alt={title || "Desktopalie Logo"}
-          style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+          alt={title || "Desktopalie"}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
         />
       </span>
     );
