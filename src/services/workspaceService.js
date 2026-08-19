@@ -41,14 +41,19 @@ function fileToBase64(file) {
 
 /**
  * Fetch all items from a given Supabase table (projects, experiments, notes, bookmarks)
+ * Optional platformId filter for multi-platform support (Alpha, Beta, Gamma, Delta)
  */
-export async function fetchCollection(type, userId = null) {
+export async function fetchCollection(type, userId = null, platformId = null) {
   let query = supabase
     .from(type)
     .select("*");
 
   if (userId) {
     query = query.eq("user_id", userId);
+  }
+
+  if (platformId) {
+    query = query.eq("platform_id", platformId);
   }
 
   const { data, error } = await query.order("created_at", { ascending: false });
@@ -58,6 +63,68 @@ export async function fetchCollection(type, userId = null) {
     return [];
   }
   return data || [];
+}
+
+/**
+ * Fetch total record breakdown per tenant/platform from Supabase
+ */
+export async function fetchTenantMetrics() {
+  try {
+    const [projects, experiments, notes, bookmarks] = await Promise.all([
+      supabase.from("projects").select("id, platform_id"),
+      supabase.from("experiments").select("id, platform_id"),
+      supabase.from("notes").select("id, platform_id"),
+      supabase.from("bookmarks").select("id"),
+    ]);
+
+    const metrics = {};
+
+    const countByPlatform = (res, tableKey) => {
+      if (res.error || !res.data) return;
+      res.data.forEach(item => {
+        const pId = (item.platform_id || "alpha").toLowerCase();
+        if (!metrics[pId]) {
+          metrics[pId] = { projects: 0, experiments: 0, notes: 0, total: 0 };
+        }
+        metrics[pId][tableKey] = (metrics[pId][tableKey] || 0) + 1;
+        metrics[pId].total = (metrics[pId].total || 0) + 1;
+      });
+    };
+
+    countByPlatform(projects, "projects");
+    countByPlatform(experiments, "experiments");
+    countByPlatform(notes, "notes");
+
+    return metrics;
+  } catch (err) {
+    console.error("Error fetching tenant metrics:", err);
+    return {};
+  }
+}
+
+
+/**
+ * Subscribe to real-time changes on a given collection table
+ */
+export function subscribeToCollection(type, callback, platformId = null) {
+  const channelName = `realtime_${type}_${platformId || "all"}_${Date.now()}`;
+  const channel = supabase
+    .channel(channelName)
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: type },
+      (payload) => {
+        if (platformId && payload.new && payload.new.platform_id && payload.new.platform_id !== platformId) {
+          return;
+        }
+        callback(payload);
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
 }
 
 /**
@@ -80,10 +147,11 @@ export async function fetchItemBySlug(type, slug) {
 /**
  * Create a new item in a Supabase table
  */
-export async function createItem(type, item, userId) {
+export async function createItem(type, item, userId, platformId = null) {
   const payload = {
     ...item,
     ...(userId ? { user_id: userId } : {}),
+    ...(platformId ? { platform_id: platformId } : {}),
   };
 
   const { data, error } = await supabase

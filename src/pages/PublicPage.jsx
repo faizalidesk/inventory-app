@@ -2,24 +2,34 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaCode, FaFigma, FaFlask, FaMoon, FaPalette, FaSun, FaSpinner } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
+import PlatformSelector from "../component/PlatformSelector";
 import "./PublicPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
-import { fetchCollection, fetchItemBySlug } from "../services/workspaceService";
+import { fetchCollection, fetchItemBySlug, subscribeToCollection } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
+import { usePlatform } from "../context/PlatformContext";
 
 function PublicShell({ children }) {
   const { user } = useAuth();
+  const { activePlatform } = usePlatform();
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
   useEffect(() => { localStorage.setItem("desktopalie-theme", theme); document.documentElement.style.colorScheme = theme; }, [theme]);
   return (
     <div className="public-page" data-theme={theme}>
       <header className="public-header">
-        <Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie</span></Link>
+        <Link to="/" className="public-brand">
+          <DesktopalieMark className="public-brand-mark" style={{ color: activePlatform.color }} />
+          <span>Desktopalie</span>
+          <span style={{ fontSize: "11px", background: activePlatform.badgeBg, color: activePlatform.badgeText, padding: "2px 8px", borderRadius: "99px", fontWeight: "700", marginLeft: "4px" }}>
+            {activePlatform.code}
+          </span>
+        </Link>
         <nav>
           <Link to="/projects">Projects</Link><Link to="/experiments">Experiments</Link><Link to="/about">About</Link><Link to="/services">Services</Link><Link to="/contact">Contact</Link>
         </nav>
         <div className="public-actions">
+          <PlatformSelector />
           <button onClick={(event) => toggleThemeWithTransition(event, theme, setTheme)} aria-label="Toggle theme">
             {theme === "dark" ? <FaSun /> : <FaMoon />}
           </button>
@@ -31,7 +41,7 @@ function PublicShell({ children }) {
         </div>
       </header>
       <main>{children}</main>
-      <footer className="public-footer"><Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie</span></Link><span>Projects, experiments, and digital creations.</span><span>© {new Date().getFullYear()} DESKTOPALIE</span></footer>
+      <footer className="public-footer"><Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie ({activePlatform.name})</span></Link><span>Projects, experiments, and digital creations.</span><span>© {new Date().getFullYear()} DESKTOPALIE</span></footer>
     </div>
   );
 }
@@ -48,41 +58,49 @@ export function PublicInfoPage({ type }) {
 }
 
 export function ProjectsPage() {
+  const { activePlatform, activePlatformId } = usePlatform();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadProjects() {
       setLoading(true);
-      const data = await fetchCollection("projects");
+      // Fetch collection with platform_id filter
+      let data = await fetchCollection("projects", null, activePlatformId);
+      // Fallback to fetch all if no platform-specific items exist yet
+      if (!data || data.length === 0) {
+        const allData = await fetchCollection("projects");
+        data = allData;
+      }
       setProjects(data);
       setLoading(false);
     }
     loadProjects();
 
-    const channel = supabase
-      .channel("public_projects_changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, () => {
-        loadProjects();
-      })
-      .subscribe();
+    const unsubscribe = subscribeToCollection("projects", () => {
+      loadProjects();
+    }, activePlatformId);
 
     return () => {
-      supabase.removeChannel(channel);
+      unsubscribe();
     };
-  }, []);
+  }, [activePlatformId]);
 
   return (
     <PublicShell>
-      <section className="public-hero"><span>01 / SELECTED WORK</span><h1>Projects shaped by curiosity and craft.</h1><p>A selection of product work, digital experiences, and visual systems.</p></section>
+      <section className="public-hero">
+        <span style={{ color: activePlatform.color }}>01 / SELECTED WORK • {activePlatform.name}</span>
+        <h1>Projects shaped by curiosity and craft.</h1>
+        <p>Filtered for <strong>{activePlatform.name}</strong> ({activePlatform.tagline}).</p>
+      </section>
       {loading ? (
-        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Fetching projects from Supabase...</p></div>
+        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: activePlatform.color }} /><p style={{ marginTop: "12px" }}>Fetching projects from Supabase ({activePlatform.id})...</p></div>
       ) : (
         <section className="public-card-grid">
           {projects.map((project, index) => (
             <Link className={`public-project-card ${project.tone || "violet"}`} to={`/projects/${project.slug}`} key={project.id || project.slug}>
               <div className="public-project-art"><span>{String(index + 1).padStart(2, "0")}</span><div>{project.title.slice(0, 2).toUpperCase()}</div></div>
-              <span>{project.type}</span>
+              <span>{project.type} {project.platform_id ? `• ${project.platform_id.toUpperCase()}` : ""}</span>
               <h2>{project.title}</h2>
               <p>{project.description}</p>
               <b>View case study <FaArrowRight /></b>
@@ -121,7 +139,7 @@ export function ProjectDetailPage() {
     <PublicShell>
       <section className={`case-hero ${project.tone || "violet"}`}>
         <Link to="/projects" className="public-back"><FaArrowLeft /> All projects</Link>
-        <span>{project.type} / {project.status}</span>
+        <span>{project.type} / {project.status} {project.platform_id ? `(${project.platform_id.toUpperCase()})` : ""}</span>
         <h1>{project.title}</h1>
         <p>{project.description}</p>
         <div><i>Progress: {project.progress}%</i></div>
@@ -137,31 +155,47 @@ export function ProjectDetailPage() {
 }
 
 export function ExperimentsPage() {
+  const { activePlatform, activePlatformId } = usePlatform();
   const [experiments, setExperiments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadExperiments() {
       setLoading(true);
-      const data = await fetchCollection("experiments");
+      let data = await fetchCollection("experiments", null, activePlatformId);
+      if (!data || data.length === 0) {
+        data = await fetchCollection("experiments");
+      }
       setExperiments(data);
       setLoading(false);
     }
     loadExperiments();
-  }, []);
+
+    const unsubscribe = subscribeToCollection("experiments", () => {
+      loadExperiments();
+    }, activePlatformId);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [activePlatformId]);
 
   return (
     <PublicShell>
-      <section className="public-hero"><span>02 / THE LAB</span><h1>Small experiments. Useful discoveries.</h1><p>An open notebook of interface studies, prototypes, and creative code.</p></section>
+      <section className="public-hero">
+        <span style={{ color: activePlatform.color }}>02 / THE LAB • {activePlatform.name}</span>
+        <h1>Small experiments. Useful discoveries.</h1>
+        <p>An open notebook of interface studies, prototypes, and creative code for platform: <strong>{activePlatform.name}</strong>.</p>
+      </section>
       {loading ? (
-        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} /><p style={{ marginTop: "12px" }}>Loading experiments from Supabase...</p></div>
+        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}><FaSpinner className="fa-spin" style={{ fontSize: "24px", color: activePlatform.color }} /><p style={{ marginTop: "12px" }}>Loading experiments from Supabase ({activePlatform.id})...</p></div>
       ) : (
         <section className="experiment-list">
           {experiments.map((item, index) => (
             <article id={`experiment-${item.slug}`} key={item.id || item.slug}>
               <span>{String(index + 1).padStart(3, "0")}</span>
-              <div><i>{item.type}</i><h2>{item.title}</h2><p>{item.description}</p></div>
-              <FaFlask />
+              <div><i>{item.type} {item.platform_id ? `[${item.platform_id.toUpperCase()}]` : ""}</i><h2>{item.title}</h2><p>{item.description}</p></div>
+              <FaFlask style={{ color: activePlatform.color }} />
             </article>
           ))}
         </section>

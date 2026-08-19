@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaBars, FaBell, FaBookmark, FaCog, FaEllipsisH, FaFlask, FaFolderOpen, FaHome, FaMoon, FaSearch, FaSignOutAlt, FaStickyNote, FaSun, FaThLarge, FaTimes } from "react-icons/fa";
+import { FaBars, FaBell, FaBookmark, FaCog, FaEllipsisH, FaFlask, FaFolderOpen, FaHome, FaLayerGroup, FaMoon, FaSearch, FaSignOutAlt, FaStickyNote, FaSun, FaThLarge, FaTimes } from "react-icons/fa";
 import DesktopalieMark from "../../component/DesktopalieMark";
+import PlatformSelector from "../../component/PlatformSelector";
 import UserAvatar from "../../component/UserAvatar";
 import { useAuth } from "../../context/auth-context";
 import WorkspaceContent, { OverviewContent } from "./WorkspaceContent";
@@ -10,6 +11,7 @@ import { toggleThemeWithTransition } from "../../utils/theme";
 
 const NAVIGATION = [
   { label: "Overview", icon: FaThLarge, to: "/dashboard" },
+  { label: "Tenants", icon: FaLayerGroup, to: "/dashboard/tenants" },
   { label: "Projects", icon: FaFolderOpen, to: "/dashboard/projects" },
   { label: "Experiments", icon: FaFlask, to: "/dashboard/experiments" },
   { label: "Notes", icon: FaStickyNote, to: "/dashboard/notes" },
@@ -40,7 +42,7 @@ export default function Dashboard(){
       <div className="sidebar-bottom"><Link className={`sidebar-link ${location.pathname==="/dashboard/settings"?"active":""}`} to="/dashboard/settings"><FaCog/><span>Settings</span></Link><button className="sidebar-link logout-link" onClick={handleLogout}><FaSignOutAlt/><span>Sign out</span></button><Link className="sidebar-profile" to="/dashboard/profile"><UserAvatar user={user} className="profile-avatar"/><div><strong>{fullName}</strong><span>{user?.email}</span></div><FaEllipsisH/></Link></div>
     </aside>
     <main className="studio-main">
-      <header className="studio-topbar"><button className="mobile-menu" onClick={()=>setSidebarOpen(true)} aria-label="Open navigation"><FaBars/></button><form className="dashboard-search" onSubmit={submitSearch}><FaSearch/><input ref={searchRef} type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search projects, notes, experiments..."/><kbd>⌘ K</kbd></form><div className="topbar-actions"><Link to="/" className="view-site"><FaHome/><span>View website</span></Link><button className="topbar-icon" onClick={(event)=>toggleThemeWithTransition(event, theme, setTheme)} aria-label="Toggle color theme">{theme==="dark"?<FaSun/>:<FaMoon/>}</button><Link className="topbar-icon notification-button" to="/dashboard/notifications" aria-label="Notifications"><FaBell/><span/></Link><Link className="topbar-avatar-link" to="/dashboard/profile" aria-label="Open profile"><UserAvatar user={user} className="topbar-avatar"/></Link></div></header>
+      <header className="studio-topbar"><button className="mobile-menu" onClick={()=>setSidebarOpen(true)} aria-label="Open navigation"><FaBars/></button><form className="dashboard-search" onSubmit={submitSearch}><FaSearch/><input ref={searchRef} type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search projects, notes, experiments..."/><kbd>⌘ K</kbd></form><div className="topbar-actions"><PlatformSelector /><Link to="/" className="view-site"><FaHome/><span>View website</span></Link><button className="topbar-icon" onClick={(event)=>toggleThemeWithTransition(event, theme, setTheme)} aria-label="Toggle color theme">{theme==="dark"?<FaSun/>:<FaMoon/>}</button><Link className="topbar-icon notification-button" to="/dashboard/notifications" aria-label="Notifications"><FaBell/><span/></Link><Link className="topbar-avatar-link" to="/dashboard/profile" aria-label="Open profile"><UserAvatar user={user} className="topbar-avatar"/></Link></div></header>
       <div className="studio-content">{overview?<OverviewContent firstName={firstName} user={user}/>:<WorkspaceContent path={location.pathname} theme={theme} setTheme={setTheme} user={user}/>}</div>
     </main>
   </div>

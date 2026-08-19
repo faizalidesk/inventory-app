@@ -12,6 +12,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 import { fetchMaintenanceSettings } from "./services/workspaceService";
 import { supabase } from "./lib/supabase";
+import { PlatformProvider } from "./context/PlatformContext";
 
 export default function App() {
   const [isMaintenance, setIsMaintenance] = useState(false);
@@ -96,34 +97,38 @@ export default function App() {
   // IF MAINTENANCE MODE IS ENABLED FROM BACKOFFICE -> LOCK ALL ROUTES TOTALLY (INCLUDING /login & /register)
   if (isMaintenance) {
     return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<MaintenancePage />} />
-        </Routes>
-      </BrowserRouter>
+      <PlatformProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="*" element={<MaintenancePage />} />
+          </Routes>
+        </BrowserRouter>
+      </PlatformProvider>
     );
   }
 
   // NORMAL ROUTING WHEN MAINTENANCE IS OFF
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/landingpage" element={<Navigate to="/" replace />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-        <Route path="/experiments" element={<ExperimentsPage />} />
-        <Route path="/about" element={<PublicInfoPage type="about" />} />
-        <Route path="/services" element={<PublicInfoPage type="services" />} />
-        <Route path="/contact" element={<PublicInfoPage type="contact" />} />
-        <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
-        <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
-        <Route path="/forgot-password" element={<PublicOnlyRoute><ForgotPassword /></PublicOnlyRoute>} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/check-email" element={<PublicOnlyRoute><CheckEmail /></PublicOnlyRoute>} />
-        <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <PlatformProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/landingpage" element={<Navigate to="/" replace />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+          <Route path="/experiments" element={<ExperimentsPage />} />
+          <Route path="/about" element={<PublicInfoPage type="about" />} />
+          <Route path="/services" element={<PublicInfoPage type="services" />} />
+          <Route path="/contact" element={<PublicInfoPage type="contact" />} />
+          <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+          <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+          <Route path="/forgot-password" element={<PublicOnlyRoute><ForgotPassword /></PublicOnlyRoute>} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/check-email" element={<PublicOnlyRoute><CheckEmail /></PublicOnlyRoute>} />
+          <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </PlatformProvider>
   );
 }

@@ -59,6 +59,10 @@ CREATE TABLE IF NOT EXISTS public.projects (
 
 -- Migration for existing database tables
 ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS cover_url TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS platform_id TEXT DEFAULT 'alpha';
+ALTER TABLE public.experiments ADD COLUMN IF NOT EXISTS platform_id TEXT DEFAULT 'alpha';
+ALTER TABLE public.notes ADD COLUMN IF NOT EXISTS platform_id TEXT DEFAULT 'alpha';
+ALTER TABLE public.bookmarks ADD COLUMN IF NOT EXISTS platform_id TEXT DEFAULT 'alpha';
 
 -- Enable RLS for Projects
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;

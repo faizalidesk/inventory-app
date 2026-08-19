@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaBell, FaBookmark, FaClock, FaExternalLinkAlt, FaFlask, FaFolderOpen, FaImage, FaPlus, FaSave, FaSpinner, FaStickyNote, FaTrash } from "react-icons/fa";
 import UserAvatar from "../../component/UserAvatar";
+import TenantManagement from "./TenantManagement";
 import "./WorkspaceContent.css";
 import { toggleThemeWithTransition } from "../../utils/theme";
 import { createItem, deleteItem, fetchCollection, fetchItemBySlug, uploadImage } from "../../services/workspaceService";
@@ -350,6 +351,7 @@ export default function WorkspaceContent({ path, theme, setTheme, user }) {
   const section = segments[0] || "overview";
   const action = segments[1];
 
+  if (section === "tenants") return <TenantManagement user={user} />;
   if (section === "projects") return action === "new" ? <NewItemPage type="projects" user={user} /> : action ? <DetailPage type="projects" slug={action}/> : <CollectionPage type="projects" title="Projects" description="Case studies, products, and client work in every stage." icon={FaFolderOpen} user={user} />;
   if (section === "experiments") return action === "new" ? <NewItemPage type="experiments" user={user} /> : action ? <DetailPage type="experiments" slug={action}/> : <CollectionPage type="experiments" title="Experiments" description="Prototypes and small ideas created to learn something new." icon={FaFlask} user={user} />;
   if (section === "notes") return action === "new" ? <NewItemPage type="notes" user={user} /> : action ? <DetailPage type="notes" slug={action}/> : <CollectionPage type="notes" title="Creative notes" description="Thoughts, lessons, and references worth keeping." icon={FaStickyNote} user={user} />;

@@ -15,11 +15,14 @@ import {
   FaTools,
 } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
+import PlatformSelector from "../component/PlatformSelector";
+import PlatformHeroVisual from "../component/PlatformHeroVisual";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
+import { usePlatform } from "../context/PlatformContext";
 
 const PROJECTS = [
   {
@@ -75,6 +78,7 @@ function ThemeIcon({ theme }) {
 
 export default function LandingPage() {
   const { user } = useAuth();
+  const { activePlatform } = usePlatform();
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("desktopalie-theme");
     if (savedTheme) return savedTheme;
@@ -309,8 +313,11 @@ export default function LandingPage() {
       <header className="site-header">
         <div className="site-wrap header-inner">
           <Link to="/" className="brand" aria-label="Desktopalie home">
-            <DesktopalieMark className="brand-mark" />
+            <DesktopalieMark className="brand-mark" style={{ color: activePlatform.color }} />
             <span>Desktopalie</span>
+            <span style={{ fontSize: "11px", background: activePlatform.badgeBg, color: activePlatform.badgeText, padding: "2px 8px", borderRadius: "99px", fontWeight: "700", marginLeft: "4px" }}>
+              {activePlatform.code}
+            </span>
           </Link>
 
           <nav className="site-nav" aria-label="Primary navigation">
@@ -323,6 +330,7 @@ export default function LandingPage() {
           </nav>
 
           <div className="header-actions">
+            <PlatformSelector />
             <button className="theme-button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
               <ThemeIcon theme={theme} />
             </button>
@@ -340,58 +348,68 @@ export default function LandingPage() {
       </header>
 
       <main id="top">
-        <section className="hero-section">
-          <div className="hero-glow hero-glow-one" aria-hidden="true" />
-          <div className="hero-glow hero-glow-two" aria-hidden="true" />
+        <section className="hero-section" style={{ background: activePlatform.bgGradient, transition: "background 0.4s ease" }}>
+          <div className="hero-glow hero-glow-one" style={{ background: `radial-gradient(circle, ${activePlatform.color}35 0%, transparent 70%)` }} aria-hidden="true" />
+          <div className="hero-glow hero-glow-two" style={{ background: `radial-gradient(circle, ${activePlatform.color}25 0%, transparent 70%)` }} aria-hidden="true" />
           <div className="site-wrap hero-grid">
             <div className="hero-copy">
-              <div className="status-pill"><span /> {landingContent.hero_badge}</div>
-              <h1>{landingContent.hero_title}</h1>
-              <p>
-                {landingContent.hero_description}
-              </p>
-              <div className="hero-actions">
-                <Link className="primary-button" to="/projects">{landingContent.hero_cta_text} <FaArrowRight /></Link>
-                <Link className="text-button" to="/about">{landingContent.hero_secondary_cta_text}</Link>
+              <div className="status-pill" style={{ background: activePlatform.badgeBg, color: activePlatform.badgeText, border: `1px solid ${activePlatform.color}40` }}>
+                <span style={{ background: activePlatform.color }} /> {activePlatform.heroBadge}
               </div>
-              <div className="hero-note">
-                <span className="note-line" />
-                {landingContent.hero_note}
+              <h1 style={{ color: "var(--text, #FFF)" }}>{activePlatform.heroTitle}</h1>
+              <p style={{ color: "var(--muted, #9CA3AF)" }}>
+                {activePlatform.heroSubtitle}
+              </p>
+              
+              <div className="hero-actions">
+                <Link className="primary-button" to="/projects" style={{ background: activePlatform.color, color: "#FFFFFF", borderColor: activePlatform.color }}>
+                  Explore {activePlatform.name} <FaArrowRight />
+                </Link>
+                <Link className="text-button" to="/about">
+                  {landingContent.hero_secondary_cta_text}
+                </Link>
+              </div>
+
+              {/* Dynamic Platform Stats Strip */}
+              <div className="platform-stats-strip" style={{ display: "flex", gap: "20px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                {activePlatform.stats.map((st, i) => (
+                  <div key={i}>
+                    <div style={{ fontSize: "20px", fontWeight: "800", color: activePlatform.color, fontFamily: activePlatform.fontFamily }}>
+                      {st.value}
+                    </div>
+                    <div style={{ fontSize: "11px", color: "var(--muted, #9CA3AF)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>
+                      {st.label}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="hero-visual" id="experiments" aria-label="Desktopalie creative workspace preview">
-              <div className="visual-orbit orbit-one" />
-              <div className="visual-orbit orbit-two" />
-              <div className="browser-window">
-                <div className="browser-topbar">
-                  <div className="browser-dots"><i /><i /><i /></div>
-                  <div className="browser-url">desktopalie.my.id/lab</div>
-                  <span className="browser-plus">+</span>
-                </div>
-                <div className="browser-content">
-                  <div className="mini-sidebar">
-                    <DesktopalieMark className="brand-mark" />
-                    <span className="side-active" />
-                    <span />
-                    <span />
-                  </div>
-                  <div className="mini-canvas">
-                    <div className="canvas-label">EXPERIMENT / 024</div>
-                    <div className="canvas-title">Make it useful.<br />Make it <em>memorable.</em></div>
-                    <div className="canvas-art">
-                      <div className="art-disc" />
-                      <div className="art-card art-card-one">UI</div>
-                      <div className="art-card art-card-two">01</div>
-                    </div>
-                    <div className="canvas-footer"><span>Creative development</span><span>2026 ↗</span></div>
-                  </div>
-                </div>
+            <div className="hero-visual" id="experiments" aria-label="Desktopalie workspace preview">
+              <PlatformHeroVisual />
+            </div>
+          </div>
+        </section>
+
+        {/* Dynamic Platform Capabilities Feature Section */}
+        <section className="section platform-capabilities-section" style={{ background: activePlatform.surfaceBg, borderTop: `1px solid ${activePlatform.color}25`, borderBottom: `1px solid ${activePlatform.color}25`, padding: "40px 0" }}>
+          <div className="site-wrap">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
+              <div>
+                <span style={{ fontSize: "11px", fontWeight: "800", color: activePlatform.color, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                  {activePlatform.logoSymbol} {activePlatform.category}
+                </span>
+                <h2 style={{ fontSize: "22px", fontWeight: "800", color: "var(--text, #FFF)", marginTop: "4px" }}>
+                  Tailored Engine: {activePlatform.name}
+                </h2>
               </div>
-              <div className="floating-code">
-                <span>const</span> ideas = <b>await</b> create();
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                {activePlatform.features.map((feat, idx) => (
+                  <div key={idx} style={{ background: activePlatform.badgeBg, border: `1px solid ${activePlatform.color}40`, borderRadius: "10px", padding: "10px 16px", fontSize: "13px", color: activePlatform.badgeText, fontWeight: "600", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span>✓</span> {feat}
+                  </div>
+                ))}
               </div>
-              <div className="floating-tag">DESIGN × CODE</div>
             </div>
           </div>
         </section>
