@@ -1,6 +1,20 @@
-export default function DesktopalieMark({ className = "", title }) {
+import { logoImg } from "../assets/index";
+
+export default function DesktopalieMark({ className = "", title, style, useImage = false }) {
+  if (useImage) {
+    return (
+      <span className={className} style={style} aria-hidden={title ? undefined : "true"}>
+        <img
+          src={logoImg}
+          alt={title || "Desktopalie Logo"}
+          style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+        />
+      </span>
+    );
+  }
+
   return (
-    <span className={className} aria-hidden={title ? undefined : "true"}>
+    <span className={className} style={style} aria-hidden={title ? undefined : "true"}>
       <svg viewBox="0 0 512 480" role={title ? "img" : undefined} aria-label={title} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M72 420V132C72 94.9969 101.997 65 139 65H373C410.003 65 440 94.9969 440 132V420" stroke="currentColor" strokeWidth="30" strokeLinejoin="round" />
         <path d="M126 145V339C126 369.376 150.624 394 181 394H331C361.376 394 386 369.376 386 339V145" stroke="currentColor" strokeWidth="28" />
