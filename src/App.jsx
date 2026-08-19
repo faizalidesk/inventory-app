@@ -19,6 +19,21 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Enforce tab bar favicon to Desktopalie.jpg
+    const updateFavicons = () => {
+      const links = document.querySelectorAll("link[rel*='icon']");
+      links.forEach((l) => {
+        l.href = "/Desktopalie.jpg";
+      });
+      if (links.length === 0) {
+        const link = document.createElement("link");
+        link.rel = "shortcut icon";
+        link.href = "/Desktopalie.jpg";
+        document.head.appendChild(link);
+      }
+    };
+    updateFavicons();
+
     async function checkMaintenance() {
       try {
         const settings = await fetchMaintenanceSettings();
