@@ -78,44 +78,62 @@ function ThemeIcon({ theme }) {
   return theme === "dark" ? <FaSun /> : <FaMoon />;
 }
 
+const DEFAULT_LANDING_CONTENT = {
+  hero_badge: "INDEPENDENT DESIGNER & DEVELOPER",
+  hero_title: "Ideas, crafted into digital experiences.",
+  hero_description: "Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.",
+  hero_cta_text: "Explore my work",
+  hero_secondary_cta_text: "More about me",
+  hero_note: "CURRENTLY EXPLORING CREATIVE INTERFACES, THOUGHTFUL MOTION, AND USEFUL AI.",
+  about_title: "Independent developer crafting interfaces with intent.",
+  about_large_copy: "I build websites and software that focus on clarity, motion, and crafted detail.",
+  about_description: "With a background bridging front-end engineering and product design, I help brands and teams bring ambitious digital concepts to life with clean code and refined interactions.",
+  about_location: "BASED IN INDONESIA • OPEN TO GLOBAL WORK",
+  stat_1_value: "04+",
+  stat_1_label: "Years building for the web",
+  stat_2_value: "20+",
+  stat_2_label: "Digital projects shipped",
+  stat_3_value: "100%",
+  stat_3_label: "Focus on craft & detail",
+  contact_title: "Let's make something thoughtful together.",
+  contact_email: "faizalidesk@gmail.com",
+  github_url: "https://github.com",
+  linkedin_url: "https://linkedin.com",
+  instagram_url: "https://instagram.com",
+};
+
 export default function LandingPage() {
   const { user } = useAuth();
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
   const [projectsList, setProjectsList] = useState(PROJECTS);
 
   // MAINTENANCE STATE
-  const [maintenance, setMaintenance] = useState({
-    is_enabled: false,
-    title: "System Under Maintenance",
-    message: "We are currently performing scheduled maintenance and performance upgrades. We will be back online shortly.",
-    end_time: null,
-    allow_admin_bypass: true
+  const [maintenance, setMaintenance] = useState(() => {
+    const local = localStorage.getItem("desktopalie_maintenance_settings");
+    if (local) {
+      try {
+        return JSON.parse(local);
+      } catch (e) {}
+    }
+    return {
+      is_enabled: false,
+      title: "System Under Maintenance",
+      message: "We are currently performing scheduled maintenance and performance upgrades. We will be back online shortly.",
+      end_time: null,
+      allow_admin_bypass: true
+    };
   });
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  // CUSTOMIZABLE LANDING CONTENT
-  const [landingContent, setLandingContent] = useState({
-    hero_badge: "AVAILABLE FOR WORK / 2026",
-    hero_title: "Building digital products, interfaces, and playful web experiments.",
-    hero_description: "Faiz Ali is a web developer and UI/UX designer crafting thoughtful interfaces, design systems, and digital experiences that balance utility and character.",
-    hero_cta_text: "Explore work",
-    hero_secondary_cta_text: "About the studio",
-    hero_note: "Currently exploring interactive systems, animation, and resilient front-end patterns.",
-    about_title: "Independent developer crafting interfaces with intent.",
-    about_large_copy: "I build websites and software that focus on clarity, motion, and crafted detail.",
-    about_description: "With a background bridging front-end engineering and product design, I help brands and teams bring ambitious digital concepts to life with clean code and refined interactions.",
-    about_location: "BASED IN INDONESIA • OPEN TO GLOBAL WORK",
-    stat_1_value: "04+",
-    stat_1_label: "Years building for the web",
-    stat_2_value: "20+",
-    stat_2_label: "Digital projects shipped",
-    stat_3_value: "100%",
-    stat_3_label: "Focus on craft & detail",
-    contact_title: "Let's make something thoughtful together.",
-    contact_email: "faizalidesk@gmail.com",
-    github_url: "https://github.com",
-    linkedin_url: "https://linkedin.com",
-    instagram_url: "https://instagram.com",
+  // CUSTOMIZABLE LANDING CONTENT (Synchronously hydrated to eliminate text blinking)
+  const [landingContent, setLandingContent] = useState(() => {
+    const local = localStorage.getItem("desktopalie_landing_settings");
+    if (local) {
+      try {
+        return { ...DEFAULT_LANDING_CONTENT, ...JSON.parse(local) };
+      } catch (e) {}
+    }
+    return DEFAULT_LANDING_CONTENT;
   });
 
   useEffect(() => {
@@ -132,6 +150,7 @@ export default function LandingPage() {
         if (landingData) {
           const parsed = typeof landingData === "string" ? JSON.parse(landingData) : landingData;
           setLandingContent(prev => ({ ...prev, ...parsed }));
+          localStorage.setItem("desktopalie_landing_settings", JSON.stringify(parsed));
         }
       } catch (e) {
         console.error("Error loading landing settings:", e);
