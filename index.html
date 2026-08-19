@@ -64,9 +64,44 @@
 </head>
 <body>
   <div id="root">
-    <div style="padding: 3rem 1.5rem; font-family: system-ui, -apple-system, sans-serif; text-align: center; color: #f8fafc; background-color: #08080b; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.03em; color: #ffffff;">Desktopalie — Projects, Experiments & Digital Creations</h1>
-      <p style="color: #94a3b8; font-size: 1rem; max-width: 540px; margin: 0; line-height: 1.6;">Faiz Ali's personal portfolio for web development, UI/UX design, digital creations, and interactive web experiments.</p>
+    <div style="padding: 2.5rem 1.5rem; font-family: 'Manrope', system-ui, -apple-system, sans-serif; color: #f7f5ff; background-color: #08080b; min-height: 100vh; max-width: 1180px; margin: 0 auto;">
+      <header style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-weight: 800; font-size: 1.25rem; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;">Desktopalie</div>
+        <nav style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+          <a href="/projects" style="color: #9997a6; text-decoration: none;">Projects</a>
+          <a href="/experiments" style="color: #9997a6; text-decoration: none;">Experiments</a>
+          <a href="/about" style="color: #9997a6; text-decoration: none;">About</a>
+          <a href="/services" style="color: #9997a6; text-decoration: none;">Services</a>
+          <a href="/contact" style="color: #9997a6; text-decoration: none;">Contact</a>
+        </nav>
+      </header>
+      <main style="padding: 4rem 0;">
+        <h1 style="font-size: 2.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; color: #ffffff;">Desktopalie — Projects, Experiments & Digital Creations</h1>
+        <p style="color: #9997a6; font-size: 1.15rem; max-width: 720px; line-height: 1.7; margin-bottom: 2.5rem;">
+          Faiz Ali's digital creative workspace and independent portfolio documenting work in web development, UI/UX design, systems architecture, and interactive web experiences.
+        </p>
+        <section style="margin-top: 3rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #ffffff;">Featured Projects & Digital Architecture</h2>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <article style="background: #101015; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem;">Orbit Analytics</h3>
+              <p style="color: #9997a6; font-size: 0.95rem; line-height: 1.6;">A focused analytics experience that turns complex product data into clear, useful decisions.</p>
+            </article>
+            <article style="background: #101015; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem;">Frame Archive</h3>
+              <p style="color: #9997a6; font-size: 0.95rem; line-height: 1.6;">A cinematic digital archive designed around discovery, motion, and thoughtful interaction.</p>
+            </article>
+            <article style="background: #101015; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem;">Mono Systems</h3>
+              <p style="color: #9997a6; font-size: 0.95rem; line-height: 1.6;">An exploration of modular interfaces, expressive typography, and reusable design systems.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+      <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 0.85rem; color: #9997a6;">
+        <span>© 2026 Desktopalie. All rights reserved.</span>
+        <span>Independent Design & Development by Faiz Ali</span>
+      </footer>
     </div>
   </div>
   <script type="module" src="/src/main.jsx"></script>

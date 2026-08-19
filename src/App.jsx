@@ -15,8 +15,16 @@ import { supabase } from "./lib/supabase";
 import { PlatformProvider } from "./context/PlatformContext";
 
 export default function App() {
-  const [isMaintenance, setIsMaintenance] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isMaintenance, setIsMaintenance] = useState(() => {
+    const localData = localStorage.getItem("desktopalie_maintenance_settings");
+    if (localData) {
+      try {
+        const val = JSON.parse(localData);
+        return val?.is_enabled === true || val?.is_enabled === "true" || val?.is_enabled === 1;
+      } catch (e) {}
+    }
+    return false;
+  });
 
   useEffect(() => {
     // Enforce tab bar favicon to Desktopalie.jpg
@@ -46,8 +54,6 @@ export default function App() {
         }
       } catch (err) {
         console.error("Error loading maintenance settings:", err);
-      } finally {
-        setLoading(false);
       }
     }
 
@@ -92,22 +98,6 @@ export default function App() {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#0B0F17",
-        color: "#9CA3AF",
-        fontFamily: "sans-serif"
-      }}>
-        Loading Desktopalie...
-      </div>
-    );
-  }
 
   // IF MAINTENANCE MODE IS ENABLED FROM BACKOFFICE -> LOCK ALL ROUTES TOTALLY (INCLUDING /login & /register)
   if (isMaintenance) {
