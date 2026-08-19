@@ -1,6 +1,6 @@
 import { logoImg } from "../assets/index";
 
-export default function DesktopalieMark({ className = "", title, style, useImage = true }) {
+export default function DesktopalieMark({ className = "", title, style, useImage = false }) {
   if (useImage) {
     return (
       <span
