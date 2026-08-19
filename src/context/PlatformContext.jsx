@@ -224,9 +224,25 @@ export function PlatformProvider({ children }) {
     }
   };
 
-  // Inject CSS Variables whenever activePlatform changes
+  // Inject CSS Variables only inside dashboard/backoffice
   useEffect(() => {
+    const isDashboard = window.location.pathname.startsWith("/dashboard");
     const root = document.documentElement;
+    if (!isDashboard) {
+      root.removeAttribute("data-platform");
+      root.style.removeProperty("--platform-color");
+      root.style.removeProperty("--platform-color-hover");
+      root.style.removeProperty("--platform-color-glow");
+      root.style.removeProperty("--platform-badge-bg");
+      root.style.removeProperty("--platform-badge-text");
+      root.style.removeProperty("--platform-page-bg");
+      root.style.removeProperty("--platform-surface-bg");
+      root.style.removeProperty("--platform-header-bg");
+      root.style.removeProperty("--platform-card-border");
+      root.style.removeProperty("--platform-bg-gradient");
+      return;
+    }
+
     root.setAttribute("data-platform", activePlatform.id);
     root.style.setProperty("--platform-color", activePlatform.color);
     root.style.setProperty("--platform-color-hover", activePlatform.colorHover);

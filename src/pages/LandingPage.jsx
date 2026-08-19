@@ -15,14 +15,11 @@ import {
   FaTools,
 } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
-import PlatformSelector from "../component/PlatformSelector";
-import PlatformHeroVisual from "../component/PlatformHeroVisual";
 import "./LandingPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
-import { usePlatform } from "../context/PlatformContext";
 
 const PROJECTS = [
   {
@@ -58,17 +55,22 @@ const SERVICES = [
   {
     icon: <FaCode />,
     title: "Web development",
-    description: "Fast, accessible, and responsive interfaces built with modern frontend technology.",
+    description: "Fast, responsive web applications built with modern frontend architecture, accessibility in mind, and clean semantic code.",
   },
   {
     icon: <FaPalette />,
     title: "UI/UX design",
-    description: "Digital products shaped around clarity, usability, and a distinctive visual character.",
+    description: "Interface systems, design kits, and interactive product surfaces designed to feel intuitive, structured, and visually engaging.",
   },
   {
     icon: <FaFigma />,
-    title: "Creative experiments",
-    description: "Small ideas, prototypes, and visual studies that explore what the web can become.",
+    title: "Creative coding & motion",
+    description: "Micro-interactions, kinetic typography, and fluid visual animations that explain state transitions naturally.",
+  },
+  {
+    icon: <FaTools />,
+    title: "Design systems",
+    description: "Scalable component libraries, coherent color palettes, typography scales, and tokens that keep digital products consistent.",
   },
 ];
 
@@ -78,38 +80,42 @@ function ThemeIcon({ theme }) {
 
 export default function LandingPage() {
   const { user } = useAuth();
-  const { activePlatform } = usePlatform();
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("desktopalie-theme");
-    if (savedTheme) return savedTheme;
-    return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
+  const [projectsList, setProjectsList] = useState(PROJECTS);
+
+  // MAINTENANCE STATE
+  const [maintenance, setMaintenance] = useState({
+    is_enabled: false,
+    title: "System Under Maintenance",
+    message: "We are currently performing scheduled maintenance and performance upgrades. We will be back online shortly.",
+    end_time: null,
+    allow_admin_bypass: true
   });
-  const projectsList = PROJECTS;
-  const [maintenance, setMaintenance] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+  // CUSTOMIZABLE LANDING CONTENT
   const [landingContent, setLandingContent] = useState({
-    hero_badge: 'Independent designer & developer',
-    hero_title: 'Ideas, crafted into digital experiences.',
-    hero_description: 'Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.',
-    hero_cta_text: 'Explore my work',
-    hero_secondary_cta_text: 'More about me',
-    hero_note: 'Currently exploring creative interfaces, thoughtful motion, and useful AI.',
-    about_title: 'I build to learn, and share what I discover.',
-    about_large_copy: 'I am Ali, a designer and developer interested in the space between technology and human experience.',
-    about_description: 'Desktopalie is where I collect the projects, lessons, and experiments that shape my creative journey. I care about simple ideas, precise details, and digital work with a clear reason to exist.',
-    about_location: 'Based in Indonesia • Working worldwide',
-    stat_1_value: '4+',
-    stat_1_label: 'Years exploring the web',
-    stat_2_value: '20+',
-    stat_2_label: 'Projects & experiments',
-    stat_3_value: '∞',
-    stat_3_label: 'Ideas still in progress',
-    contact_title: "Let's make something worth remembering.",
-    contact_email: 'hello@desktopalie.my.id',
-    github_url: 'https://github.com',
-    linkedin_url: 'https://linkedin.com',
-    instagram_url: 'https://instagram.com'
+    hero_badge: "AVAILABLE FOR WORK / 2026",
+    hero_title: "Building digital products, interfaces, and playful web experiments.",
+    hero_description: "Faiz Ali is a web developer and UI/UX designer crafting thoughtful interfaces, design systems, and digital experiences that balance utility and character.",
+    hero_cta_text: "Explore work",
+    hero_secondary_cta_text: "About the studio",
+    hero_note: "Currently exploring interactive systems, animation, and resilient front-end patterns.",
+    about_title: "Independent developer crafting interfaces with intent.",
+    about_large_copy: "I build websites and software that focus on clarity, motion, and crafted detail.",
+    about_description: "With a background bridging front-end engineering and product design, I help brands and teams bring ambitious digital concepts to life with clean code and refined interactions.",
+    about_location: "BASED IN INDONESIA • OPEN TO GLOBAL WORK",
+    stat_1_value: "04+",
+    stat_1_label: "Years building for the web",
+    stat_2_value: "20+",
+    stat_2_label: "Digital projects shipped",
+    stat_3_value: "100%",
+    stat_3_label: "Focus on craft & detail",
+    contact_title: "Let's make something thoughtful together.",
+    contact_email: "faizalidesk@gmail.com",
+    github_url: "https://github.com",
+    linkedin_url: "https://linkedin.com",
+    instagram_url: "https://instagram.com",
   });
 
   useEffect(() => {
@@ -117,186 +123,149 @@ export default function LandingPage() {
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
-  // Load Landing Content from Supabase
+  // Load customizable landing page settings & maintenance settings from Supabase
   useEffect(() => {
-    async function loadLandingContent() {
-      const data = await fetchLandingPageSettings();
-      if (data) {
-        setLandingContent(prev => ({ ...prev, ...data }));
-      }
-    }
-    loadLandingContent();
-
-    // Listen to Supabase Realtime changes on site_settings
-    const channel = supabase
-      .channel('landing_settings_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
-        if (payload.new && payload.new.key === 'landing_page') {
-          const val = typeof payload.new.value === 'string' ? JSON.parse(payload.new.value) : payload.new.value;
-          setLandingContent(prev => ({ ...prev, ...val }));
+    async function loadSettings() {
+      // 1. Landing Page Content
+      try {
+        const landingData = await fetchLandingPageSettings();
+        if (landingData) {
+          const parsed = typeof landingData === "string" ? JSON.parse(landingData) : landingData;
+          setLandingContent(prev => ({ ...prev, ...parsed }));
         }
-      })
-      .subscribe();
-
-    const handleStorage = () => {
-      const local = localStorage.getItem('desktopalie_landing_settings');
-      if (local) {
-        try {
-          setLandingContent(prev => ({ ...prev, ...JSON.parse(local) }));
-        } catch (e) {}
+      } catch (e) {
+        console.error("Error loading landing settings:", e);
       }
-    };
-    window.addEventListener('storage', handleStorage);
 
-    return () => {
-      supabase.removeChannel(channel);
-      window.removeEventListener('storage', handleStorage);
-    };
-  }, []);
+      // 2. Maintenance Settings
+      try {
+        const maintData = await fetchMaintenanceSettings();
+        if (maintData) {
+          const parsed = typeof maintData === "string" ? JSON.parse(maintData) : maintData;
+          setMaintenance(parsed);
+        }
+      } catch (e) {
+        console.error("Error loading maintenance settings:", e);
+      }
 
-
-  const sanitizeMaint = (data) => {
-    if (!data) return null;
-    let title = data.title || "System Under Maintenance";
-    let message = data.message || "We are performing system upgrades and performance enhancements. Please check back shortly.";
-
-    if (title.toLowerCase().includes("situs sedang") || title.toLowerCase().includes("pemeliharaan")) {
-      title = "System Under Maintenance";
-    }
-    if (message.toLowerCase().includes("kami sedang") || message.toLowerCase().includes("pembaruan sistem")) {
-      message = "We are performing system upgrades and performance enhancements. Please check back shortly.";
-    }
-
-    return { ...data, title, message };
-  };
-
-  // Load & Listen to Maintenance Settings from Supabase & LocalStorage
-  useEffect(() => {
-    async function loadMaintenance() {
-      const settings = await fetchMaintenanceSettings();
-      const sanitized = sanitizeMaint(settings);
-      if (sanitized) {
-        setMaintenance(sanitized);
+      // 3. Projects from Supabase
+      try {
+        const liveProjects = await fetchCollection("projects");
+        if (liveProjects && liveProjects.length > 0) {
+          setProjectsList(liveProjects.map((p, idx) => ({
+            number: String(idx + 1).padStart(2, "0"),
+            slug: p.slug,
+            type: p.type || "Web application",
+            title: p.title,
+            description: p.description,
+            tags: [p.type || "Web", p.status || "Published"],
+            className: idx % 3 === 0 ? "project-orbit" : idx % 3 === 1 ? "project-frame" : "project-mono",
+          })));
+        }
+      } catch (e) {
+        console.error("Error loading projects for landing:", e);
       }
     }
-    loadMaintenance();
 
-    // Listen to Supabase Realtime changes on site_settings
+    loadSettings();
+
+    // Listen to real-time changes
     const channel = supabase
-      .channel('site_settings_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, (payload) => {
-        if (payload.new && payload.new.key === 'maintenance') {
-          const sanitized = sanitizeMaint(payload.new.value);
-          if (sanitized) {
-            setMaintenance(sanitized);
+      .channel("landing_page_site_settings")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "site_settings" },
+        (payload) => {
+          if (payload.new) {
+            if (payload.new.key === "landing_page") {
+              const val = typeof payload.new.value === "string" ? JSON.parse(payload.new.value) : payload.new.value;
+              setLandingContent(prev => ({ ...prev, ...val }));
+            }
+            if (payload.new.key === "maintenance") {
+              const val = typeof payload.new.value === "string" ? JSON.parse(payload.new.value) : payload.new.value;
+              setMaintenance(val);
+            }
           }
         }
-      })
+      )
       .subscribe();
-
-    // Listen to window storage events for local testing
-    const handleStorageChange = () => {
-      const localData = localStorage.getItem('desktopalie_maintenance_settings');
-      if (localData) {
-        try {
-          const sanitized = sanitizeMaint(JSON.parse(localData));
-          if (sanitized) setMaintenance(sanitized);
-        } catch (e) {}
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
 
     return () => {
       supabase.removeChannel(channel);
-      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
-  // Calculate live countdown matching Backoffice end_time / target_date
+  // Countdown timer calculation for maintenance mode
   useEffect(() => {
-    if (!maintenance?.is_enabled) return;
+    if (!maintenance.is_enabled || !maintenance.end_time) return;
 
-    const calculateTimeLeft = () => {
-      const targetStr = maintenance.end_time || maintenance.target_date;
-      if (!targetStr) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
-
-      const target = new Date(targetStr).getTime();
+    function updateCountdown() {
       const now = new Date().getTime();
-      const diff = target - now;
+      const target = new Date(maintenance.end_time).getTime();
+      const distance = target - now;
 
-      if (diff <= 0) {
+      if (distance < 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       setTimeLeft({ days, hours, minutes, seconds });
-    };
+    }
 
-    calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000);
-    return () => clearInterval(interval);
-  }, [maintenance]);
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, [maintenance.is_enabled, maintenance.end_time]);
 
-  const toggleTheme = (event) => toggleThemeWithTransition(event, theme, setTheme);
+  const toggleTheme = (event) => {
+    toggleThemeWithTransition(event, theme, setTheme);
+  };
 
-  // IF MAINTENANCE MODE IS ENABLED IN BACKOFFICE
-  if (maintenance && maintenance.is_enabled) {
+  const isMaintenanceActive = maintenance.is_enabled === true || maintenance.is_enabled === "true" || maintenance.is_enabled === 1;
+
+  // MAINTENANCE MODE VIEW
+  if (isMaintenanceActive) {
     return (
-      <div className="desktopalie" data-theme={theme} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", padding: "2rem" }}>
+      <div className="desktopalie maintenance-view" data-theme={theme}>
         <div className="page-noise" aria-hidden="true" />
-        
-        {/* Background glow */}
-        <div style={{ position: "absolute", width: "450px", height: "450px", borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%)", top: "15%", pointerEvents: "none" }} />
-
-        <div style={{ maxWidth: "680px", width: "100%", textAlign: "center", zIndex: 2, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "20px", padding: "3rem 2rem", boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}>
-          <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "linear-gradient(135deg, var(--accent), var(--accent2))", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.75rem", marginBottom: "1.5rem", boxShadow: "0 10px 20px rgba(139,92,246,0.3)" }}>
-            <FaTools />
+        <div className="maintenance-card">
+          <div className="maintenance-badge">
+            <span className="pulsing-dot" /> SYSTEM UPGRADE IN PROGRESS
           </div>
-
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "4px 14px", borderRadius: "99px", background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)", color: "#F59E0B", fontSize: "11px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "1.25rem" }}>
-            <FaClock /> SYSTEM MAINTENANCE & COUNTDOWN
-          </div>
-
-          <h1 style={{ fontSize: "clamp(28px, 4vw, 42px)", fontWeight: "800", letterSpacing: "-0.04em", marginBottom: "1rem", color: "var(--text)" }}>
-            {maintenance.title || "System Under Maintenance"}
-          </h1>
-
-          <p style={{ color: "var(--muted)", fontSize: "15px", lineHeight: "1.7", maxWidth: "540px", margin: "0 auto 2.5rem" }}>
-            {maintenance.message || "We are performing system upgrades and performance enhancements. Please check back shortly."}
+          <h1>{maintenance.title || "System Under Maintenance"}</h1>
+          <p className="maintenance-text">
+            {maintenance.message || "We are performing system upgrades and optimizations. Please check back shortly."}
           </p>
 
-          {/* Real-time Live Countdown Cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", maxWidth: "480px", margin: "0 auto 2.5rem" }}>
-            {[
-              { label: "DAYS", value: timeLeft.days },
-              { label: "HOURS", value: timeLeft.hours },
-              { label: "MINUTES", value: timeLeft.minutes },
-              { label: "SECONDS", value: timeLeft.seconds }
-            ].map((item, index) => (
-              <div key={index} style={{ background: "var(--raised)", border: "1px solid var(--line)", borderRadius: "12px", padding: "1rem 0.5rem" }}>
-                <div style={{ fontSize: "clamp(22px, 3.5vw, 32px)", fontWeight: "800", color: "var(--accent)", fontFamily: "'DM Mono', monospace" }}>
-                  {String(item.value).padStart(2, "0")}
-                </div>
-                <div style={{ fontSize: "10px", fontWeight: "700", color: "var(--muted)", letterSpacing: "0.08em", marginTop: "4px" }}>
-                  {item.label}
-                </div>
+          {maintenance.end_time && (
+            <div className="countdown-grid">
+              <div className="count-unit">
+                <strong>{String(timeLeft.days).padStart(2, "0")}</strong>
+                <span>DAYS</span>
               </div>
-            ))}
-          </div>
+              <div className="count-unit">
+                <strong>{String(timeLeft.hours).padStart(2, "0")}</strong>
+                <span>HOURS</span>
+              </div>
+              <div className="count-unit">
+                <strong>{String(timeLeft.minutes).padStart(2, "0")}</strong>
+                <span>MINUTES</span>
+              </div>
+              <div className="count-unit">
+                <strong>{String(timeLeft.seconds).padStart(2, "0")}</strong>
+                <span>SECONDS</span>
+              </div>
+            </div>
+          )}
 
-          {/* Admin Bypass Link if allowed */}
           {maintenance.allow_admin_bypass !== false && (
-            <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1.5rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <span style={{ fontSize: "12px", color: "var(--muted)" }}>Administrator Backoffice?</span>
-              <Link to="/login" style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "var(--accent)", fontWeight: "700", fontSize: "12px", textDecoration: "none" }}>
+            <div className="admin-bypass">
+              <Link to="/login" className="admin-login-btn">
                 <FaLock /> Sign In to Backoffice
               </Link>
             </div>
@@ -313,24 +282,18 @@ export default function LandingPage() {
       <header className="site-header">
         <div className="site-wrap header-inner">
           <Link to="/" className="brand" aria-label="Desktopalie home">
-            <DesktopalieMark className="brand-mark" style={{ color: activePlatform.color }} />
+            <DesktopalieMark className="brand-mark" />
             <span>Desktopalie</span>
-            <span style={{ fontSize: "11px", background: activePlatform.badgeBg, color: activePlatform.badgeText, padding: "2px 8px", borderRadius: "99px", fontWeight: "700", marginLeft: "4px" }}>
-              {activePlatform.code}
-            </span>
           </Link>
 
           <nav className="site-nav" aria-label="Primary navigation">
-            <Link to="/">Home</Link>
-            <Link to="/projects">Projects</Link>
-            <Link to="/experiments">Experiments</Link>
-            <Link to="/about">About</Link>
-            <Link to="/services">Services</Link>
-            <Link to="/contact">Contact</Link>
+            <a href="#work">Work</a>
+            <a href="#about">About</a>
+            <a href="#capabilities">Capabilities</a>
+            <a href="#contact">Contact</a>
           </nav>
 
           <div className="header-actions">
-            <PlatformSelector />
             <button className="theme-button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
               <ThemeIcon theme={theme} />
             </button>
@@ -348,68 +311,66 @@ export default function LandingPage() {
       </header>
 
       <main id="top">
-        <section className="hero-section" style={{ background: activePlatform.bgGradient, transition: "background 0.4s ease" }}>
-          <div className="hero-glow hero-glow-one" style={{ background: `radial-gradient(circle, ${activePlatform.color}35 0%, transparent 70%)` }} aria-hidden="true" />
-          <div className="hero-glow hero-glow-two" style={{ background: `radial-gradient(circle, ${activePlatform.color}25 0%, transparent 70%)` }} aria-hidden="true" />
+        <section className="hero-section">
+          <div className="hero-glow hero-glow-one" aria-hidden="true" />
+          <div className="hero-glow hero-glow-two" aria-hidden="true" />
           <div className="site-wrap hero-grid">
             <div className="hero-copy">
-              <div className="status-pill" style={{ background: activePlatform.badgeBg, color: activePlatform.badgeText, border: `1px solid ${activePlatform.color}40` }}>
-                <span style={{ background: activePlatform.color }} /> {activePlatform.heroBadge}
+              <div className="status-pill">
+                <span /> {landingContent.hero_badge}
               </div>
-              <h1 style={{ color: "var(--text, #FFF)" }}>{activePlatform.heroTitle}</h1>
-              <p style={{ color: "var(--muted, #9CA3AF)" }}>
-                {activePlatform.heroSubtitle}
+              <h1>{landingContent.hero_title}</h1>
+              <p>
+                {landingContent.hero_description}
               </p>
               
               <div className="hero-actions">
-                <Link className="primary-button" to="/projects" style={{ background: activePlatform.color, color: "#FFFFFF", borderColor: activePlatform.color }}>
-                  Explore {activePlatform.name} <FaArrowRight />
-                </Link>
-                <Link className="text-button" to="/about">
+                <a className="primary-button" href="#work">
+                  {landingContent.hero_cta_text} <FaArrowRight />
+                </a>
+                <a className="text-button" href="#about">
                   {landingContent.hero_secondary_cta_text}
-                </Link>
+                </a>
               </div>
 
-              {/* Dynamic Platform Stats Strip */}
-              <div className="platform-stats-strip" style={{ display: "flex", gap: "20px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                {activePlatform.stats.map((st, i) => (
-                  <div key={i}>
-                    <div style={{ fontSize: "20px", fontWeight: "800", color: activePlatform.color, fontFamily: activePlatform.fontFamily }}>
-                      {st.value}
-                    </div>
-                    <div style={{ fontSize: "11px", color: "var(--muted, #9CA3AF)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>
-                      {st.label}
-                    </div>
-                  </div>
-                ))}
+              <div className="hero-note">
+                <span className="note-line" />
+                {landingContent.hero_note}
               </div>
             </div>
 
             <div className="hero-visual" id="experiments" aria-label="Desktopalie workspace preview">
-              <PlatformHeroVisual />
-            </div>
-          </div>
-        </section>
-
-        {/* Dynamic Platform Capabilities Feature Section */}
-        <section className="section platform-capabilities-section" style={{ background: activePlatform.surfaceBg, borderTop: `1px solid ${activePlatform.color}25`, borderBottom: `1px solid ${activePlatform.color}25`, padding: "40px 0" }}>
-          <div className="site-wrap">
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
-              <div>
-                <span style={{ fontSize: "11px", fontWeight: "800", color: activePlatform.color, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  {activePlatform.logoSymbol} {activePlatform.category}
-                </span>
-                <h2 style={{ fontSize: "22px", fontWeight: "800", color: "var(--text, #FFF)", marginTop: "4px" }}>
-                  Tailored Engine: {activePlatform.name}
-                </h2>
-              </div>
-              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                {activePlatform.features.map((feat, idx) => (
-                  <div key={idx} style={{ background: activePlatform.badgeBg, border: `1px solid ${activePlatform.color}40`, borderRadius: "10px", padding: "10px 16px", fontSize: "13px", color: activePlatform.badgeText, fontWeight: "600", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span>✓</span> {feat}
+              <div className="visual-orbit orbit-one" />
+              <div className="visual-orbit orbit-two" />
+              <div className="browser-window">
+                <div className="browser-topbar">
+                  <div className="browser-dots"><i /><i /><i /></div>
+                  <div className="browser-url">desktopalie.my.id/lab</div>
+                  <span className="browser-plus">+</span>
+                </div>
+                <div className="browser-content">
+                  <div className="mini-sidebar">
+                    <DesktopalieMark className="brand-mark" />
+                    <span className="side-active" />
+                    <span />
+                    <span />
                   </div>
-                ))}
+                  <div className="mini-canvas">
+                    <div className="canvas-label">EXPERIMENT / 024</div>
+                    <div className="canvas-title">Make it useful.<br />Make it <em>memorable.</em></div>
+                    <div className="canvas-art">
+                      <div className="art-disc" />
+                      <div className="art-card art-card-one">UI</div>
+                      <div className="art-card art-card-two">01</div>
+                    </div>
+                    <div className="canvas-footer"><span>Creative development</span><span>2026 ↗</span></div>
+                  </div>
+                </div>
               </div>
+              <div className="floating-code">
+                <span>const</span> ideas = <b>await</b> create();
+              </div>
+              <div className="floating-tag">DESIGN × CODE</div>
             </div>
           </div>
         </section>
