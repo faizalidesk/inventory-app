@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { usePlatform } from "../../context/PlatformContext";
 import { fetchTenantMetrics } from "../../services/workspaceService";
+import DesktopalieMark from "../../component/DesktopalieMark";
 import "./TenantManagement.css";
 
 export default function TenantManagement({ user }) {
@@ -179,7 +180,7 @@ export default function TenantManagement({ user }) {
         </div>
         <div className="active-tenant-content">
           <div className="active-tenant-symbol" style={{ color: activePlatform.color, borderColor: `${activePlatform.color}50` }}>
-            {activePlatform.logoSymbol || "⚡"}
+            <DesktopalieMark platform={activePlatform.id} style={{ width: "32px", height: "32px", color: activePlatform.color }} />
           </div>
           <div className="active-tenant-info">
             <h2>{activePlatform.name} <code>({activePlatform.id.toUpperCase()})</code></h2>
@@ -218,7 +219,7 @@ export default function TenantManagement({ user }) {
               <div className="tenant-card-header">
                 <div className="tenant-identity">
                   <span className="tenant-icon-box" style={{ background: platform.badgeBg || "rgba(99,102,241,0.15)", color: platform.color }}>
-                    {platform.logoSymbol || "⚡"}
+                    <DesktopalieMark platform={platform.id} style={{ width: "24px", height: "24px", color: platform.color }} />
                   </span>
                   <div>
                     <h3>{platform.name}</h3>
@@ -480,7 +481,9 @@ export default function TenantManagement({ user }) {
 
             <div className="tenant-detail-body">
               <div className="detail-hero-box" style={{ background: selectedTenantDetail.bgGradient || "var(--raised)" }}>
-                <span className="symbol-large" style={{ color: selectedTenantDetail.color }}>{selectedTenantDetail.logoSymbol}</span>
+                <span className="symbol-large" style={{ color: selectedTenantDetail.color }}>
+                  <DesktopalieMark platform={selectedTenantDetail.id} style={{ width: "36px", height: "36px", color: selectedTenantDetail.color }} />
+                </span>
                 <div>
                   <h4>{selectedTenantDetail.name}</h4>
                   <code>ID: {selectedTenantDetail.id}</code>

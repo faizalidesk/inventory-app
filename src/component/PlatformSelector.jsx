@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { usePlatform, PLATFORMS } from "../context/PlatformContext";
-import { FaChevronDown, FaLayerGroup } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import DesktopalieMark from "./DesktopalieMark";
 
 export default function PlatformSelector() {
   const { activePlatform, setPlatform } = usePlatform();
@@ -38,7 +39,7 @@ export default function PlatformSelector() {
         }}
         title={`Active Platform: ${activePlatform.name}`}
       >
-        <span style={{ fontSize: "14px" }}>{activePlatform.logoSymbol}</span>
+        <DesktopalieMark platform={activePlatform.id} style={{ width: "16px", height: "16px", color: activePlatform.color }} />
         <span>{activePlatform.name}</span>
         <FaChevronDown style={{ fontSize: "10px", opacity: 0.7, transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
       </button>
@@ -50,7 +51,7 @@ export default function PlatformSelector() {
             position: "absolute",
             top: "calc(100% + 8px)",
             right: 0,
-            width: "220px",
+            width: "230px",
             background: "var(--card, #131B2E)",
             border: "1px solid var(--border, rgba(255,255,255,0.1))",
             borderRadius: "12px",
@@ -90,8 +91,8 @@ export default function PlatformSelector() {
                   transition: "all 0.15s ease",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "15px" }}>{p.logoSymbol}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <DesktopalieMark platform={p.id} style={{ width: "20px", height: "20px", color: p.color, flexShrink: 0 }} />
                   <div>
                     <div style={{ fontWeight: isSelected ? "700" : "500" }}>{p.name}</div>
                     <div style={{ fontSize: "10px", opacity: 0.7 }}>{p.code} • {p.id}</div>
