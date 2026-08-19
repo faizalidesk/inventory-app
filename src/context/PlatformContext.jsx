@@ -150,14 +150,23 @@ export function PlatformProvider({ children }) {
   });
 
   const [activePlatformId, setActivePlatformId] = useState(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const paramPlatform = searchParams.get("platform")?.toLowerCase();
+    // 1. Subdomain Detection (e.g. beta.desktopalie.my.id -> 'beta')
+    const hostname = window.location.hostname.toLowerCase();
+    const subdomain = hostname.split(".")[0];
     const savedCustom = localStorage.getItem("desktopalie_custom_platforms");
     let custom = {};
     if (savedCustom) {
       try { custom = JSON.parse(savedCustom); } catch (e) {}
     }
     const combined = { ...PLATFORMS, ...custom };
+
+    if (subdomain && combined[subdomain]) {
+      return subdomain;
+    }
+
+    // 2. Query Parameter Detection (?platform=beta)
+    const searchParams = new URLSearchParams(window.location.search);
+    const paramPlatform = searchParams.get("platform")?.toLowerCase();
 
     if (paramPlatform && combined[paramPlatform]) {
       return paramPlatform;
