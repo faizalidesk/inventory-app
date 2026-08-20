@@ -23,9 +23,12 @@ import {
   ArrowUp,
   Check,
   Copy,
+  Cpu,
+  Database,
   ExternalLink,
   Eye,
   Layers,
+  Layout,
   Mail,
   Menu,
   MessageSquare,
@@ -853,41 +856,158 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* 3. TECH STACK & TOOLING SECTION WITH SHADCN HOVERCARDS & BADGES */}
-          <section className="py-12 border-y border-border/60 bg-muted/20" id="tech">
+          {/* 3. BENTO GRID CORE CAPABILITIES SECTION */}
+          <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="capabilities">
             <div className="site-wrap">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+              <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
                 <div>
-                  <Badge variant="purple" className="mb-2">CORE TECHNOLOGIES</Badge>
-                  <h3 className="text-xl sm:text-2xl font-bold">Engineered with modern tools</h3>
+                  <Badge variant="purple" className="mb-3">CORE CAPABILITIES</Badge>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
+                    Engineered for high performance,<br className="hidden sm:inline" /> crafted with intent.
+                  </h2>
                 </div>
-                <p className="text-xs font-mono text-muted-foreground max-w-sm">
-                  Hover any technology to inspect the architecture and ecosystem role.
+                <p className="text-sm text-muted-foreground max-w-md">
+                  Combining modern design systems, resilient cloud infrastructure, and intelligent autonomous AI agents to build memorable digital products.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-                {TECH_STACK.map((tech) => (
-                  <HoverCard key={tech.name}>
-                    <HoverCardTrigger asChild>
-                      <Card className="p-3 bg-card/60 hover:bg-card hover:border-primary/50 cursor-pointer transition-all hover:scale-[1.03] flex flex-col items-center justify-center text-center gap-2">
-                        <div className="w-8 h-8 flex items-center justify-center">
-                          {tech.icon}
-                        </div>
-                        <span className="font-mono text-[11px] font-semibold">{tech.name}</span>
-                      </Card>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-64" side="top">
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="font-bold text-sm">{tech.name}</span>
-                        <Badge variant={tech.badgeVariant} className="text-[9px] py-0 px-1.5">
-                          {tech.category}
-                        </Badge>
+              {/* Bento Grid Container */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+                
+                {/* Bento Card 1: UI/UX Engineering & Motion (Col span 7) */}
+                <div className="md:col-span-7 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/10 transition-colors" />
+                  
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <Layers className="w-6 h-6" />
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{tech.desc}</p>
-                    </HoverCardContent>
-                  </HoverCard>
-                ))}
+                      <Badge variant="purple" className="text-[10px] font-mono tracking-wide">
+                        FRONTEND ARCHITECTURE
+                      </Badge>
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                      Modern UI/UX & Motion Systems
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                      Designing and developing fluid, accessible interfaces using React 19, Tailwind CSS, and shadcn UI. Every component is crafted with micro-interactions, responsive touch targets, and smooth View Transitions API.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-border/60 flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      {['React 19', 'Tailwind CSS', 'shadcn UI', 'View Transitions', 'Figma Tokens'].map((pill, i) => (
+                        <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
+                          {pill}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-xs font-mono text-primary font-semibold flex items-center gap-1">
+                      Pixel Precise ➔
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bento Card 2: Cloud & Database Architecture (Col span 5) */}
+                <div className="md:col-span-5 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-emerald-500/50 transition-all duration-300 shadow-sm hover:shadow-md">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/10 transition-colors" />
+                  
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                        <Database className="w-6 h-6" />
+                      </div>
+                      <Badge variant="emerald" className="text-[10px] font-mono tracking-wide">
+                        BACKEND & DATA
+                      </Badge>
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-emerald-500 transition-colors">
+                      Resilient Cloud & Database
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                      PostgreSQL data modeling, Supabase Realtime synchronization, multi-tenant workspace isolation, and automated Row Level Security (RLS) policies with edge caching.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-border/60 flex flex-wrap gap-1.5">
+                    {['PostgreSQL', 'Supabase Realtime', 'RLS Security', 'Edge CDN'].map((pill, i) => (
+                      <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
+                        {pill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bento Card 3: AI Intelligence & Autonomous Agents (Col span 5) */}
+                <div className="md:col-span-5 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-amber-500/50 transition-all duration-300 shadow-sm hover:shadow-md">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/10 transition-colors" />
+                  
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                        <Cpu className="w-6 h-6" />
+                      </div>
+                      <Badge variant="pulse" className="text-[10px] font-mono tracking-wide">
+                        AGENTIC AI & RAG
+                      </Badge>
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-amber-500 transition-colors">
+                      Autonomous AI & Knowledge RAG
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                      Building Agentic intelligence powered by Google Gemini 2.0 Flash, Obsidian Knowledge Graph RAG retrieval, Google Voice Speech AI, and autonomous tool calling workflows.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-border/60 flex flex-wrap gap-1.5">
+                    {['Gemini 2.0 Flash', 'Obsidian RAG', 'Voice AI (STT/TTS)', 'Tool Calling'].map((pill, i) => (
+                      <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
+                        {pill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bento Card 4: Design Systems & Multi-Tenant Workspace (Col span 7) */}
+                <div className="md:col-span-7 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-indigo-500/50 transition-all duration-300 shadow-sm hover:shadow-md">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-indigo-500/10 transition-colors" />
+                  
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500">
+                        <Layout className="w-6 h-6" />
+                      </div>
+                      <Badge variant="purple" className="text-[10px] font-mono tracking-wide">
+                        MULTI-TENANT ECOSYSTEM
+                      </Badge>
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-indigo-500 transition-colors">
+                      Multi-Tenant Design Systems & Flavoring
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                      Dynamic multi-tenant workspace architecture supporting 4 dedicated platform flavors (Core Web, Beta Cold-Chain Logistics, Gamma AI Video Hub, Delta Enterprise Cloud) with instant theme switching.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-border/60 flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      {['Multi-Tenant Flavors', 'Dynamic CSS Vars', 'Theme Switcher', 'Isolated DB Context'].map((pill, i) => (
+                        <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
+                          {pill}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-xs font-mono text-indigo-500 font-semibold flex items-center gap-1">
+                      4 Workspaces ➔
+                    </span>
+                  </div>
+                </div>
+
               </div>
             </div>
           </section>
