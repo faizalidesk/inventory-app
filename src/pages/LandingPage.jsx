@@ -1106,10 +1106,10 @@ export default function LandingPage() {
           {/* 6. CAPABILITIES SECTION WITH SHADCN CARDS & FEATURE LISTS */}
           <section className="section" id="capabilities">
             <div className="site-wrap">
-              <div className="section-heading centered-heading">
+              <div className="section-heading centered-heading text-center flex flex-col items-center justify-center mx-auto">
                 <Badge variant="purple" className="mb-4">03 / CAPABILITIES</Badge>
-                <h2>From first sketch<br />to final interaction.</h2>
-                <p className="text-sm text-muted-foreground max-w-lg mx-auto mt-3">
+                <h2 className="text-center">From first sketch<br />to final interaction.</h2>
+                <p className="text-sm text-muted-foreground max-w-lg mx-auto mt-4 text-center">
                   Comprehensive engineering and design services tailored for ambitious teams and digital products.
                 </p>
               </div>
