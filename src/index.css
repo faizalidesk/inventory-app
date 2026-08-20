@@ -1,324 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 260 20% 97%;
+    --foreground: 260 25% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 260 25% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 260 25% 10%;
+    --primary: 256 71% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 15% 93%;
+    --secondary-foreground: 260 25% 15%;
+    --muted: 260 10% 92%;
+    --muted-foreground: 260 10% 42%;
+    --accent: 172 88% 26%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 260 15% 88%;
+    --input: 260 15% 88%;
+    --ring: 256 71% 55%;
+    --radius: 0.75rem;
+
+    --page: #f5f3f8;
+    --surface: #ffffff;
+    --surface-raised: #f0edf5;
+    --soft: #e8e3ef;
+    --text: #17131e;
+    --muted-color: #6d6877;
+    --line: rgba(26,20,35,.12);
+    --accent-color: #7451df;
+    --accent-2: #087f72;
+    --accent-soft: rgba(116,81,223,.12);
+    --header: rgba(245,243,248,.8);
+    --shadow: 0 24px 70px rgba(48,35,69,.14);
+  }
+
+  [data-theme="dark"], .dark {
+    --background: 240 16% 4%;
+    --foreground: 255 100% 98%;
+    --card: 240 14% 7%;
+    --card-foreground: 255 100% 98%;
+    --popover: 240 14% 7%;
+    --popover-foreground: 255 100% 98%;
+    --primary: 256 100% 74%;
+    --primary-foreground: 240 20% 6%;
+    --secondary: 240 12% 12%;
+    --secondary-foreground: 255 100% 98%;
+    --muted: 240 12% 14%;
+    --muted-foreground: 245 10% 62%;
+    --accent: 167 71% 67%;
+    --accent-foreground: 240 20% 6%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 10% 16%;
+    --input: 240 10% 16%;
+    --ring: 256 100% 74%;
+
+    --page: #08080b;
+    --surface: #101015;
+    --surface-raised: #16161d;
+    --soft: #1c1c24;
+    --text: #f7f5ff;
+    --muted-color: #9997a6;
+    --line: rgba(255,255,255,.1);
+    --accent-color: #9d7cff;
+    --accent-2: #73e6ce;
+    --accent-soft: rgba(157,124,255,.15);
+    --header: rgba(8,8,11,.78);
+    --shadow: 0 24px 70px rgba(0,0,0,.4);
+  }
+}
+
 :root {
-
-  --primary: #2563eb;
+  --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
-
-  --text: #334155;
   --text-dark: #4b7ffa;
-
   --bg: #f8fafc;
-  --card: #ffffff;
-
-  --border: #e2e8f0;
-
   --success: #16a34a;
   --warning: #ca8a04;
   --danger: #dc2626;
 
-  --shadow:
-    0 4px 12px rgba(0,0,0,0.08);
-
-
   font-family:
+    "Manrope",
     Inter,
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
-
-  font-size:16px;
-
-  color:var(--text);
-
-  background:var(--bg);
-
-  font-synthesis:none;
-
-  text-rendering:
-    optimizeLegibility;
-
-  -webkit-font-smoothing:
-    antialiased;
-
+  font-size: 16px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
-
-
 
 /* RESET */
-
 *, *::before, *::after {
-
-  margin:0;
-
-  padding:0;
-
-  box-sizing:border-box;
-
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   -webkit-tap-highlight-color: transparent !important;
-
-}
-
-button, a, input, select, textarea {
-
-  -webkit-tap-highlight-color: transparent !important;
-
 }
 
 button:focus, button:focus-visible, a:focus, a:focus-visible {
-
   outline: none !important;
-
 }
-
-
 
 html,
 body,
 #root {
-
-  width:100%;
-
-  min-height:100vh;
-
+  width: 100%;
+  min-height: 100vh;
 }
-
-
-
-/* BODY */
 
 body {
-
-  background:
-  var(--bg);
-
-  color:
-  var(--text);
-
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
-
-
-
-/* ROOT APP */
 
 #root {
-
-  width:100%;
-
-  min-height:100vh;
-
-  display:flex;
-
-  flex-direction:column;
-
-  text-align:left;
-
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
-
-
-
-/* TEXT */
-
-h1,
-h2,
-h3 {
-
-  color:
-  var(--text-dark);
-
-  font-weight:600;
-
-}
-
-
-
-h1 {
-
-  font-size:32px;
-
-}
-
-
-
-h2 {
-
-  font-size:22px;
-
-}
-
-
 
 p {
-
-  line-height:1.6;
-
+  line-height: 1.6;
 }
-
-
-
-/* BUTTON */
-
-button {
-
-  border:none;
-
-  cursor:pointer;
-
-  font-size:15px;
-
-  transition:.2s;
-
-}
-
-
-
-button:hover {
-
-  opacity:.9;
-
-}
-
-
-
-/* INPUT */
-
-input {
-
-  width:100%;
-
-  padding:12px 15px;
-
-  border:
-
-  1px solid var(--border);
-
-  border-radius:8px;
-
-  outline:none;
-
-  font-size:15px;
-
-  background:white;
-
-}
-
-
-
-input:focus {
-
-  border-color:
-  var(--primary);
-
-}
-
-
-
-/* CARD */
-
-.card {
-
-  background:white;
-
-  border-radius:15px;
-
-  padding:25px;
-
-  box-shadow:
-  var(--shadow);
-
-}
-
-
-
-/* TABLE */
-
-table {
-
-  width:100%;
-
-  border-collapse:collapse;
-
-}
-
-
-
-th {
-
-  text-align:left;
-
-  padding:12px;
-
-  background:#f1f5f9;
-
-}
-
-
-
-td {
-
-  padding:12px;
-
-  border-bottom:
-  1px solid var(--border);
-
-}
-
-
-
-/* LINK */
-
-a {
-
-  color:
-  var(--primary);
-
-  text-decoration:none;
-
-}
-
-
-
-a:hover {
-
-  text-decoration:underline;
-
-}
-
-
 
 /* SCROLL */
-
 ::-webkit-scrollbar {
-
-  width:8px;
-
+  width: 8px;
 }
-
-
 
 ::-webkit-scrollbar-thumb {
-
-  background:#cbd5e1;
-
-  border-radius:10px;
-
+  background: #cbd5e1;
+  border-radius: 10px;
 }
 
-
-
-/* RESPONSIVE */
-
-@media(max-width:768px){
-
-
-  h1 {
-
-    font-size:26px;
-
-  }
-
-
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #272733;
 }
 
 /* VIEW TRANSITIONS FOR CIRCULAR THEME TOGGLE */
@@ -337,7 +164,6 @@ a:hover {
   z-index: 9999;
 }
 
-/* Disable standard theme CSS transitions during view transition to prevent lag/conflicts */
 .theme-transitioning,
 .theme-transitioning * {
   transition: none !important;
@@ -365,7 +191,7 @@ a:hover {
 .studio-loading-mark {
   width: 42px;
   height: 40px;
-  color: var(--accent, #9d7cff);
+  color: var(--accent-color, #9d7cff);
 }
 
 .studio-loading-box span {
@@ -373,7 +199,7 @@ a:hover {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted, #9997a6);
+  color: var(--muted-color, #9997a6);
 }
 
 @keyframes studio-pulse {
