@@ -1033,11 +1033,18 @@ export default function LandingPage() {
           {/* 5. ABOUT SECTION WITH SHADCN CARDS, TABS & STATS */}
           <section className="section about-section" id="about">
             <div className="site-wrap about-grid">
-              <div className="about-visual">
+              <div className="about-visual group">
+                <div className="about-glow" aria-hidden="true" />
                 <Card className="portrait-card relative overflow-hidden border-border/80 shadow-2xl">
                   <div className="portrait-grid" />
                   <div className="portrait-monogram">FA</div>
-                  <span className="portrait-caption">{landingContent.about_location}</span>
+                  <span className="portrait-caption flex items-center gap-2.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#73e6ce] opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#73e6ce]" />
+                    </span>
+                    {landingContent.about_location}
+                  </span>
                 </Card>
                 <Badge variant="accent" className="about-sticker shadow-lg">
                   Curious by default ✦
@@ -1056,7 +1063,7 @@ export default function LandingPage() {
                     <TabsTrigger value="approach">Approach</TabsTrigger>
                   </TabsList>
                   
-                  <TabsContent value="story" className="space-y-4">
+                  <TabsContent value="story" className="space-y-4 animate-in fade-in-50 slide-in-from-bottom-1 duration-300">
                     <p className="large-copy text-foreground font-medium text-lg leading-relaxed">
                       {landingContent.about_large_copy}
                     </p>
@@ -1065,7 +1072,7 @@ export default function LandingPage() {
                     </p>
                   </TabsContent>
 
-                  <TabsContent value="philosophy" className="space-y-4">
+                  <TabsContent value="philosophy" className="space-y-4 animate-in fade-in-50 slide-in-from-bottom-1 duration-300">
                     <p className="large-copy text-foreground font-medium text-lg leading-relaxed">
                       Form and function are not opposing forces—they amplify each other.
                     </p>
@@ -1074,7 +1081,7 @@ export default function LandingPage() {
                     </p>
                   </TabsContent>
 
-                  <TabsContent value="approach" className="space-y-4">
+                  <TabsContent value="approach" className="space-y-4 animate-in fade-in-50 slide-in-from-bottom-1 duration-300">
                     <p className="large-copy text-foreground font-medium text-lg leading-relaxed">
                       Modular design tokens meet scalable fullstack engineering.
                     </p>
@@ -1086,16 +1093,16 @@ export default function LandingPage() {
 
                 {/* Stats Grid using shadcn Cards */}
                 <div className="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-border/60">
-                  <Card className="p-4 text-center bg-card/50 border-border/60 hover:border-primary/40 transition-colors">
-                    <strong className="block text-2xl sm:text-3xl font-bold text-primary">{landingContent.stat_1_value}</strong>
+                  <Card className="p-4 text-center bg-card/50 border-border/60 hover:border-primary/50 hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 group cursor-default">
+                    <strong className="block text-2xl sm:text-3xl font-bold text-primary group-hover:scale-110 transition-transform duration-300">{landingContent.stat_1_value}</strong>
                     <span className="block mt-1 text-[11px] font-mono text-muted-foreground">{landingContent.stat_1_label}</span>
                   </Card>
-                  <Card className="p-4 text-center bg-card/50 border-border/60 hover:border-primary/40 transition-colors">
-                    <strong className="block text-2xl sm:text-3xl font-bold text-[#73e6ce]">{landingContent.stat_2_value}</strong>
+                  <Card className="p-4 text-center bg-card/50 border-border/60 hover:border-primary/50 hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 group cursor-default">
+                    <strong className="block text-2xl sm:text-3xl font-bold text-[#73e6ce] group-hover:scale-110 transition-transform duration-300">{landingContent.stat_2_value}</strong>
                     <span className="block mt-1 text-[11px] font-mono text-muted-foreground">{landingContent.stat_2_label}</span>
                   </Card>
-                  <Card className="p-4 text-center bg-card/50 border-border/60 hover:border-primary/40 transition-colors">
-                    <strong className="block text-2xl sm:text-3xl font-bold text-[#ff8eb4]">{landingContent.stat_3_value}</strong>
+                  <Card className="p-4 text-center bg-card/50 border-border/60 hover:border-primary/50 hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 group cursor-default">
+                    <strong className="block text-2xl sm:text-3xl font-bold text-[#ff8eb4] group-hover:scale-110 transition-transform duration-300">{landingContent.stat_3_value}</strong>
                     <span className="block mt-1 text-[11px] font-mono text-muted-foreground">{landingContent.stat_3_label}</span>
                   </Card>
                 </div>
