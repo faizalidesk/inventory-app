@@ -27,9 +27,10 @@ import {
   Send,
   Layers,
   FileText,
-  Info
+  Search,
+  Mail
 } from "lucide-react";
-import { FaSun, FaMoon, FaArrowLeft, FaWhatsapp, FaTwitter, FaTelegram } from "react-icons/fa";
+import { FaSun, FaMoon, FaArrowLeft, FaWhatsapp, FaTwitter, FaTelegram, FaLinkedin, FaFacebook } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import SiteNavbar from "../component/SiteNavbar";
 import "./LandingPage.css";
@@ -111,7 +112,7 @@ export default function NewsDetailPage() {
     ? allArticles.filter((a) => a.category === article.category && a.id !== article.id).slice(0, 3)
     : [];
 
-  // Trending sidebar picks (4 articles from other categories)
+  // Trending sidebar picks (4 articles)
   const trendingArticles = article
     ? allArticles.filter((a) => a.id !== article.id).slice(0, 4)
     : allArticles.slice(0, 4);
@@ -129,12 +130,12 @@ export default function NewsDetailPage() {
 
   const getCategoryBadgeClass = (categoryId) => {
     switch (categoryId) {
-      case "teknologi": return "bg-blue-500/15 text-blue-400 border-blue-500/30";
-      case "bencana": return "bg-amber-500/15 text-amber-400 border-amber-500/30";
-      case "pendidikan": return "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
-      case "politik": return "bg-indigo-500/15 text-indigo-400 border-indigo-500/30";
-      case "kriminal": return "bg-rose-500/15 text-rose-400 border-rose-500/30";
-      default: return "bg-purple-500/15 text-purple-400 border-purple-500/30";
+      case "teknologi": return "bg-blue-500/10 text-blue-400 border-blue-500/25";
+      case "bencana": return "bg-amber-500/10 text-amber-400 border-amber-500/25";
+      case "pendidikan": return "bg-emerald-500/10 text-emerald-400 border-emerald-500/25";
+      case "politik": return "bg-indigo-500/10 text-indigo-400 border-indigo-500/25";
+      case "kriminal": return "bg-rose-500/10 text-rose-400 border-rose-500/25";
+      default: return "bg-purple-500/10 text-purple-400 border-purple-500/25";
     }
   };
 
@@ -166,7 +167,7 @@ export default function NewsDetailPage() {
   const toggleBookmark = () => {
     const next = !bookmarked;
     setBookmarked(next);
-    toast.success(next ? "Artikel berhasil disimpan ke bookmark!" : "Artikel dihapus dari bookmark.");
+    toast.success(next ? "Artikel berhasil disimpan!" : "Artikel dihapus dari bookmark.");
   };
 
   const handleSidebarSubscribe = (e) => {
@@ -176,7 +177,7 @@ export default function NewsDetailPage() {
       return;
     }
     setSidebarSubscribed(true);
-    toast.success("Terima kasih! Anda telah berlangganan warta harian.");
+    toast.success("Terima kasih! Anda telah berlangganan.");
     setSidebarEmail("");
   };
 
@@ -217,234 +218,185 @@ export default function NewsDetailPage() {
       {/* 1. UNIFIED SITE NAVBAR */}
       <SiteNavbar activeNav="news" />
 
+      {/* 2. SEAMLESS UNIFIED EDITORIAL CONTAINER */}
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8">
         
-        {/* MODERN RESPONSIVE BREADCRUMB */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground mb-8 py-2.5 px-4 rounded-xl bg-card/70 border border-border/80 shadow-xs backdrop-blur-sm overflow-x-auto scrollbar-none">
-          <Link to="/" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0 no-underline text-muted-foreground">
-            <Home className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>Beranda</span>
+        {/* CLEAN MINIMALIST BREADCRUMB */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground mb-6 overflow-x-auto scrollbar-none">
+          <Link to="/" className="hover:text-foreground transition-colors no-underline text-muted-foreground">
+            Beranda
           </Link>
-          
-          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
-          
-          <Link to="/news" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0 no-underline text-muted-foreground">
-            <Newspaper className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>Warta & Berita</span>
+          <span className="text-muted-foreground/40">/</span>
+          <Link to="/news" className="hover:text-foreground transition-colors no-underline text-muted-foreground">
+            Warta & Berita
           </Link>
-          
-          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
-          
-          <Link 
-            to="/news" 
-            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md border transition-opacity hover:opacity-80 shrink-0 no-underline ${getCategoryBadgeClass(article.category)}`}
-          >
-            {getCategoryIcon(article.category)}
-            <span>{article.categoryLabel}</span>
+          <span className="text-muted-foreground/40">/</span>
+          <Link to="/news" className="hover:text-foreground transition-colors no-underline font-medium text-primary">
+            {article.categoryLabel}
           </Link>
-          
-          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
-          
-          <span className="text-foreground font-medium truncate max-w-[200px] sm:max-w-xs md:max-w-md shrink-0" title={article.title}>
+          <span className="text-muted-foreground/40">/</span>
+          <span className="text-foreground truncate max-w-[280px] sm:max-w-md">
             {article.title}
           </span>
         </nav>
 
-        {/* 3-COLUMN EDITORIAL LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
+        {/* 2-COLUMN UNIFIED EDITORIAL LAYOUT (MAIN READING + UNIFIED SIDEBAR) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative">
           
           {/* =========================================================================
-              LEFT COLUMN: ELEGANT FLOATING DOCK & READING ASSISTANT (Col 1-2 on desktop)
+              LEFT: SLIM FLOATING ACTION PILL (Subtle single floating capsule)
              ========================================================================= */}
-          <aside className="hidden lg:flex lg:col-span-2 flex-col gap-4 sticky top-24">
-            
-            {/* Quick Navigation Back Pill */}
-            <Link 
-              to="/news" 
-              className="flex items-center justify-between gap-2 text-xs font-mono font-semibold text-muted-foreground hover:text-foreground p-3 rounded-2xl bg-card border border-border/80 shadow-xs hover:border-primary/50 transition-all group no-underline"
-            >
-              <span className="flex items-center gap-1.5">
-                <ArrowLeft className="w-4 h-4 text-primary group-hover:-translate-x-1 transition-transform" />
-                <span>Portal Berita</span>
-              </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted font-mono">ESC</span>
-            </Link>
+          <aside className="hidden xl:flex xl:col-span-1 flex-col items-center sticky top-24 z-20">
+            <div className="flex flex-col items-center gap-3 p-2 rounded-full bg-card/90 border border-border/80 shadow-md backdrop-blur-md">
+              {/* Back button */}
+              <Link 
+                to="/news" 
+                title="Kembali ke Portal Berita"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors no-underline"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
 
-            {/* Quick Meta Badge Card */}
-            <div className="p-3.5 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col gap-2">
-              <span className="text-[10px] font-mono text-muted-foreground uppercase font-bold tracking-wider">
-                Info Liputan
-              </span>
-              <div className="flex flex-col gap-1.5 text-[11px] font-mono text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-3 h-3 text-primary" />
-                  <span>{article.readTime || "2 mnt baca"}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3 h-3 text-primary" />
-                  <span>{article.date}</span>
-                </div>
-              </div>
-            </div>
+              <div className="w-4 h-px bg-border" />
 
-            {/* Reading Font Size Controller Card */}
-            <div className="p-3.5 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col gap-2">
-              <span className="text-[10px] font-mono text-muted-foreground uppercase font-bold tracking-wider">
-                Ukuran Teks
-              </span>
-              <div className="grid grid-cols-3 gap-1 bg-muted/60 p-1 rounded-xl">
-                <button
-                  type="button"
-                  onClick={() => setFontSize("small")}
-                  className={`py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${fontSize === "small" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}
-                >
-                  A-
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFontSize("normal")}
-                  className={`py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${fontSize === "normal" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}
-                >
-                  A
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFontSize("large")}
-                  className={`py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${fontSize === "large" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}
-                >
-                  A+
-                </button>
-              </div>
-            </div>
+              {/* WhatsApp */}
+              <button
+                type="button"
+                onClick={handleShareWhatsApp}
+                title="Bagikan ke WhatsApp"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors cursor-pointer"
+              >
+                <FaWhatsapp className="w-3.5 h-3.5" />
+              </button>
 
-            {/* Vertical Social Sharing Dock */}
-            <div className="p-3.5 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col items-center gap-2.5">
-              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider font-bold">
-                Bagikan
-              </span>
-              
-              <div className="grid grid-cols-2 gap-2 w-full">
-                {/* WhatsApp */}
-                <button
-                  type="button"
-                  onClick={handleShareWhatsApp}
-                  title="Bagikan ke WhatsApp"
-                  className="h-9 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all cursor-pointer shadow-xs"
-                >
-                  <FaWhatsapp className="w-4 h-4" />
-                </button>
+              {/* Twitter / X */}
+              <button
+                type="button"
+                onClick={handleShareTwitter}
+                title="Bagikan ke Twitter / X"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-sky-400 hover:bg-sky-500/10 transition-colors cursor-pointer"
+              >
+                <FaTwitter className="w-3.5 h-3.5" />
+              </button>
 
-                {/* Twitter / X */}
-                <button
-                  type="button"
-                  onClick={handleShareTwitter}
-                  title="Bagikan ke Twitter / X"
-                  className="h-9 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all cursor-pointer shadow-xs"
-                >
-                  <FaTwitter className="w-4 h-4" />
-                </button>
+              {/* Telegram */}
+              <button
+                type="button"
+                onClick={handleShareTelegram}
+                title="Bagikan ke Telegram"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-blue-400 hover:bg-blue-500/10 transition-colors cursor-pointer"
+              >
+                <FaTelegram className="w-3.5 h-3.5" />
+              </button>
 
-                {/* Telegram */}
-                <button
-                  type="button"
-                  onClick={handleShareTelegram}
-                  title="Bagikan ke Telegram"
-                  className="h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all cursor-pointer shadow-xs"
-                >
-                  <FaTelegram className="w-4 h-4" />
-                </button>
+              {/* Copy Link */}
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                title="Salin Tautan"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+              </button>
 
-                {/* Copy Link */}
-                <button
-                  type="button"
-                  onClick={handleCopyLink}
-                  title="Salin Tautan Berita"
-                  className="h-9 rounded-xl bg-muted/60 text-foreground border border-border/80 flex items-center justify-center hover:border-primary transition-all cursor-pointer shadow-xs"
-                >
-                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4 text-primary" />}
-                </button>
-              </div>
+              <div className="w-4 h-px bg-border" />
 
-              <div className="w-full h-px bg-border/60 my-0.5" />
-
-              {/* Bookmark Toggle Full Pill */}
+              {/* Bookmark Toggle */}
               <button
                 type="button"
                 onClick={toggleBookmark}
-                className={`w-full py-2 px-3 rounded-xl border text-xs font-mono font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs ${
-                  bookmarked 
-                    ? "bg-amber-500/20 text-amber-400 border-amber-500/40" 
-                    : "bg-card text-muted-foreground border-border/80 hover:text-foreground hover:border-primary/50"
+                title={bookmarked ? "Hapus dari Bookmark" : "Simpan Berita"}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                  bookmarked ? "text-amber-400 bg-amber-500/15" : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
               >
                 <Bookmark className="w-3.5 h-3.5" />
-                <span>{bookmarked ? "Tersimpan" : "Simpan"}</span>
               </button>
             </div>
           </aside>
 
           {/* =========================================================================
-              CENTER COLUMN: MAIN EDITORIAL ARTICLE (Col 3-9 on desktop)
+              CENTER: CONTINUOUS SEAMLESS EDITORIAL ARTICLE (Col 2-8 / 1-8)
              ========================================================================= */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-8 xl:col-span-7 space-y-8">
             
-            {/* ARTICLE HEADER */}
-            <div className="article-header pb-6 border-b border-border/70">
-              <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-                <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-md border ${getCategoryBadgeClass(article.category)}`}>
+            {/* ARTICLE HEADER & BYLINE */}
+            <div className="space-y-4 pb-6 border-b border-border/70">
+              
+              {/* Category Pill & Time Meta */}
+              <div className="flex items-center gap-3 flex-wrap text-xs">
+                <span className={`inline-flex items-center gap-1.5 font-bold px-2.5 py-0.5 rounded-full border ${getCategoryBadgeClass(article.category)}`}>
                   {getCategoryIcon(article.category)}
-                  <span>{article.categoryLabel || article.category}</span>
+                  <span>{article.categoryLabel}</span>
                 </span>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {article.date}
-                  </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    {article.readTime}
-                  </span>
-                </div>
+                <span className="text-muted-foreground font-mono flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" /> {article.date}
+                </span>
+                <span className="text-muted-foreground/40">•</span>
+                <span className="text-muted-foreground font-mono flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" /> {article.readTime}
+                </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-6 text-foreground">
+              {/* Bold Editorial Headline Title */}
+              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight text-foreground">
                 {article.title}
               </h1>
 
-              {/* Author & Editorial Byline */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border/50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                    <User className="w-5 h-5" />
+              {/* Author Info Bar + Font Size Switcher (Unified Row) */}
+              <div className="flex items-center justify-between gap-4 pt-3 flex-wrap">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-full bg-primary/15 border border-primary/25 flex items-center justify-center text-primary font-bold text-xs shrink-0">
+                    <User className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-foreground">{article.author}</div>
-                    <div className="text-xs text-muted-foreground font-mono">Redaksi Berita Publik Nusantara</div>
+                    <div className="text-xs sm:text-sm font-bold text-foreground">{article.author}</div>
+                    <div className="text-[11px] text-muted-foreground">Redaksi Berita Publik Nusantara</div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Liputan Terverifikasi</span>
+                {/* Font Size Adjuster in header */}
+                <div className="flex items-center gap-1 bg-card border border-border/70 rounded-lg p-0.5 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setFontSize("small")}
+                    className={`px-2 py-0.5 rounded text-xs transition-colors ${fontSize === "small" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    A-
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFontSize("normal")}
+                    className={`px-2 py-0.5 rounded text-xs transition-colors ${fontSize === "normal" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    A
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFontSize("large")}
+                    className={`px-2 py-0.5 rounded text-xs transition-colors ${fontSize === "large" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    A+
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* ARTICLE BODY */}
+            {/* ARTICLE NARRATIVE */}
             <article className="space-y-6">
-              {/* Executive Summary Box */}
-              <div className="p-5 rounded-2xl bg-card border border-border/80 shadow-xs relative overflow-hidden">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-primary uppercase mb-2">
-                  <Sparkles className="w-3.5 h-3.5" /> RINGKASAN EKSEKUTIF
-                </div>
-                <p className="text-sm sm:text-base font-semibold leading-relaxed text-foreground">
+              
+              {/* Executive Summary Callout (Seamless left-accent quote) */}
+              <div className="p-4 sm:p-5 rounded-r-2xl bg-card border-l-4 border-primary border-y border-r border-border/60 shadow-xs">
+                <span className="text-[11px] font-mono font-bold text-primary uppercase tracking-wider block mb-1.5">
+                  Ringkasan Eksekutif
+                </span>
+                <p className="text-sm sm:text-[15px] font-medium leading-relaxed text-foreground">
                   {article.summary}
                 </p>
               </div>
 
-              {/* Full Narrative Content */}
-              <div className={`space-y-5 text-foreground/90 leading-relaxed article-content-rendered ${fontClass}`}>
+              {/* Narrative Content Paragraphs */}
+              <div className={`space-y-5 text-foreground/90 leading-relaxed ${fontClass}`}>
                 {article.content && (article.content.includes('<') && article.content.includes('>')) ? (
                   <div 
                     dangerouslySetInnerHTML={{ __html: article.content }} 
@@ -452,7 +404,10 @@ export default function NewsDetailPage() {
                   />
                 ) : (
                   <>
-                    <p>{article.content}</p>
+                    <p>
+                      <strong>Jakarta, Indonesia — </strong>
+                      {article.content}
+                    </p>
                     <p>
                       Perkembangan ini menjadi salah satu tonggak strategis dalam agenda penguatan infrastruktur dan tata kelola di Indonesia. Sinergi antara pemerintah pusat, pemerintah daerah, dan partisipasi publik diharapkan dapat mengoptimalkan dampak positif bagi kemajuan masyarakat di seluruh pelosok Tanah Air.
                     </p>
@@ -460,39 +415,39 @@ export default function NewsDetailPage() {
                 )}
               </div>
 
-              {/* Tag and Topic Badge */}
-              <div className="pt-6 border-t border-border/60 flex items-center justify-between flex-wrap gap-3">
+              {/* Topic Tag and Mobile Share Row */}
+              <div className="pt-6 border-t border-border/60 flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono text-muted-foreground">Topik:</span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-primary/10 text-primary border border-primary/20 text-xs font-bold">
-                    <Tag className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-muted text-foreground text-xs font-semibold">
+                    <Tag className="w-3 h-3 text-primary" />
                     {article.tag}
                   </span>
                 </div>
 
-                {/* Social Sharing (Mobile Only) */}
-                <div className="flex lg:hidden items-center gap-2">
+                {/* Mobile-only share buttons */}
+                <div className="flex xl:hidden items-center gap-2">
                   <button
                     type="button"
                     onClick={handleShareWhatsApp}
-                    className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center"
+                    className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center"
                   >
-                    <FaWhatsapp className="w-4 h-4" />
+                    <FaWhatsapp className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={handleShareTwitter}
-                    className="w-8 h-8 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center"
+                    className="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center"
                   >
-                    <FaTwitter className="w-4 h-4" />
+                    <FaTwitter className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={handleCopyLink}
-                    className="px-3 h-8 rounded-lg bg-card border border-border/80 text-xs font-bold text-foreground flex items-center gap-1.5"
+                    className="px-3 h-8 rounded-lg bg-card border border-border text-xs font-semibold flex items-center gap-1.5"
                   >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-primary" />}
-                    <span>{copied ? "Tersalin!" : "Salin"}</span>
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+                    <span>{copied ? "Tersalin!" : "Salin Link"}</span>
                   </button>
                 </div>
               </div>
@@ -503,7 +458,7 @@ export default function NewsDetailPage() {
               {prevArticle ? (
                 <Link
                   to={`/news/${prevArticle.slug || prevArticle.id}`}
-                  className="p-4 rounded-2xl border border-border/70 bg-card hover:border-primary/50 transition-all text-left flex flex-col justify-between group no-underline"
+                  className="p-4 rounded-xl border border-border/70 bg-card hover:border-primary/50 transition-all text-left flex flex-col justify-between group no-underline"
                 >
                   <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1 mb-1">
                     <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform text-primary" /> Berita Sebelumnya
@@ -517,7 +472,7 @@ export default function NewsDetailPage() {
               {nextArticle && (
                 <Link
                   to={`/news/${nextArticle.slug || nextArticle.id}`}
-                  className="p-4 rounded-2xl border border-border/70 bg-card hover:border-primary/50 transition-all text-right flex flex-col justify-between group no-underline"
+                  className="p-4 rounded-xl border border-border/70 bg-card hover:border-primary/50 transition-all text-right flex flex-col justify-between group no-underline"
                 >
                   <span className="text-[11px] font-mono text-muted-foreground flex items-center justify-end gap-1 mb-1">
                     Berita Selanjutnya <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform text-primary" />
@@ -529,36 +484,34 @@ export default function NewsDetailPage() {
               )}
             </nav>
 
-            {/* RELATED ARTICLES IN SAME CATEGORY */}
+            {/* RELATED ARTICLES */}
             {relatedArticles.length > 0 && (
               <section className="pt-2">
-                <div className="flex items-center justify-between mb-6 pb-2 border-b border-border/70">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-border/70">
+                  <h3 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-primary" />
-                    <h3 className="text-base sm:text-lg font-bold tracking-tight text-foreground">
-                      Berita Terkait Kategori {article.categoryLabel}
-                    </h3>
-                  </div>
+                    <span>Warta Terkait Kategori {article.categoryLabel}</span>
+                  </h3>
                   <Link to="/news" className="text-xs text-primary font-bold hover:underline no-underline">
                     Lihat Semua ➔
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {relatedArticles.map((rel) => (
                     <div
                       key={rel.id}
                       onClick={() => navigate(`/news/${rel.slug || rel.id}`)}
-                      className="p-4 rounded-2xl border border-border/70 bg-card hover:border-primary/40 transition-all cursor-pointer group flex flex-col justify-between shadow-xs"
+                      className="p-3.5 rounded-xl border border-border/70 bg-card hover:border-primary/40 transition-all cursor-pointer group flex flex-col justify-between"
                     >
                       <div>
-                        <span className="text-[10px] font-mono text-muted-foreground block mb-2">{rel.date}</span>
-                        <h4 className="text-xs sm:text-sm font-bold line-clamp-2 group-hover:text-primary transition-colors mb-2 text-foreground">
+                        <span className="text-[10px] font-mono text-muted-foreground block mb-1.5">{rel.date}</span>
+                        <h4 className="text-xs font-bold line-clamp-2 group-hover:text-primary transition-colors mb-2 text-foreground">
                           {rel.title}
                         </h4>
                       </div>
-                      <span className="text-[11px] font-bold text-primary flex items-center gap-1 group-hover:translate-x-0.5 transition-transform pt-2 border-t border-border/40">
-                        Baca Artikel ➔
+                      <span className="text-[11px] font-semibold text-primary pt-2 border-t border-border/40">
+                        Baca ➔
                       </span>
                     </div>
                   ))}
@@ -568,112 +521,102 @@ export default function NewsDetailPage() {
           </div>
 
           {/* =========================================================================
-              RIGHT COLUMN: EDITORIAL CHANNELS & CURATED PICKS (Col 10-12 on desktop)
+              RIGHT: SINGLE UNIFIED SEAMLESS SIDEBAR PANEL (Col 9-12 / 8-12)
              ========================================================================= */}
-          <aside className="hidden lg:flex lg:col-span-3 flex-col gap-6 sticky top-24">
+          <aside className="lg:col-span-4 xl:col-span-4 sticky top-24">
             
-            {/* Widget 1: Kanal Kategori Warta (Category Navigator) */}
-            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-              <div className="flex items-center gap-2 pb-2.5 mb-2.5 border-b border-border/60">
-                <Layers className="w-4 h-4 text-primary" />
-                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-foreground">
-                  Kanal Warta
-                </h3>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                {NEWS_CATEGORIES.filter(c => c.id !== "all").map((cat) => (
-                  <Link
-                    key={cat.id}
-                    to="/news"
-                    className="flex items-center justify-between p-2 rounded-xl hover:bg-muted/60 transition-colors text-xs font-medium text-muted-foreground hover:text-foreground no-underline group"
-                  >
-                    <span className="flex items-center gap-2">
-                      {getCategoryIcon(cat.id)}
-                      <span className="group-hover:text-primary transition-colors">{cat.label}</span>
-                    </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-muted/80 text-muted-foreground">
-                      15
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Widget 2: Trending Warta Terhangat */}
-            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-              <div className="flex items-center gap-2 pb-2.5 mb-3 border-b border-border/60">
-                <Flame className="w-4 h-4 text-amber-400" />
-                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-foreground">
-                  Warta Terhangat
-                </h3>
-              </div>
-
-              <div className="space-y-3">
-                {trendingArticles.map((trend, idx) => (
-                  <div
-                    key={trend.id}
-                    onClick={() => navigate(`/news/${trend.slug || trend.id}`)}
-                    className="group cursor-pointer flex items-start gap-2.5"
-                  >
-                    <span className="w-5 h-5 rounded-md bg-primary/10 text-primary font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-primary group-hover:text-white transition-colors">
-                      {idx + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-xs font-semibold line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-snug">
-                        {trend.title}
-                      </h4>
-                      <span className="text-[10px] font-mono text-muted-foreground">
-                        {trend.categoryLabel}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Widget 3: Transparansi Sumber & Regulasi */}
-            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-              <div className="flex items-center gap-2 mb-2 text-primary font-mono text-xs font-bold">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Keterbukaan Informasi</span>
-              </div>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Portal warta independen menyajikan informasi terverifikasi sesuai prinsip transparansi publik dan rilis resmi kementerian/lembaga nasional.
-              </p>
-            </div>
-
-            {/* Widget 4: Quick Newsletter Box */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-card to-muted/30 border border-border/80 shadow-xs">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary block mb-1">
-                Langganan Warta
-              </span>
-              <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">
-                Terima ringkasan warta terpenting langsung ke email Anda.
-              </p>
+            {/* ONE SINGLE UNIFIED CONTAINER (No chopped cards!) */}
+            <div className="p-5 rounded-2xl bg-card border border-border/80 shadow-sm space-y-6">
               
-              {sidebarSubscribed ? (
-                <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Terima kasih telah bergabung!</span>
+              {/* SECTION 1: WARTA TERHANGAT */}
+              <div>
+                <div className="flex items-center gap-2 pb-3 mb-3 border-b border-border/60">
+                  <Flame className="w-4 h-4 text-amber-400" />
+                  <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-foreground">
+                    Warta Terhangat
+                  </h3>
                 </div>
-              ) : (
-                <form onSubmit={handleSidebarSubscribe} className="space-y-2">
-                  <input
-                    type="email"
-                    placeholder="nama@email.com"
-                    value={sidebarEmail}
-                    onChange={(e) => setSidebarEmail(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-background border border-border/80 focus:border-primary outline-none transition-colors"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full py-2 bg-primary text-primary-foreground font-bold text-xs rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                  >
-                    <Send className="w-3 h-3" /> Berlangganan
-                  </button>
-                </form>
-              )}
+
+                <div className="space-y-3">
+                  {trendingArticles.map((trend, idx) => (
+                    <div
+                      key={trend.id}
+                      onClick={() => navigate(`/news/${trend.slug || trend.id}`)}
+                      className="group cursor-pointer flex items-start gap-2.5"
+                    >
+                      <span className="w-5 h-5 rounded-md bg-primary/10 text-primary font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-primary group-hover:text-white transition-colors">
+                        {idx + 1}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-xs font-bold line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-snug">
+                          {trend.title}
+                        </h4>
+                        <span className="text-[10px] font-medium text-muted-foreground">
+                          {trend.categoryLabel}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* SECTION 2: KANAL KATEGORI */}
+              <div className="pt-4 border-t border-border/60">
+                <div className="flex items-center gap-2 pb-2.5 mb-2.5">
+                  <Layers className="w-4 h-4 text-primary" />
+                  <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-foreground">
+                    Kanal Kategori
+                  </h3>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {NEWS_CATEGORIES.filter(c => c.id !== "all").map((cat) => (
+                    <Link
+                      key={cat.id}
+                      to="/news"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/60 hover:bg-muted text-xs font-medium text-muted-foreground hover:text-foreground transition-colors no-underline"
+                    >
+                      {getCategoryIcon(cat.id)}
+                      <span>{cat.label}</span>
+                      <span className="text-[10px] font-mono text-muted-foreground/60">(15)</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* SECTION 3: LANGGANAN BULETIN */}
+              <div className="pt-4 border-t border-border/60">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-foreground block mb-1">
+                  Langganan Warta Harian
+                </span>
+                <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">
+                  Kurasi berita penting langsung ke email Anda setiap pagi.
+                </p>
+                
+                {sidebarSubscribed ? (
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Terima kasih telah bergabung!</span>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSidebarSubscribe} className="space-y-2">
+                    <input
+                      type="email"
+                      placeholder="nama@email.com"
+                      value={sidebarEmail}
+                      onChange={(e) => setSidebarEmail(e.target.value)}
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-background border border-border/80 focus:border-primary outline-none transition-colors"
+                    />
+                    <button
+                      type="submit"
+                      className="w-full py-2 bg-primary text-primary-foreground font-bold text-xs rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                    >
+                      <Send className="w-3 h-3" /> Berlangganan
+                    </button>
+                  </form>
+                )}
+              </div>
+
             </div>
 
           </aside>
