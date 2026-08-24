@@ -942,9 +942,17 @@ export default function LandingPage() {
                     Pusat Informasi &<br className="hidden sm:inline" /> Kabar Terhangat Hari Ini
                   </h2>
                 </div>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  Liputan mendalam dan terpercaya seputar terobosan teknologi, mitigasi bencana, pendidikan nasional, perkembangan politik, serta transparansi penegakan hukum.
-                </p>
+                <div className="flex flex-col items-start md:items-end gap-3">
+                  <p className="text-sm text-muted-foreground max-w-md">
+                    Liputan mendalam dan terpercaya seputar terobosan teknologi, mitigasi bencana, pendidikan nasional, perkembangan politik, serta transparansi penegakan hukum.
+                  </p>
+                  <Button asChild variant="outline" size="sm" className="gap-2 font-bold hover:border-primary/50 text-xs">
+                    <Link to="/news">
+                      <Newspaper className="w-3.5 h-3.5 text-primary" />
+                      Buka Portal Berita Lengkap ➔
+                    </Link>
+                  </Button>
+                </div>
               </div>
 
               {/* Search & Category Filter Bar */}
@@ -1076,20 +1084,32 @@ export default function LandingPage() {
                 </div>
               )}
 
-              {/* Load More Button */}
-              {filteredNews.length > newsDisplayCount && (
-                <div className="flex justify-center mt-10">
+              {/* Bottom Actions: Load More & Open Full Portal */}
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-10">
+                {filteredNews.length > newsDisplayCount && (
                   <Button
+                    type="button"
                     variant="outline"
                     size="lg"
                     onClick={() => setNewsDisplayCount(prev => prev + 9)}
-                    className="gap-2 font-bold px-6 shadow-sm hover:border-primary/50 cursor-pointer"
+                    className="gap-2 font-bold px-6 shadow-sm hover:border-primary/50 cursor-pointer text-xs sm:text-sm"
                   >
                     <BookOpen className="w-4 h-4 text-primary" />
                     <span>Muat Berita Lainnya ({filteredNews.length - newsDisplayCount} Tersisa)</span>
                   </Button>
-                </div>
-              )}
+                )}
+                <Button
+                  asChild
+                  variant="default"
+                  size="lg"
+                  className="gap-2 font-bold px-6 shadow-sm cursor-pointer text-xs sm:text-sm"
+                >
+                  <Link to="/news">
+                    <Newspaper className="w-4 h-4" />
+                    <span>Buka Portal Berita Lengkap (/news) ➔</span>
+                  </Link>
+                </Button>
+              </div>
             </div>
           </section>
 
