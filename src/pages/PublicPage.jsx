@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { 
   FaArrowLeft, 
@@ -128,14 +128,26 @@ export function PublicInfoPage({ type }) {
         metaDesc.content = "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.";
       }
 
-      // 3. OpenGraph
+      // 3. Dynamic Canonical Tag
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.rel = 'canonical';
+        document.head.appendChild(canonical);
+      }
+      canonical.href = `https://desktopalie.my.id/${type}`;
+
+      // 4. OpenGraph
       let ogTitle = document.querySelector('meta[property="og:title"]');
       if (ogTitle) ogTitle.content = "About Desktopalie — Projects, Experiments & Digital Creations";
 
       let ogDesc = document.querySelector('meta[property="og:description"]');
       if (ogDesc) ogDesc.content = "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.";
 
-      // 4. Schema.org JSON-LD Organization / Project Structured Data
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.content = `https://desktopalie.my.id/${type}`;
+
+      // 5. Schema.org JSON-LD Organization / Project Structured Data
       const existingScript = document.getElementById('schema-about-desktopalie');
       if (!existingScript) {
         const script = document.createElement('script');
