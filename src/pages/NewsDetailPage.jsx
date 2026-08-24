@@ -35,6 +35,7 @@ export default function NewsDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { theme } = useTheme();
   const [allArticles, setAllArticles] = useState(() => {
     try {
       const cached = localStorage.getItem("desktopalie_news_cache");
@@ -47,7 +48,7 @@ export default function NewsDetailPage() {
     } catch (e) {}
     return NEWS_ARTICLES;
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState("normal"); // small, normal, large
 
@@ -72,7 +73,7 @@ export default function NewsDetailPage() {
     loadData();
   }, [id]);
 
-  const article = allArticles.find((a) => a.slug === id || a.id === id) || allArticles[0];
+  const article = allArticles.find((a) => a.slug === id || a.id === id);
 
   useEffect(() => {
     if (article) {
@@ -81,14 +82,14 @@ export default function NewsDetailPage() {
       if (metaDesc) metaDesc.content = article.summary || "";
 
       // Auto-canonicalize URL if opened via raw ID to clean title slug
-      if (article.slug && id !== article.slug) {
+      if (article.slug && id === article.id && id !== article.slug) {
         navigate(`/news/${article.slug}`, { replace: true });
       }
     }
   }, [article, id, navigate]);
 
   // If article not found, find by index or fallback
-  const currentIndex = allArticles.findIndex((a) => (a.id === id || a.slug === id));
+  const currentIndex = article ? allArticles.findIndex((a) => a.id === article.id) : -1;
   const prevArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
   const nextArticle = currentIndex >= 0 && currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
 
@@ -128,9 +129,7 @@ export default function NewsDetailPage() {
 
   const handleShareWhatsApp = () => {
     if (!article) return;
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${article.title}
-
-Baca selengkapnya di: ${window.location.href}`)}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${article.title}\n\nBaca selengkapnya di: ${window.location.href}`)}`;
     window.open(url, "_blank");
   };
 
@@ -141,13 +140,25 @@ Baca selengkapnya di: ${window.location.href}`)}`;
   };
 
   if (!article) {
+    if (loading) {
+      return (
+        <div className="desktopalie" data-theme={theme}>
+          <SiteNavbar activeNav="news" />
+          <div className="site-wrap py-24 text-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-sm font-mono text-muted-foreground">Memuat artikel berita...</p>
+          </div>
+        </div>
+      );
+    }
     return (
-      <div className="public-page" data-theme={theme}>
+      <div className="desktopalie" data-theme={theme}>
+        <SiteNavbar activeNav="news" />
         <div className="site-wrap py-24 text-center">
           <Newspaper className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-40" />
           <h1 className="text-2xl font-bold mb-2">Artikel Tidak Ditemukan</h1>
           <p className="text-muted-foreground mb-6">Artikel berita yang Anda cari mungkin telah dipindahkan atau dihapus.</p>
-          <Link to="/news" className="btn btn-primary px-6 py-2.5 rounded-xl font-bold">
+          <Link to="/news" className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold inline-block no-underline">
             Kembali ke Portal Berita
           </Link>
         </div>
