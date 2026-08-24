@@ -809,12 +809,12 @@ export default function LandingPage() {
                     className="gap-1.5 font-bold hover:border-primary/50 text-xs cursor-pointer shadow-sm"
                   >
                     <Sparkles className={`w-3.5 h-3.5 text-primary ${isShufflingNews ? "animate-spin" : ""}`} />
-                    <span>Acak Berita Lain ðŸŽ²</span>
+                    <span>Acak Berita Lain 🎲</span>
                   </Button>
                   <Button asChild variant="default" size="sm" className="gap-2 font-bold shadow-sm text-xs cursor-pointer">
                     <Link to="/news">
                       <Newspaper className="w-3.5 h-3.5" />
-                      <span>Buka Portal Berita (75 Berita) âž”</span>
+                      <span>Buka Portal Berita (75 Berita) →</span>
                     </Link>
                   </Button>
                 </div>
@@ -832,7 +832,7 @@ export default function LandingPage() {
                         <div className="flex items-center gap-2">
                           <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-lg border ${getCategoryBadgeClass(highlightedNews.category)}`}>
                             {getCategoryIcon(highlightedNews.category)}
-                            <span>{highlightedNews.categoryLabel}</span>
+                            <span>{highlightedNews.categoryLabel || highlightedNews.category}</span>
                           </span>
                           <span className="text-xs font-mono text-muted-foreground">
                             ID: #{highlightedNews.id.toUpperCase()}
@@ -843,7 +843,7 @@ export default function LandingPage() {
                             <Calendar className="w-3.5 h-3.5" />
                             {highlightedNews.date}
                           </span>
-                          <span>â€¢</span>
+                          <span>•</span>
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
                             {highlightedNews.readTime}
