@@ -39,6 +39,21 @@ import {
   Sun,
   Terminal,
   Zap,
+  Newspaper,
+  Flame,
+  GraduationCap,
+  Building2,
+  ShieldAlert,
+  Search,
+  Calendar,
+  Clock,
+  User,
+  Tag,
+  ChevronRight,
+  Share2,
+  BookOpen,
+  Filter,
+  X,
 } from "lucide-react";
 
 import DesktopalieMark from "../component/DesktopalieMark";
@@ -48,6 +63,7 @@ import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
+import { NEWS_CATEGORIES, NEWS_ARTICLES } from "../data/newsData";
 
 // shadcn UI Components
 import { Button } from "@/components/ui/button";
@@ -493,6 +509,45 @@ export default function LandingPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // News states & filtering
+  const [activeNewsCategory, setActiveNewsCategory] = useState("all");
+  const [newsSearchQuery, setNewsSearchQuery] = useState("");
+  const [selectedNewsArticle, setSelectedNewsArticle] = useState(null);
+  const [newsDisplayCount, setNewsDisplayCount] = useState(9);
+
+  const filteredNews = NEWS_ARTICLES.filter((article) => {
+    const matchesCategory = activeNewsCategory === "all" || article.category === activeNewsCategory;
+    const query = newsSearchQuery.toLowerCase().trim();
+    const matchesSearch = !query || 
+      article.title.toLowerCase().includes(query) ||
+      article.summary.toLowerCase().includes(query) ||
+      article.content.toLowerCase().includes(query) ||
+      (article.tag && article.tag.toLowerCase().includes(query));
+    return matchesCategory && matchesSearch;
+  });
+
+  const getCategoryIcon = (categoryId) => {
+    switch (categoryId) {
+      case "teknologi": return <Cpu className="w-3.5 h-3.5" />;
+      case "bencana": return <Flame className="w-3.5 h-3.5" />;
+      case "pendidikan": return <GraduationCap className="w-3.5 h-3.5" />;
+      case "politik": return <Building2 className="w-3.5 h-3.5" />;
+      case "kriminal": return <ShieldAlert className="w-3.5 h-3.5" />;
+      default: return <Newspaper className="w-3.5 h-3.5" />;
+    }
+  };
+
+  const getCategoryBadgeClass = (categoryId) => {
+    switch (categoryId) {
+      case "teknologi": return "bg-blue-500/10 text-blue-400 border-blue-500/30";
+      case "bencana": return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+      case "pendidikan": return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+      case "politik": return "bg-indigo-500/10 text-indigo-400 border-indigo-500/30";
+      case "kriminal": return "bg-rose-500/10 text-rose-400 border-rose-500/30";
+      default: return "bg-purple-500/10 text-purple-400 border-purple-500/30";
+    }
+  };
+
   const filteredProjects = activeProjectTab === "all"
     ? projectsList
     : projectsList.filter((p) => (p.category || "").toLowerCase() === activeProjectTab);
@@ -577,7 +632,10 @@ export default function LandingPage() {
             <nav className="site-nav hidden md:flex items-center gap-6" aria-label="Primary navigation">
               <a href="#work" className="hover:text-primary transition-colors">Work</a>
               <a href="#about" className="hover:text-primary transition-colors">About</a>
-              <a href="#capabilities" className="hover:text-primary transition-colors">Capabilities</a>
+              <a href="#news" className="hover:text-primary transition-colors flex items-center gap-1.5 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                News
+              </a>
               <a href="#tech" className="hover:text-primary transition-colors">Tech</a>
               <a href="#workflow" className="hover:text-primary transition-colors">Workflow</a>
               <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
@@ -592,6 +650,12 @@ export default function LandingPage() {
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuLabel>Direct Links</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <a href="#news" className="w-full flex items-center justify-between cursor-pointer">
+                      <span>Warta & Berita</span>
+                      <Newspaper className="w-3.5 h-3.5 text-primary" />
+                    </a>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/projects" className="w-full flex items-center justify-between">
                       <span>Projects Archive</span>
@@ -667,7 +731,10 @@ export default function LandingPage() {
                   <div className="flex flex-col gap-4 py-6 font-mono text-sm">
                     <a href="#work" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors">01. Selected Work</a>
                     <a href="#about" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors">02. About Studio</a>
-                    <a href="#capabilities" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors">03. Capabilities</a>
+                    <a href="#news" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors text-primary font-bold flex items-center justify-between">
+                      <span>03. News & Warta</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary">75 Berita</span>
+                    </a>
                     <a href="#tech" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors">04. Tech Stack</a>
                     <a href="#workflow" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors">05. Workflow & FAQ</a>
                     <a href="#contact" className="py-2 px-3 rounded-lg hover:bg-muted transition-colors">06. Contact</a>
@@ -856,161 +923,250 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* 3. BENTO GRID CORE CAPABILITIES SECTION */}
-          <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="capabilities">
+          {/* 3. NEWS & WARTA PORTAL SECTION */}
+          <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="news">
             <div className="site-wrap">
-              <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
+              {/* Section Header */}
+              <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-8">
                 <div>
-                  <Badge variant="purple" className="mb-3">CORE CAPABILITIES</Badge>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge variant="purple" className="flex items-center gap-1.5 py-1 px-3">
+                      <Newspaper className="w-3.5 h-3.5" />
+                      <span>WARTA & BERITA TERKINI</span>
+                    </Badge>
+                    <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                      75 Berita Terverifikasi
+                    </span>
+                  </div>
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
-                    Engineered for high performance,<br className="hidden sm:inline" /> crafted with intent.
+                    Pusat Informasi &<br className="hidden sm:inline" /> Kabar Terhangat Hari Ini
                   </h2>
                 </div>
                 <p className="text-sm text-muted-foreground max-w-md">
-                  Combining modern design systems, resilient cloud infrastructure, and intelligent autonomous AI agents to build memorable digital products.
+                  Liputan mendalam dan terpercaya seputar terobosan teknologi, mitigasi bencana, pendidikan nasional, perkembangan politik, serta transparansi penegakan hukum.
                 </p>
               </div>
 
-              {/* Bento Grid Container */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-                
-                {/* Bento Card 1: UI/UX Engineering & Motion (Col span 7) */}
-                <div className="md:col-span-7 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/10 transition-colors" />
-                  
-                  <div>
-                    <div className="flex items-center justify-between gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                        <Layers className="w-6 h-6" />
-                      </div>
-                      <Badge variant="purple" className="text-[10px] font-mono tracking-wide">
-                        FRONTEND ARCHITECTURE
-                      </Badge>
-                    </div>
+              {/* Search & Category Filter Bar */}
+              <div className="bg-card/70 border border-border/70 rounded-2xl p-4 md:p-5 backdrop-blur-sm shadow-sm mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                {/* Realtime Search Input */}
+                <div className="relative flex-1 max-w-md">
+                  <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Input
+                    type="text"
+                    placeholder="Cari topik berita, kata kunci, atau tag..."
+                    value={newsSearchQuery}
+                    onChange={(e) => {
+                      setNewsSearchQuery(e.target.value);
+                      setNewsDisplayCount(9);
+                    }}
+                    className="pl-9.5 pr-8 bg-background/80 border-border/60 text-sm rounded-xl focus-visible:ring-primary h-10"
+                  />
+                  {newsSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setNewsSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
 
-                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                      Modern UI/UX & Motion Systems
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                      Designing and developing fluid, accessible interfaces using React 19, Tailwind CSS, and shadcn UI. Every component is crafted with micro-interactions, responsive touch targets, and smooth View Transitions API.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/60 flex items-center justify-between flex-wrap gap-2">
-                    <div className="flex flex-wrap gap-1.5">
-                      {['React 19', 'Tailwind CSS', 'shadcn UI', 'View Transitions', 'Figma Tokens'].map((pill, i) => (
-                        <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
-                          {pill}
+                {/* Category Filter Chips */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+                  {NEWS_CATEGORIES.map((cat) => {
+                    const isActive = activeNewsCategory === cat.id;
+                    const count = cat.id === 'all' 
+                      ? NEWS_ARTICLES.length 
+                      : NEWS_ARTICLES.filter(a => a.category === cat.id).length;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveNewsCategory(cat.id);
+                          setNewsDisplayCount(9);
+                        }}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/40"
+                        }`}
+                      >
+                        {getCategoryIcon(cat.id)}
+                        <span>{cat.label}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                          isActive ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted-foreground/10 text-muted-foreground"
+                        }`}>
+                          {count}
                         </span>
-                      ))}
-                    </div>
-                    <span className="text-xs font-mono text-primary font-semibold flex items-center gap-1">
-                      Pixel Precise ➔
-                    </span>
-                  </div>
+                      </button>
+                    );
+                  })}
                 </div>
-
-                {/* Bento Card 2: Cloud & Database Architecture (Col span 5) */}
-                <div className="md:col-span-5 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-emerald-500/50 transition-all duration-300 shadow-sm hover:shadow-md">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/10 transition-colors" />
-                  
-                  <div>
-                    <div className="flex items-center justify-between gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
-                        <Database className="w-6 h-6" />
-                      </div>
-                      <Badge variant="emerald" className="text-[10px] font-mono tracking-wide">
-                        BACKEND & DATA
-                      </Badge>
-                    </div>
-
-                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-emerald-500 transition-colors">
-                      Resilient Cloud & Database
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                      PostgreSQL data modeling, Supabase Realtime synchronization, multi-tenant workspace isolation, and automated Row Level Security (RLS) policies with edge caching.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/60 flex flex-wrap gap-1.5">
-                    {['PostgreSQL', 'Supabase Realtime', 'RLS Security', 'Edge CDN'].map((pill, i) => (
-                      <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
-                        {pill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bento Card 3: AI Intelligence & Autonomous Agents (Col span 5) */}
-                <div className="md:col-span-5 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-amber-500/50 transition-all duration-300 shadow-sm hover:shadow-md">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/10 transition-colors" />
-                  
-                  <div>
-                    <div className="flex items-center justify-between gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
-                        <Cpu className="w-6 h-6" />
-                      </div>
-                      <Badge variant="pulse" className="text-[10px] font-mono tracking-wide">
-                        AGENTIC AI & RAG
-                      </Badge>
-                    </div>
-
-                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-amber-500 transition-colors">
-                      Autonomous AI & Knowledge RAG
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                      Building Agentic intelligence powered by Google Gemini 2.0 Flash, Obsidian Knowledge Graph RAG retrieval, Google Voice Speech AI, and autonomous tool calling workflows.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/60 flex flex-wrap gap-1.5">
-                    {['Gemini 2.0 Flash', 'Obsidian RAG', 'Voice AI (STT/TTS)', 'Tool Calling'].map((pill, i) => (
-                      <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
-                        {pill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bento Card 4: Design Systems & Multi-Tenant Workspace (Col span 7) */}
-                <div className="md:col-span-7 rounded-2xl border border-border/80 bg-card/70 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden flex flex-col justify-between group hover:border-indigo-500/50 transition-all duration-300 shadow-sm hover:shadow-md">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-indigo-500/10 transition-colors" />
-                  
-                  <div>
-                    <div className="flex items-center justify-between gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500">
-                        <Layout className="w-6 h-6" />
-                      </div>
-                      <Badge variant="purple" className="text-[10px] font-mono tracking-wide">
-                        MULTI-TENANT ECOSYSTEM
-                      </Badge>
-                    </div>
-
-                    <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-indigo-500 transition-colors">
-                      Multi-Tenant Design Systems & Flavoring
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                      Dynamic multi-tenant workspace architecture supporting 4 dedicated platform flavors (Core Web, Beta Cold-Chain Logistics, Gamma AI Video Hub, Delta Enterprise Cloud) with instant theme switching.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/60 flex items-center justify-between flex-wrap gap-2">
-                    <div className="flex flex-wrap gap-1.5">
-                      {['Multi-Tenant Flavors', 'Dynamic CSS Vars', 'Theme Switcher', 'Isolated DB Context'].map((pill, i) => (
-                        <span key={i} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-muted/60 text-foreground/80 border border-border/50">
-                          {pill}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-xs font-mono text-indigo-500 font-semibold flex items-center gap-1">
-                      4 Workspaces ➔
-                    </span>
-                  </div>
-                </div>
-
               </div>
+
+              {/* News Grid */}
+              {filteredNews.length === 0 ? (
+                <div className="text-center py-16 px-4 border border-dashed border-border/80 rounded-2xl bg-card/40">
+                  <Newspaper className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-40" />
+                  <h3 className="text-lg font-bold mb-1">Tidak ada berita ditemukan</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Tidak ditemukan berita yang cocok dengan kata kunci "{newsSearchQuery}".
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => { setNewsSearchQuery(""); setActiveNewsCategory("all"); }}>
+                    Reset Pencarian
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {filteredNews.slice(0, newsDisplayCount).map((article) => {
+                    const badgeClass = getCategoryBadgeClass(article.category);
+                    return (
+                      <article
+                        key={article.id}
+                        className="rounded-2xl border border-border/80 bg-card/70 p-5 backdrop-blur-sm relative flex flex-col justify-between group hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer"
+                        onClick={() => setSelectedNewsArticle(article)}
+                      >
+                        <div>
+                          {/* Card Top: Category Badge, Date, Read Time */}
+                          <div className="flex items-center justify-between gap-2 mb-3.5">
+                            <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-md border ${badgeClass}`}>
+                              {getCategoryIcon(article.category)}
+                              <span>{article.categoryLabel}</span>
+                            </span>
+                            <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-3 h-3" />
+                                {article.date.split(" ")[0]} {article.date.split(" ")[1]}
+                              </span>
+                              <span>•</span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {article.readTime}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Article Title */}
+                          <h3 className="text-base sm:text-lg font-bold mb-2.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+                            {article.title}
+                          </h3>
+
+                          {/* Summary */}
+                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-3 mb-4 leading-relaxed">
+                            {article.summary}
+                          </p>
+                        </div>
+
+                        {/* Card Bottom */}
+                        <div className="pt-3.5 border-t border-border/50 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
+                            <Tag className="w-3 h-3 text-primary" />
+                            <span className="font-semibold text-foreground/80">{article.tag}</span>
+                          </div>
+                          <span className="text-xs font-semibold text-primary flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                            Baca Berita ➔
+                          </span>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Load More Button */}
+              {filteredNews.length > newsDisplayCount && (
+                <div className="flex justify-center mt-10">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => setNewsDisplayCount(prev => prev + 9)}
+                    className="gap-2 font-bold px-6 shadow-sm hover:border-primary/50 cursor-pointer"
+                  >
+                    <BookOpen className="w-4 h-4 text-primary" />
+                    <span>Muat Berita Lainnya ({filteredNews.length - newsDisplayCount} Tersisa)</span>
+                  </Button>
+                </div>
+              )}
             </div>
           </section>
+
+          {/* FULL NEWS READER DIALOG MODAL */}
+          <Dialog open={!!selectedNewsArticle} onOpenChange={(open) => !open && setSelectedNewsArticle(null)}>
+            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+              {selectedNewsArticle && (
+                <div>
+                  <DialogHeader className="mb-4">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-md border ${getCategoryBadgeClass(selectedNewsArticle.category)}`}>
+                        {getCategoryIcon(selectedNewsArticle.category)}
+                        <span>{selectedNewsArticle.categoryLabel}</span>
+                      </span>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {selectedNewsArticle.date}
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5" />
+                          {selectedNewsArticle.readTime}
+                        </span>
+                      </div>
+                    </div>
+                    <DialogTitle className="text-xl sm:text-2xl font-bold leading-snug">
+                      {selectedNewsArticle.title}
+                    </DialogTitle>
+                    <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+                      <User className="w-3.5 h-3.5 text-primary" />
+                      <span>Ditulis oleh: <b className="text-foreground">{selectedNewsArticle.author}</b></span>
+                      <span>•</span>
+                      <span className="px-2 py-0.5 rounded bg-muted font-mono font-bold text-foreground/80">
+                        {selectedNewsArticle.tag}
+                      </span>
+                    </div>
+                  </DialogHeader>
+
+                  <div className="space-y-4 text-sm sm:text-base leading-relaxed text-foreground/90 py-2 border-y border-border/60">
+                    <p className="font-semibold text-foreground bg-muted/40 p-3.5 rounded-xl border border-border/40 text-sm">
+                      {selectedNewsArticle.summary}
+                    </p>
+                    <p>
+                      {selectedNewsArticle.content}
+                    </p>
+                  </div>
+
+                  <DialogFooter className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="text-xs text-muted-foreground">
+                      Sumber: Portal Berita Terverifikasi Desktopalie
+                    </div>
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/#news`);
+                          toast.success("Tautan berita disalin ke clipboard!");
+                        }}
+                        className="gap-1.5 text-xs w-full sm:w-auto cursor-pointer"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>Bagikan</span>
+                      </Button>
+                      <DialogClose asChild>
+                        <Button size="sm" variant="default" className="text-xs w-full sm:w-auto cursor-pointer">
+                          Tutup
+                        </Button>
+                      </DialogClose>
+                    </div>
+                  </DialogFooter>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
 
           {/* 4. SELECTED WORK / PROJECTS SECTION WITH SHADCN TABS, CARDS & MODAL DIALOG */}
           <section className="section" id="work">

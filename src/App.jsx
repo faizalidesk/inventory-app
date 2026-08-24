@@ -119,6 +119,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/landingpage" element={<Navigate to="/" replace />} />
+          <Route path="/news" element={<Navigate to="/#news" replace />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           <Route path="/experiments" element={<ExperimentsPage />} />
