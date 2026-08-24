@@ -180,11 +180,11 @@ Baca selengkapnya di: ${window.location.href}`)}`;
         </nav>
 
         {/* ARTICLE HEADER */}
-        <header className="mb-8 pb-6 border-b border-border/70">
+        <div className="article-header mb-8 pb-6 border-b border-border/70">
           <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
             <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-md border ${getCategoryBadgeClass(article.category)}`}>
               {getCategoryIcon(article.category)}
-              <span>{article.categoryLabel}</span>
+              <span>{article.categoryLabel || article.category}</span>
             </span>
             <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
               <span className="flex items-center gap-1">
@@ -204,9 +204,9 @@ Baca selengkapnya di: ${window.location.href}`)}`;
           </h1>
 
           {/* Author & Editorial Byline */}
-          <div className="flex items-center justify-between flex-wrap gap-4 pt-4 border-t border-border/50">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm shrink-0">
                 <User className="w-5 h-5" />
               </div>
               <div>
@@ -216,7 +216,7 @@ Baca selengkapnya di: ${window.location.href}`)}`;
             </div>
 
             {/* Reading font size adjuster */}
-            <div className="flex items-center gap-1 bg-card border border-border/60 rounded-xl p-1 text-xs">
+            <div className="inline-flex items-center gap-1 bg-card border border-border/60 rounded-xl p-1 text-xs self-start sm:self-auto">
               <span className="px-2 text-muted-foreground font-mono">Font:</span>
               <button
                 type="button"
@@ -241,7 +241,7 @@ Baca selengkapnya di: ${window.location.href}`)}`;
               </button>
             </div>
           </div>
-        </header>
+        </div>
 
         {/* ARTICLE BODY */}
         <article className="space-y-6 mb-12">

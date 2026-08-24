@@ -207,7 +207,7 @@ p {
   to { opacity: 1; transform: scale(1); }
 }
 /* GLOBAL STICKY NAVBAR SYSTEM */
-header, .public-header, .site-header, .sticky-nav {
+.site-navbar, .public-header, .site-header, .sticky-nav, nav.sticky {
   position: sticky !important;
   top: 0 !important;
   z-index: 50 !important;
