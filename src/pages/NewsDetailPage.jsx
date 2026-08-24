@@ -35,9 +35,19 @@ export default function NewsDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { theme } = useTheme();
-  const [allArticles, setAllArticles] = useState(NEWS_ARTICLES);
-  const [loading, setLoading] = useState(true);
+  const [allArticles, setAllArticles] = useState(() => {
+    try {
+      const cached = localStorage.getItem("desktopalie_news_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return NEWS_ARTICLES;
+  });
+  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState("normal"); // small, normal, large
 
@@ -49,6 +59,9 @@ export default function NewsDetailPage() {
         const data = await fetchNewsArticles();
         if (data && data.length > 0) {
           setAllArticles(data);
+          try {
+            localStorage.setItem("desktopalie_news_cache", JSON.stringify(data));
+          } catch (e) {}
         }
       } catch (e) {
         console.error("Error loading news detail:", e);
@@ -59,15 +72,20 @@ export default function NewsDetailPage() {
     loadData();
   }, [id]);
 
-  const article = allArticles.find((a) => a.id === id || a.slug === id) || allArticles[0];
+  const article = allArticles.find((a) => a.slug === id || a.id === id) || allArticles[0];
 
   useEffect(() => {
     if (article) {
       document.title = `${article.title} — Desktopalie News`;
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.content = article.summary || "";
+
+      // Auto-canonicalize URL if opened via raw ID to clean title slug
+      if (article.slug && id !== article.slug) {
+        navigate(`/news/${article.slug}`, { replace: true });
+      }
     }
-  }, [article]);
+  }, [article, id, navigate]);
 
   // If article not found, find by index or fallback
   const currentIndex = allArticles.findIndex((a) => (a.id === id || a.slug === id));

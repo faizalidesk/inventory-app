@@ -889,7 +889,7 @@ export default function LandingPage() {
                       <div>
                         {/* Title */}
                         <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-3 leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                          <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
+                          <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`} className="hover:underline">
                             {highlightedNews.title}
                           </Link>
                         </h3>
@@ -902,7 +902,7 @@ export default function LandingPage() {
 
                       {/* Highlighted News Image Banner */}
                       {extractArticleImage(highlightedNews) && (
-                        <Link to={`/news/${highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
+                        <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
                           <img
                             src={extractArticleImage(highlightedNews)}
                             alt={highlightedNews.title}
@@ -930,7 +930,7 @@ export default function LandingPage() {
 
                       <div className="flex items-center gap-3 w-full sm:w-auto">
                         <Button asChild variant="default" size="default" className="font-bold gap-2 text-xs sm:text-sm flex-1 sm:flex-none">
-                          <Link to={`/news/${highlightedNews.id}`}>
+                          <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`}>
                             <span>Baca Berita Lengkap</span>
                             <ArrowRight className="w-4 h-4" />
                           </Link>
