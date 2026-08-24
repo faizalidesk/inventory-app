@@ -14,7 +14,6 @@ import {
   FaEnvelope, 
   FaShieldAlt, 
   FaLayerGroup, 
-  FaCheckCircle, 
   FaServer, 
   FaMobileAlt, 
   FaBrain 
@@ -54,7 +53,7 @@ export function PublicShell({ children }) {
                 <span>DESKTOPALIE</span>
               </Link>
               <p className="footer-desc">
-                Personal digital space by <strong>Faiz Ali</strong> — dedicated to creative UI/UX design, modern full-stack web engineering, multi-platform architecture, and intelligent tools.
+                <strong>Desktopalie</strong> is an independent digital space and creative studio dedicated to UI/UX design, modern full-stack web engineering, multi-platform architecture, and intelligent tools.
               </p>
               <div className="footer-status">
                 <span className="status-dot"></span> All Systems Operational
@@ -67,7 +66,7 @@ export function PublicShell({ children }) {
               <ul>
                 <li><Link to="/">Home Overview</Link></li>
                 <li><Link to="/projects">Selected Work</Link></li>
-                <li><Link to="/about" className="footer-active-link">About Faiz Ali</Link></li>
+                <li><Link to="/about" className="footer-active-link">About Desktopalie</Link></li>
                 <li><Link to="/news">News & Warta</Link></li>
                 <li><Link to="/experiments">Lab Experiments</Link></li>
                 <li><Link to="/services">Services & Pricing</Link></li>
@@ -110,7 +109,7 @@ export function PublicShell({ children }) {
 
           <div className="footer-bottom">
             <div className="footer-copy">
-              © {new Date().getFullYear()} <strong>Desktopalie</strong> by Faiz Ali. All rights reserved.
+              © {new Date().getFullYear()} <strong>Desktopalie</strong>. All rights reserved.
             </div>
             <div className="footer-badges">
               <span><FaShieldAlt className="shield-icon" /> ISO 27001 Security Ready</span>
@@ -129,37 +128,39 @@ export function PublicShell({ children }) {
 export function PublicInfoPage({ type }) {
   useEffect(() => {
     if (type === "about") {
-      // 1. Dynamic Title
-      document.title = "About Faiz Ali — Designer & Developer | Desktopalie";
+      // 1. Dynamic Title highlighting Desktopalie
+      document.title = "About Desktopalie — Projects, Experiments & Digital Creations";
 
-      // 2. Dynamic Meta Description
+      // 2. Dynamic Meta Description highlighting Desktopalie
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
-        metaDesc.content = "Desktopalie is Faiz Ali's personal website for projects, experiments, web development, UI/UX design, and digital creations.";
+        metaDesc.content = "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.";
       }
 
       // 3. OpenGraph
       let ogTitle = document.querySelector('meta[property="og:title"]');
-      if (ogTitle) ogTitle.content = "About Faiz Ali — Designer & Developer | Desktopalie";
+      if (ogTitle) ogTitle.content = "About Desktopalie — Projects, Experiments & Digital Creations";
 
-      // 4. Schema.org JSON-LD Person Structured Data
-      const existingScript = document.getElementById('schema-about-person');
+      let ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.content = "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.";
+
+      // 4. Schema.org JSON-LD Organization / Project Structured Data
+      const existingScript = document.getElementById('schema-about-desktopalie');
       if (!existingScript) {
         const script = document.createElement('script');
-        script.id = 'schema-about-person';
+        script.id = 'schema-about-desktopalie';
         script.type = 'application/ld+json';
         script.text = JSON.stringify({
           "@context": "https://schema.org",
           "@type": "AboutPage",
-          "name": "About Faiz Ali — Designer & Developer | Desktopalie",
+          "name": "About Desktopalie — Projects, Experiments & Digital Creations",
           "url": "https://desktopalie.my.id/about",
-          "description": "Desktopalie is Faiz Ali's personal website for projects, experiments, web development, UI/UX design, and digital creations.",
+          "description": "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.",
           "mainEntity": {
-            "@type": "Person",
-            "name": "Faiz Ali",
-            "alternateName": "Desktopalie",
-            "jobTitle": "Lead Designer & Full-Stack Developer",
+            "@type": "Organization",
+            "name": "Desktopalie",
             "url": "https://desktopalie.my.id",
+            "logo": "https://desktopalie.my.id/favicon-512x512.png",
             "sameAs": [
               "https://github.com/faizalidesk",
               "https://linkedin.com/in/faizalidesk",
@@ -178,7 +179,7 @@ export function PublicInfoPage({ type }) {
     window.scrollTo(0, 0);
 
     return () => {
-      const s = document.getElementById('schema-about-person');
+      const s = document.getElementById('schema-about-desktopalie');
       if (s) s.remove();
     };
   }, [type]);
@@ -191,7 +192,7 @@ export function PublicInfoPage({ type }) {
           <span>03 / ABOUT</span>
           <h1>Building to learn. Sharing to connect.</h1>
           <p>
-            I am <strong>Faiz Ali</strong>, a designer and developer interested in the space between technology, human experience, and thoughtful engineering.
+            <strong>Desktopalie</strong> is an independent digital space and creative studio for projects, experiments, and modern web creations, exploring the space between technology, human experience, and thoughtful engineering.
           </p>
         </section>
 
@@ -200,7 +201,7 @@ export function PublicInfoPage({ type }) {
           <div>
             <span className="public-label">THE STORY</span>
             <p>
-              Desktopalie is my independent digital space—a growing archive of projects, lessons, and experiments. I care about simple ideas, precise details, accessible interfaces, and digital work with a clear reason to exist.
+              <strong>Desktopalie</strong> is an independent digital space—a growing archive of projects, lessons, and experiments. We care about simple ideas, precise details, accessible interfaces, and digital work with a clear reason to exist.
             </p>
             <p style={{ marginTop: "1rem" }}>
               What started as personal design explorations has evolved into a unified multi-tenant platform architecture, spanning web portals, real-time telemetry systems, and cross-platform native Android integration.
