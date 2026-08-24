@@ -97,6 +97,21 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/co
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+// Helper to extract first image URL from article or content
+const extractArticleImage = (article) => {
+  if (!article) return null;
+  if (article.image_url && typeof article.image_url === "string" && article.image_url.trim()) {
+    return article.image_url.trim();
+  }
+  if (article.content && typeof article.content === "string") {
+    const match = article.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+  return null;
+};
+
 const PROJECTS = [
   {
     number: "01",
@@ -852,16 +867,28 @@ export default function LandingPage() {
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-4 leading-snug group-hover:text-primary transition-colors">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-4 leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
                           {highlightedNews.title}
                         </Link>
                       </h3>
 
                       {/* Summary */}
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-4xl">
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         {highlightedNews.summary}
                       </p>
+
+                      {/* Highlighted News Image Banner */}
+                      {extractArticleImage(highlightedNews) && (
+                        <Link to={`/news/${highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden mb-6 border border-border/60 bg-muted/20">
+                          <img
+                            src={extractArticleImage(highlightedNews)}
+                            alt={highlightedNews.title}
+                            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        </Link>
+                      )}
                     </div>
 
                     {/* Bottom Bar: Author, Tag & CTAs */}
