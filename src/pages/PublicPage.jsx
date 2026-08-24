@@ -23,19 +23,10 @@ import SiteNavbar from "../component/SiteNavbar";
 import "./PublicPage.css";
 import { fetchCollection, fetchItemBySlug, subscribeToCollection } from "../services/workspaceService";
 import { usePlatform } from "../context/PlatformContext";
+import { useTheme } from "../context/ThemeContext";
 
 export function PublicShell({ children }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
-  
-  useEffect(() => { 
-    localStorage.setItem("desktopalie-theme", theme); 
-    document.documentElement.style.colorScheme = theme; 
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
+  const { theme } = useTheme();
 
   return (
     <div className="public-page" data-theme={theme}>
@@ -579,3 +570,5 @@ export function ExperimentsPage() {
     </PublicShell>
   );
 }
+
+

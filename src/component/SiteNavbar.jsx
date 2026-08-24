@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
   Menu, 
@@ -11,8 +11,8 @@ import {
   Newspaper 
 } from "lucide-react";
 import DesktopalieMark from "./DesktopalieMark";
-import { toggleThemeWithTransition } from "../utils/theme";
 import { useAuth } from "../context/auth-context";
+import { useTheme } from "../context/ThemeContext";
 
 // shadcn UI Components
 import { Button } from "@/components/ui/button";
@@ -35,22 +35,8 @@ function ThemeIcon({ theme }) {
 export default function SiteNavbar({ activeNav = "" }) {
   const { user } = useAuth();
   const location = useLocation();
-  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
+  const { theme, toggleTheme } = useTheme();
   const isHomePage = location.pathname === "/" || location.pathname === "/landingpage";
-
-  useEffect(() => {
-    localStorage.setItem("desktopalie-theme", theme);
-    document.documentElement.style.colorScheme = theme;
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
-
-  const toggleTheme = (event) => {
-    toggleThemeWithTransition(event, theme, setTheme);
-  };
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -157,7 +143,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/about" className="w-full flex items-center justify-between cursor-pointer no-underline">
-                    <span>About Faiz Ali</span>
+                    <span>About Desktopalie</span>
                     <ExternalLink className="w-3 h-3 text-muted-foreground" />
                   </Link>
                 </DropdownMenuItem>

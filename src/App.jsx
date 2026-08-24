@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import NewsPage from "./pages/NewsPage";
@@ -15,6 +15,7 @@ import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 import { fetchMaintenanceSettings } from "./services/workspaceService";
 import { supabase } from "./lib/supabase";
 import { PlatformProvider } from "./context/PlatformContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 export default function App() {
   const [isMaintenance, setIsMaintenance] = useState(() => {
@@ -61,9 +62,6 @@ export default function App() {
 
     checkMaintenance();
 
-    // Poll every 2s for instant sync across devices & tabs
-    const pollInterval = setInterval(checkMaintenance, 2000);
-
     // Listen to Supabase Realtime changes on site_settings table
     const channel = supabase
       .channel("app_site_settings_changes")
@@ -95,7 +93,6 @@ export default function App() {
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      clearInterval(pollInterval);
       supabase.removeChannel(channel);
       window.removeEventListener("storage", handleStorageChange);
     };
@@ -104,40 +101,44 @@ export default function App() {
   // IF MAINTENANCE MODE IS ENABLED FROM BACKOFFICE -> LOCK ALL ROUTES TOTALLY (INCLUDING /login & /register)
   if (isMaintenance) {
     return (
-      <PlatformProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="*" element={<MaintenancePage />} />
-          </Routes>
-        </BrowserRouter>
-      </PlatformProvider>
+      <ThemeProvider>
+        <PlatformProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="*" element={<MaintenancePage />} />
+            </Routes>
+          </BrowserRouter>
+        </PlatformProvider>
+      </ThemeProvider>
     );
   }
 
   // NORMAL ROUTING WHEN MAINTENANCE IS OFF
   return (
-    <PlatformProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/landingpage" element={<Navigate to="/" replace />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:id" element={<NewsDetailPage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-          <Route path="/experiments" element={<ExperimentsPage />} />
-          <Route path="/about" element={<PublicInfoPage type="about" />} />
-          <Route path="/services" element={<PublicInfoPage type="services" />} />
-          <Route path="/contact" element={<PublicInfoPage type="contact" />} />
-          <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
-          <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
-          <Route path="/forgot-password" element={<PublicOnlyRoute><ForgotPassword /></PublicOnlyRoute>} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/check-email" element={<PublicOnlyRoute><CheckEmail /></PublicOnlyRoute>} />
-          <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </PlatformProvider>
+    <ThemeProvider>
+      <PlatformProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/landingpage" element={<Navigate to="/" replace />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/news/:id" element={<NewsDetailPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+            <Route path="/experiments" element={<ExperimentsPage />} />
+            <Route path="/about" element={<PublicInfoPage type="about" />} />
+            <Route path="/services" element={<PublicInfoPage type="services" />} />
+            <Route path="/contact" element={<PublicInfoPage type="contact" />} />
+            <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+            <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+            <Route path="/forgot-password" element={<PublicOnlyRoute><ForgotPassword /></PublicOnlyRoute>} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/check-email" element={<PublicOnlyRoute><CheckEmail /></PublicOnlyRoute>} />
+            <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </PlatformProvider>
+    </ThemeProvider>
   );
 }

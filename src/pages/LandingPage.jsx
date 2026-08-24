@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -60,7 +60,7 @@ import DesktopalieMark from "../component/DesktopalieMark";
 import AntigravityLogo from "../component/AntigravityLogo";
 import SiteNavbar from "../component/SiteNavbar";
 import "./LandingPage.css";
-import { toggleThemeWithTransition } from "../utils/theme";
+import { useTheme } from "../context/ThemeContext";
 import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
@@ -107,7 +107,7 @@ const PROJECTS = [
     description: "A focused analytics experience that turns complex product data into clear, useful decisions.",
     tags: ["React", "Data visualization", "Product design", "Supabase"],
     className: "project-orbit",
-    stats: "99.8% Uptime • Realtime Sync",
+    stats: "99.8% Uptime â€¢ Realtime Sync",
   },
   {
     number: "02",
@@ -118,7 +118,7 @@ const PROJECTS = [
     description: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
     tags: ["Creative development", "UI/UX", "Motion", "Tailwind CSS"],
     className: "project-frame",
-    stats: "60 FPS Animations • Fluid UX",
+    stats: "60 FPS Animations â€¢ Fluid UX",
   },
   {
     number: "03",
@@ -129,7 +129,7 @@ const PROJECTS = [
     description: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
     tags: ["Design system", "Prototype", "Art direction", "Figma Tokens"],
     className: "project-mono",
-    stats: "30+ Components • Multi-theme",
+    stats: "30+ Components â€¢ Multi-theme",
   },
 ];
 
@@ -263,7 +263,7 @@ const FAQS = [
   {
     id: "faq-2",
     question: "How long does a typical project take?",
-    answer: "A focused landing page or prototype typically takes 1–2 weeks, while a full-scale web application or custom dashboard takes between 3–6 weeks depending on the complexity of features and integrations.",
+    answer: "A focused landing page or prototype typically takes 1â€“2 weeks, while a full-scale web application or custom dashboard takes between 3â€“6 weeks depending on the complexity of features and integrations.",
   },
   {
     id: "faq-3",
@@ -284,14 +284,14 @@ function ThemeIcon({ theme }) {
 const DEFAULT_LANDING_CONTENT = {
   hero_badge: "INDEPENDENT DESIGNER & DEVELOPER",
   hero_title: "Ideas, crafted into digital experiences.",
-  hero_description: "Desktopalie is my personal space for projects, experiments, and digital creations—documenting my journey through web development, UI/UX design, and modern technology.",
+  hero_description: "Desktopalie is my personal space for projects, experiments, and digital creationsâ€”documenting my journey through web development, UI/UX design, and modern technology.",
   hero_cta_text: "Explore my work",
   hero_secondary_cta_text: "More about me",
   hero_note: "CURRENTLY EXPLORING CREATIVE INTERFACES, THOUGHTFUL MOTION, AND USEFUL AI.",
   about_title: "Independent developer crafting interfaces with intent.",
   about_large_copy: "I build websites and software that focus on clarity, motion, and crafted detail.",
   about_description: "With a background bridging front-end engineering and product design, I help brands and teams bring ambitious digital concepts to life with clean code and refined interactions.",
-  about_location: "BASED IN INDONESIA • OPEN TO GLOBAL WORK",
+  about_location: "BASED IN INDONESIA â€¢ OPEN TO GLOBAL WORK",
   stat_1_value: "04+",
   stat_1_label: "Years building for the web",
   stat_2_value: "20+",
@@ -307,7 +307,7 @@ const DEFAULT_LANDING_CONTENT = {
 
 export default function LandingPage() {
   const { user } = useAuth();
-  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
+  const { theme, toggleTheme } = useTheme();
   const [projectsList, setProjectsList] = useState(PROJECTS);
   const [activeProjectTab, setActiveProjectTab] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
@@ -351,15 +351,7 @@ export default function LandingPage() {
     return DEFAULT_LANDING_CONTENT;
   });
 
-  useEffect(() => {
-    localStorage.setItem("desktopalie-theme", theme);
-    document.documentElement.style.colorScheme = theme;
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
+
 
   // Load customizable landing page settings & maintenance settings from Supabase
   useEffect(() => {
@@ -463,15 +455,13 @@ export default function LandingPage() {
     return () => clearInterval(timer);
   }, [maintenance.is_enabled, maintenance.end_time]);
 
-  const toggleTheme = (event) => {
-    toggleThemeWithTransition(event, theme, setTheme);
-  };
+
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(landingContent.contact_email || "faizalidesk@gmail.com");
     setCopiedEmail(true);
     toast.success("Email copied to clipboard!", {
-      icon: "✨",
+      icon: "âœ¨",
       style: {
         borderRadius: "10px",
         background: theme === "dark" ? "#16161d" : "#ffffff",
@@ -494,7 +484,7 @@ export default function LandingPage() {
     setIsSubmittingInquiry(false);
     setIsInquiryOpen(false);
     toast.success("Thank you! Your message has been sent.", {
-      icon: "🚀",
+      icon: "ðŸš€",
       style: {
         borderRadius: "10px",
         background: theme === "dark" ? "#16161d" : "#ffffff",
@@ -684,7 +674,7 @@ export default function LandingPage() {
                         <>
                           <div className="canvas-label font-mono text-xs flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#73e6ce]" />
-                            EXPERIMENT / 024 • LIVE CANVAS
+                            EXPERIMENT / 024 â€¢ LIVE CANVAS
                           </div>
                           <div className="canvas-title">Make it useful.<br />Make it <em>memorable.</em></div>
                           <div className="canvas-art">
@@ -694,7 +684,7 @@ export default function LandingPage() {
                           </div>
                           <div className="canvas-footer">
                             <span>Creative Development</span>
-                            <span>Radix + Tailwind ↗</span>
+                            <span>Radix + Tailwind â†—</span>
                           </div>
                         </>
                       )}
@@ -708,7 +698,7 @@ export default function LandingPage() {
                           <div className="pl-4">styling: <span className="text-amber-300">"Tailwind CSS v3.4"</span>,</div>
                           <div className="pl-4">database: <span className="text-amber-300">"Supabase Realtime"</span></div>
                           <div>{`}`});</div>
-                          <div className="pt-2 text-[11px] text-[#73e6ce]">✓ Production Ready & Verified</div>
+                          <div className="pt-2 text-[11px] text-[#73e6ce]">âœ“ Production Ready & Verified</div>
                         </div>
                       )}
 
@@ -757,7 +747,7 @@ export default function LandingPage() {
                 <HoverCard>
                   <HoverCardTrigger asChild>
                     <div className="floating-tag cursor-pointer select-none">
-                      DESIGN × CODE ✦
+                      DESIGN Ã— CODE âœ¦
                     </div>
                   </HoverCardTrigger>
                   <HoverCardContent side="bottom" className="w-64">
@@ -803,12 +793,12 @@ export default function LandingPage() {
                     className="gap-1.5 font-bold hover:border-primary/50 text-xs cursor-pointer shadow-sm"
                   >
                     <Sparkles className={`w-3.5 h-3.5 text-primary ${isShufflingNews ? "animate-spin" : ""}`} />
-                    <span>Acak Berita Lain 🎲</span>
+                    <span>Acak Berita Lain ðŸŽ²</span>
                   </Button>
                   <Button asChild variant="default" size="sm" className="gap-2 font-bold shadow-sm text-xs cursor-pointer">
                     <Link to="/news">
                       <Newspaper className="w-3.5 h-3.5" />
-                      <span>Buka Portal Berita (75 Berita) ➔</span>
+                      <span>Buka Portal Berita (75 Berita) âž”</span>
                     </Link>
                   </Button>
                 </div>
@@ -837,7 +827,7 @@ export default function LandingPage() {
                             <Calendar className="w-3.5 h-3.5" />
                             {highlightedNews.date}
                           </span>
-                          <span>•</span>
+                          <span>â€¢</span>
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
                             {highlightedNews.readTime}
@@ -1049,7 +1039,7 @@ export default function LandingPage() {
                   </span>
                 </Card>
                 <Badge variant="accent" className="about-sticker shadow-lg">
-                  Curious by default ✦
+                  Curious by default âœ¦
                 </Badge>
               </div>
 
@@ -1076,7 +1066,7 @@ export default function LandingPage() {
 
                   <TabsContent value="philosophy" className="space-y-4 animate-in fade-in-50 slide-in-from-bottom-1 duration-300">
                     <p className="large-copy text-foreground font-medium text-lg leading-relaxed">
-                      Form and function are not opposing forces—they amplify each other.
+                      Form and function are not opposing forcesâ€”they amplify each other.
                     </p>
                     <p className="text-muted-foreground text-sm leading-relaxed">
                       Every interface decision should serve clarity, accessibility, and delight. I believe software should feel tactile, fast, and respectful of human attention.
@@ -1318,9 +1308,9 @@ export default function LandingPage() {
 
               <div className="contact-login mt-8 text-xs text-muted-foreground">
                 {user ? (
-                  <>Welcome back, <span className="text-primary font-bold">{user.email?.split("@")[0]}</span>! <Link to="/dashboard" className="text-primary font-semibold hover:underline">Go to Dashboard →</Link></>
+                  <>Welcome back, <span className="text-primary font-bold">{user.email?.split("@")[0]}</span>! <Link to="/dashboard" className="text-primary font-semibold hover:underline">Go to Dashboard â†’</Link></>
                 ) : (
-                  <>Already part of the studio? <Link to="/login" className="text-primary font-semibold hover:underline">Sign in to Backoffice →</Link></>
+                  <>Already part of the studio? <Link to="/login" className="text-primary font-semibold hover:underline">Sign in to Backoffice â†’</Link></>
                 )}
               </div>
             </div>
@@ -1402,7 +1392,7 @@ export default function LandingPage() {
             </div>
 
             <span className="copyright text-[10px] font-mono text-muted-foreground">
-              © {new Date().getFullYear()} DESKTOPALIE
+              Â© {new Date().getFullYear()} DESKTOPALIE
             </span>
           </div>
         </footer>
@@ -1410,3 +1400,5 @@ export default function LandingPage() {
     </TooltipProvider>
   );
 }
+
+
