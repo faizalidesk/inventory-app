@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { FaSun, FaMoon, FaArrowLeft } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
+import SiteNavbar from "../component/SiteNavbar";
 import { NEWS_CATEGORIES, NEWS_ARTICLES } from "../data/newsData";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { useAuth } from "../context/auth-context";
@@ -134,45 +135,8 @@ export default function NewsPage() {
         </div>
       </div>
 
-      {/* MAIN PORTAL HEADER */}
-      <header className="public-header" style={{ height: "auto", padding: "1rem 2rem", flexWrap: "wrap" }}>
-        <div className="flex items-center justify-between w-full gap-4">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="public-brand" style={{ textDecoration: "none" }}>
-              <DesktopalieMark className="public-brand-mark" />
-              <div className="flex flex-col">
-                <span className="text-base font-extrabold tracking-tight">DESKTOPALIE NEWS</span>
-                <span className="text-[9px] font-mono text-primary font-bold tracking-widest">PORTAL WARTA & INFORMASI</span>
-              </div>
-            </Link>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold">
-            <Link to="/" className="hover:text-primary transition-colors flex items-center gap-1">
-              <FaArrowLeft className="w-3 h-3" /> Beranda Utama
-            </Link>
-            <Link to="/projects" className="hover:text-primary transition-colors">Projects</Link>
-            <Link to="/experiments" className="hover:text-primary transition-colors">Experiments</Link>
-            <Link to="/about" className="hover:text-primary transition-colors">About Faiz Ali</Link>
-          </nav>
-
-          <div className="public-actions flex items-center gap-2">
-            <button
-              type="button"
-              onClick={(event) => toggleThemeWithTransition(event, theme, setTheme)}
-              aria-label="Toggle theme"
-              className="cursor-pointer"
-            >
-              {theme === "dark" ? <FaSun /> : <FaMoon />}
-            </button>
-            {user ? (
-              <Link to="/dashboard" className="font-bold">Dashboard ➔</Link>
-            ) : (
-              <Link to="/login" className="font-bold">Masuk ➔</Link>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* 1. UNIFIED SITE NAVBAR */}
+      <SiteNavbar activeNav="news" />
 
       <main className="site-wrap py-8 px-4 max-w-6xl mx-auto">
         {/* HERO SECTION / EDITOR PICKS (Shown on All tab without search) */}

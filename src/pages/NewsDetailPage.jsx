@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { FaSun, FaMoon, FaArrowLeft, FaWhatsapp, FaTwitter, FaTelegram } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
+import SiteNavbar from "../component/SiteNavbar";
 import { NEWS_ARTICLES, NEWS_CATEGORIES } from "../data/newsData";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { useAuth } from "../context/auth-context";
@@ -120,45 +121,8 @@ Baca selengkapnya di: ${window.location.href}`)}`;
     <div className="public-page" data-theme={theme}>
       <Toaster position="bottom-right" reverseOrder={false} />
 
-      {/* PORTAL HEADER */}
-      <header className="public-header" style={{ height: "auto", padding: "1rem 2rem", flexWrap: "wrap" }}>
-        <div className="flex items-center justify-between w-full gap-4">
-          <div className="flex items-center gap-3">
-            <Link to="/news" className="public-brand" style={{ textDecoration: "none" }}>
-              <DesktopalieMark className="public-brand-mark" />
-              <div className="flex flex-col">
-                <span className="text-base font-extrabold tracking-tight">DESKTOPALIE NEWS</span>
-                <span className="text-[9px] font-mono text-primary font-bold tracking-widest">PORTAL WARTA & INFORMASI</span>
-              </div>
-            </Link>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold">
-            <Link to="/news" className="hover:text-primary transition-colors flex items-center gap-1 font-bold text-primary">
-              <FaArrowLeft className="w-3 h-3" /> Semua Berita
-            </Link>
-            <Link to="/" className="hover:text-primary transition-colors">Beranda Utama</Link>
-            <Link to="/projects" className="hover:text-primary transition-colors">Projects</Link>
-            <Link to="/about" className="hover:text-primary transition-colors">About Faiz Ali</Link>
-          </nav>
-
-          <div className="public-actions flex items-center gap-2">
-            <button
-              type="button"
-              onClick={(event) => toggleThemeWithTransition(event, theme, setTheme)}
-              aria-label="Toggle theme"
-              className="cursor-pointer"
-            >
-              {theme === "dark" ? <FaSun /> : <FaMoon />}
-            </button>
-            {user ? (
-              <Link to="/dashboard" className="font-bold">Dashboard ➔</Link>
-            ) : (
-              <Link to="/login" className="font-bold">Masuk ➔</Link>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* 1. UNIFIED SITE NAVBAR */}
+      <SiteNavbar activeNav="news" />
 
       <main className="site-wrap py-8 px-4 max-w-4xl mx-auto">
         {/* BREADCRUMBS */}

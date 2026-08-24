@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaCode, FaFigma, FaFlask, FaMoon, FaPalette, FaSun, FaSpinner } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
+import SiteNavbar from "../component/SiteNavbar";
 import "./PublicPage.css";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { fetchCollection, fetchItemBySlug, subscribeToCollection } from "../services/workspaceService";
@@ -9,32 +10,24 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
 
 function PublicShell({ children }) {
-  const { user } = useAuth();
   const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
-  useEffect(() => { localStorage.setItem("desktopalie-theme", theme); document.documentElement.style.colorScheme = theme; }, [theme]);
+  useEffect(() => { 
+    localStorage.setItem("desktopalie-theme", theme); 
+    document.documentElement.style.colorScheme = theme; 
+  }, [theme]);
+
   return (
     <div className="public-page" data-theme={theme}>
-      <header className="public-header">
+      <SiteNavbar />
+      <main>{children}</main>
+      <footer className="public-footer">
         <Link to="/" className="public-brand">
           <DesktopalieMark className="public-brand-mark" />
           <span>Desktopalie</span>
         </Link>
-        <nav>
-          <Link to="/projects">Projects</Link><Link to="/experiments">Experiments</Link><Link to="/about">About</Link><Link to="/services">Services</Link><Link to="/contact">Contact</Link>
-        </nav>
-        <div className="public-actions">
-          <button onClick={(event) => toggleThemeWithTransition(event, theme, setTheme)} aria-label="Toggle theme">
-            {theme === "dark" ? <FaSun /> : <FaMoon />}
-          </button>
-          {user ? (
-            <Link to="/dashboard">Dashboard <FaArrowRight /></Link>
-          ) : (
-            <Link to="/login">Login <FaArrowRight /></Link>
-          )}
-        </div>
-      </header>
-      <main>{children}</main>
-      <footer className="public-footer"><Link to="/" className="public-brand"><DesktopalieMark className="public-brand-mark" /><span>Desktopalie</span></Link><span>Projects, experiments, and digital creations.</span><span>© {new Date().getFullYear()} DESKTOPALIE</span></footer>
+        <span>Projects, experiments, and digital creations.</span>
+        <span>© {new Date().getFullYear()} DESKTOPALIE</span>
+      </footer>
     </div>
   );
 }
