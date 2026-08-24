@@ -510,22 +510,24 @@ export default function LandingPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // News states & filtering
-  const [activeNewsCategory, setActiveNewsCategory] = useState("all");
-  const [newsSearchQuery, setNewsSearchQuery] = useState("");
-  const [selectedNewsArticle, setSelectedNewsArticle] = useState(null);
-  const [newsDisplayCount, setNewsDisplayCount] = useState(9);
-
-  const filteredNews = NEWS_ARTICLES.filter((article) => {
-    const matchesCategory = activeNewsCategory === "all" || article.category === activeNewsCategory;
-    const query = newsSearchQuery.toLowerCase().trim();
-    const matchesSearch = !query || 
-      article.title.toLowerCase().includes(query) ||
-      article.summary.toLowerCase().includes(query) ||
-      article.content.toLowerCase().includes(query) ||
-      (article.tag && article.tag.toLowerCase().includes(query));
-    return matchesCategory && matchesSearch;
+  // Highlight 1 news randomly selected on every page refresh/load (1 of 75 articles)
+  const [highlightedNews, setHighlightedNews] = useState(() => {
+    const randomIndex = Math.floor(Math.random() * NEWS_ARTICLES.length);
+    return NEWS_ARTICLES[randomIndex] || NEWS_ARTICLES[0];
   });
+  const [isShufflingNews, setIsShufflingNews] = useState(false);
+
+  const handleShuffleNews = () => {
+    setIsShufflingNews(true);
+    setTimeout(() => {
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * NEWS_ARTICLES.length);
+      } while (NEWS_ARTICLES.length > 1 && NEWS_ARTICLES[nextIndex]?.id === highlightedNews?.id);
+      setHighlightedNews(NEWS_ARTICLES[nextIndex]);
+      setIsShufflingNews(false);
+    }, 150);
+  };
 
   const getCategoryIcon = (categoryId) => {
     switch (categoryId) {
@@ -540,12 +542,12 @@ export default function LandingPage() {
 
   const getCategoryBadgeClass = (categoryId) => {
     switch (categoryId) {
-      case "teknologi": return "bg-blue-500/10 text-blue-400 border-blue-500/30";
-      case "bencana": return "bg-amber-500/10 text-amber-400 border-amber-500/30";
-      case "pendidikan": return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-      case "politik": return "bg-indigo-500/10 text-indigo-400 border-indigo-500/30";
-      case "kriminal": return "bg-rose-500/10 text-rose-400 border-rose-500/30";
-      default: return "bg-purple-500/10 text-purple-400 border-purple-500/30";
+      case "teknologi": return "bg-blue-500/15 text-blue-400 border-blue-500/30";
+      case "bencana": return "bg-amber-500/15 text-amber-400 border-amber-500/30";
+      case "pendidikan": return "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+      case "politik": return "bg-indigo-500/15 text-indigo-400 border-indigo-500/30";
+      case "kriminal": return "bg-rose-500/15 text-rose-400 border-rose-500/30";
+      default: return "bg-purple-500/15 text-purple-400 border-purple-500/30";
     }
   };
 
@@ -772,270 +774,125 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* 3. NEWS & WARTA PORTAL SECTION */}
-          <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="news">
+          {/* 3. HIGHLIGHT 1 BERITA PILIHAN (DIPILIH SECARA ACAK SETIAP REFRESH) */}
+          <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="news-highlight">
             <div className="site-wrap">
               {/* Section Header */}
               <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-8">
                 <div>
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
                     <Badge variant="purple" className="flex items-center gap-1.5 py-1 px-3">
-                      <Newspaper className="w-3.5 h-3.5" />
-                      <span>WARTA & BERITA TERKINI</span>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>SOROTAN WARTA PILIHAN</span>
                     </Badge>
-                    <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                      75 Berita Terverifikasi
+                    <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Berganti Acak Setiap Refresh (1 dari 75 Berita)
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
-                    Pusat Informasi &<br className="hidden sm:inline" /> Kabar Terhangat Hari Ini
+                    Kabar Terhangat Hari Ini
                   </h2>
                 </div>
-                <div className="flex flex-col items-start md:items-end gap-3">
-                  <p className="text-sm text-muted-foreground max-w-md">
-                    Liputan mendalam dan terpercaya seputar terobosan teknologi, mitigasi bencana, pendidikan nasional, perkembangan politik, serta transparansi penegakan hukum.
-                  </p>
-                  <Button asChild variant="outline" size="sm" className="gap-2 font-bold hover:border-primary/50 text-xs">
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleShuffleNews}
+                    className="gap-1.5 font-bold hover:border-primary/50 text-xs cursor-pointer shadow-sm"
+                  >
+                    <Sparkles className={`w-3.5 h-3.5 text-primary ${isShufflingNews ? "animate-spin" : ""}`} />
+                    <span>Acak Berita Lain 🎲</span>
+                  </Button>
+                  <Button asChild variant="default" size="sm" className="gap-2 font-bold shadow-sm text-xs cursor-pointer">
                     <Link to="/news">
-                      <Newspaper className="w-3.5 h-3.5 text-primary" />
-                      Buka Portal Berita Lengkap ➔
+                      <Newspaper className="w-3.5 h-3.5" />
+                      <span>Buka Portal Berita (75 Berita) ➔</span>
                     </Link>
                   </Button>
                 </div>
               </div>
 
-              {/* Search & Category Filter Bar */}
-              <div className="bg-card/70 border border-border/70 rounded-2xl p-4 md:p-5 backdrop-blur-sm shadow-sm mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-                {/* Realtime Search Input */}
-                <div className="relative flex-1 max-w-md">
-                  <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <Input
-                    type="text"
-                    placeholder="Cari topik berita, kata kunci, atau tag..."
-                    value={newsSearchQuery}
-                    onChange={(e) => {
-                      setNewsSearchQuery(e.target.value);
-                      setNewsDisplayCount(9);
-                    }}
-                    className="pl-9.5 pr-8 bg-background/80 border-border/60 text-sm rounded-xl focus-visible:ring-primary h-10"
-                  />
-                  {newsSearchQuery && (
-                    <button
-                      type="button"
-                      onClick={() => setNewsSearchQuery("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
+              {/* The Single Highlighted Card */}
+              {highlightedNews && (
+                <div className="rounded-3xl border border-border/80 bg-card/90 p-6 sm:p-10 backdrop-blur-md relative overflow-hidden shadow-lg group hover:border-primary/50 transition-all duration-300">
+                  <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/15 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/25 transition-colors" />
 
-                {/* Category Filter Chips */}
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-                  {NEWS_CATEGORIES.map((cat) => {
-                    const isActive = activeNewsCategory === cat.id;
-                    const count = cat.id === 'all' 
-                      ? NEWS_ARTICLES.length 
-                      : NEWS_ARTICLES.filter(a => a.category === cat.id).length;
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => {
-                          setActiveNewsCategory(cat.id);
-                          setNewsDisplayCount(9);
-                        }}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                          isActive
-                            ? "bg-primary text-primary-foreground shadow-sm"
-                            : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/40"
-                        }`}
-                      >
-                        {getCategoryIcon(cat.id)}
-                        <span>{cat.label}</span>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                          isActive ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted-foreground/10 text-muted-foreground"
-                        }`}>
-                          {count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* News Grid */}
-              {filteredNews.length === 0 ? (
-                <div className="text-center py-16 px-4 border border-dashed border-border/80 rounded-2xl bg-card/40">
-                  <Newspaper className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-40" />
-                  <h3 className="text-lg font-bold mb-1">Tidak ada berita ditemukan</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Tidak ditemukan berita yang cocok dengan kata kunci "{newsSearchQuery}".
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => { setNewsSearchQuery(""); setActiveNewsCategory("all"); }}>
-                    Reset Pencarian
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {filteredNews.slice(0, newsDisplayCount).map((article) => {
-                    const badgeClass = getCategoryBadgeClass(article.category);
-                    return (
-                      <article
-                        key={article.id}
-                        className="rounded-2xl border border-border/80 bg-card/70 p-5 backdrop-blur-sm relative flex flex-col justify-between group hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer"
-                        onClick={() => setSelectedNewsArticle(article)}
-                      >
-                        <div>
-                          {/* Card Top: Category Badge, Date, Read Time */}
-                          <div className="flex items-center justify-between gap-2 mb-3.5">
-                            <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-md border ${badgeClass}`}>
-                              {getCategoryIcon(article.category)}
-                              <span>{article.categoryLabel}</span>
-                            </span>
-                            <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-3 h-3" />
-                                {article.date.split(" ")[0]} {article.date.split(" ")[1]}
-                              </span>
-                              <span>•</span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {article.readTime}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Article Title */}
-                          <h3 className="text-base sm:text-lg font-bold mb-2.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
-                            {article.title}
-                          </h3>
-
-                          {/* Summary */}
-                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-3 mb-4 leading-relaxed">
-                            {article.summary}
-                          </p>
-                        </div>
-
-                        {/* Card Bottom */}
-                        <div className="pt-3.5 border-t border-border/50 flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-                            <Tag className="w-3 h-3 text-primary" />
-                            <span className="font-semibold text-foreground/80">{article.tag}</span>
-                          </div>
-                          <span className="text-xs font-semibold text-primary flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                            Baca Berita ➔
+                  <div className="relative z-10 flex flex-col justify-between gap-6">
+                    <div>
+                      {/* Top metadata */}
+                      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-lg border ${getCategoryBadgeClass(highlightedNews.category)}`}>
+                            {getCategoryIcon(highlightedNews.category)}
+                            <span>{highlightedNews.categoryLabel}</span>
+                          </span>
+                          <span className="text-xs font-mono text-muted-foreground">
+                            ID: #{highlightedNews.id.toUpperCase()}
                           </span>
                         </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              )}
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {highlightedNews.date}
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            {highlightedNews.readTime}
+                          </span>
+                        </div>
+                      </div>
 
-              {/* Bottom Actions: Load More & Open Full Portal */}
-              <div className="flex flex-wrap items-center justify-center gap-3 mt-10">
-                {filteredNews.length > newsDisplayCount && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => setNewsDisplayCount(prev => prev + 9)}
-                    className="gap-2 font-bold px-6 shadow-sm hover:border-primary/50 cursor-pointer text-xs sm:text-sm"
-                  >
-                    <BookOpen className="w-4 h-4 text-primary" />
-                    <span>Muat Berita Lainnya ({filteredNews.length - newsDisplayCount} Tersisa)</span>
-                  </Button>
-                )}
-                <Button
-                  asChild
-                  variant="default"
-                  size="lg"
-                  className="gap-2 font-bold px-6 shadow-sm cursor-pointer text-xs sm:text-sm"
-                >
-                  <Link to="/news">
-                    <Newspaper className="w-4 h-4" />
-                    <span>Buka Portal Berita Lengkap (/news) ➔</span>
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </section>
+                      {/* Title */}
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-4 leading-snug group-hover:text-primary transition-colors">
+                        <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
+                          {highlightedNews.title}
+                        </Link>
+                      </h3>
 
-          {/* FULL NEWS READER DIALOG MODAL */}
-          <Dialog open={!!selectedNewsArticle} onOpenChange={(open) => !open && setSelectedNewsArticle(null)}>
-            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-              {selectedNewsArticle && (
-                <div>
-                  <DialogHeader className="mb-4">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-md border ${getCategoryBadgeClass(selectedNewsArticle.category)}`}>
-                        {getCategoryIcon(selectedNewsArticle.category)}
-                        <span>{selectedNewsArticle.categoryLabel}</span>
-                      </span>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {selectedNewsArticle.date}
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5" />
-                          {selectedNewsArticle.readTime}
-                        </span>
+                      {/* Summary */}
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-4xl">
+                        {highlightedNews.summary}
+                      </p>
+                    </div>
+
+                    {/* Bottom Bar: Author, Tag & CTAs */}
+                    <div className="pt-6 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center text-primary font-bold text-xs">
+                          <User className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-foreground">{highlightedNews.author}</div>
+                          <div className="text-[11px] text-muted-foreground font-mono flex items-center gap-1.5">
+                            <Tag className="w-3 h-3 text-primary" />
+                            <span>{highlightedNews.tag}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 w-full sm:w-auto">
+                        <Button asChild variant="default" size="default" className="font-bold gap-2 text-xs sm:text-sm flex-1 sm:flex-none">
+                          <Link to={`/news/${highlightedNews.id}`}>
+                            <span>Baca Berita Lengkap</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                        <Button asChild variant="outline" size="default" className="font-bold gap-2 text-xs sm:text-sm flex-1 sm:flex-none">
+                          <Link to="/news">
+                            <span>Lihat Semua Berita</span>
+                            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
+                          </Link>
+                        </Button>
                       </div>
                     </div>
-                    <DialogTitle className="text-xl sm:text-2xl font-bold leading-snug">
-                      {selectedNewsArticle.title}
-                    </DialogTitle>
-                    <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
-                      <User className="w-3.5 h-3.5 text-primary" />
-                      <span>Ditulis oleh: <b className="text-foreground">{selectedNewsArticle.author}</b></span>
-                      <span>•</span>
-                      <span className="px-2 py-0.5 rounded bg-muted font-mono font-bold text-foreground/80">
-                        {selectedNewsArticle.tag}
-                      </span>
-                    </div>
-                  </DialogHeader>
-
-                  <div className="space-y-4 text-sm sm:text-base leading-relaxed text-foreground/90 py-2 border-y border-border/60">
-                    <p className="font-semibold text-foreground bg-muted/40 p-3.5 rounded-xl border border-border/40 text-sm">
-                      {selectedNewsArticle.summary}
-                    </p>
-                    <p>
-                      {selectedNewsArticle.content}
-                    </p>
                   </div>
-
-                  <DialogFooter className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div className="text-xs text-muted-foreground">
-                      Sumber: Portal Berita Terverifikasi Desktopalie
-                    </div>
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/#news`);
-                          toast.success("Tautan berita disalin ke clipboard!");
-                        }}
-                        className="gap-1.5 text-xs w-full sm:w-auto cursor-pointer"
-                      >
-                        <Share2 className="w-3.5 h-3.5" />
-                        <span>Bagikan</span>
-                      </Button>
-                      <DialogClose asChild>
-                        <Button size="sm" variant="default" className="text-xs w-full sm:w-auto cursor-pointer">
-                          Tutup
-                        </Button>
-                      </DialogClose>
-                    </div>
-                  </DialogFooter>
                 </div>
               )}
-            </DialogContent>
-          </Dialog>
+            </div>
+          </section>
 
           {/* 4. SELECTED WORK / PROJECTS SECTION WITH SHADCN TABS, CARDS & MODAL DIALOG */}
           <section className="section" id="work">
