@@ -81,6 +81,11 @@
   }
 }
 
+.font-brand-script, .logo-script {
+  font-family: 'Pacifico', 'Yellowtail', 'Satisfy', 'Leckerli One', cursive, system-ui;
+  letter-spacing: 0.02em;
+}
+
 :root {
   --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
