@@ -840,47 +840,49 @@ export default function LandingPage() {
                 <div className="rounded-3xl border border-border/80 bg-card/90 p-6 sm:p-10 backdrop-blur-md relative overflow-hidden shadow-lg group hover:border-primary/50 transition-all duration-300">
                   <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/15 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/25 transition-colors" />
 
-                  <div className="relative z-10 flex flex-col justify-between gap-6">
-                    <div>
-                      {/* Top metadata */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-                        <div className="flex items-center gap-2">
-                          <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-lg border ${getCategoryBadgeClass(highlightedNews.category)}`}>
-                            {getCategoryIcon(highlightedNews.category)}
-                            <span>{highlightedNews.categoryLabel || highlightedNews.category}</span>
-                          </span>
-                          <span className="text-xs font-mono text-muted-foreground">
-                            ID: #{highlightedNews.id.toUpperCase()}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5" />
-                            {highlightedNews.date}
-                          </span>
-                          <span>•</span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" />
-                            {highlightedNews.readTime}
-                          </span>
-                        </div>
+                  <div className="relative z-10 flex flex-col justify-between gap-6 sm:gap-7">
+                    {/* Top metadata */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-lg border ${getCategoryBadgeClass(highlightedNews.category)}`}>
+                          {getCategoryIcon(highlightedNews.category)}
+                          <span>{highlightedNews.categoryLabel || highlightedNews.category}</span>
+                        </span>
+                        <span className="text-xs font-mono text-muted-foreground">
+                          ID: #{highlightedNews.id.toUpperCase()}
+                        </span>
                       </div>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {highlightedNews.date}
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5" />
+                          {highlightedNews.readTime}
+                        </span>
+                      </div>
+                    </div>
 
-                      {/* Title */}
-                      <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-3 sm:mb-4 leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                        <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
-                          {highlightedNews.title}
-                        </Link>
-                      </h3>
+                    <div className="flex flex-col gap-6 sm:gap-7">
+                      <div>
+                        {/* Title */}
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-3 leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                          <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
+                            {highlightedNews.title}
+                          </Link>
+                        </h3>
 
-                      {/* Summary */}
-                      <p className="text-xs sm:text-sm text-muted-foreground/90 leading-relaxed mb-6 max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                        {highlightedNews.summary}
-                      </p>
+                        {/* Summary */}
+                        <p className="text-xs sm:text-sm text-muted-foreground/90 leading-relaxed max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                          {highlightedNews.summary}
+                        </p>
+                      </div>
 
                       {/* Highlighted News Image Banner */}
                       {extractArticleImage(highlightedNews) && (
-                        <Link to={`/news/${highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden mb-6 border border-border/70 bg-muted/20 shadow-xs">
+                        <Link to={`/news/${highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
                           <img
                             src={extractArticleImage(highlightedNews)}
                             alt={highlightedNews.title}

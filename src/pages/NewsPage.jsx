@@ -161,29 +161,31 @@ export default function NewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
               
               {/* HERO LEFT COLUMN CARD */}
-              <div className="lg:col-span-7 bg-card/60 backdrop-blur-xs border border-border/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between hover:border-primary/50 transition-all group overflow-hidden">
-                <div>
-                  <div className="flex items-center gap-2.5 mb-4 sm:mb-5 flex-wrap">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono border ${getCategoryBadgeClass(heroArticle.category)}`}>
-                      {getCategoryIcon(heroArticle.category)}
-                      {heroArticle.categoryLabel || heroArticle.category}
-                    </span>
-                    <span className="text-xs font-mono text-muted-foreground">• {heroArticle.readTime}</span>
+              <div className="lg:col-span-7 bg-card/60 backdrop-blur-xs border border-border/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-primary/50 transition-all group overflow-hidden">
+                <div className="flex flex-col gap-6 sm:gap-7">
+                  <div>
+                    <div className="flex items-center gap-2.5 mb-3.5 flex-wrap">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono border ${getCategoryBadgeClass(heroArticle.category)}`}>
+                        {getCategoryIcon(heroArticle.category)}
+                        {heroArticle.categoryLabel || heroArticle.category}
+                      </span>
+                      <span className="text-xs font-mono text-muted-foreground">• {heroArticle.readTime}</span>
+                    </div>
+
+                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="no-underline text-foreground block mb-3 sm:mb-3.5">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                        {heroArticle.title}
+                      </h3>
+                    </Link>
+
+                    <p className="text-muted-foreground/90 text-xs sm:text-sm leading-relaxed break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                      {heroArticle.summary}
+                    </p>
                   </div>
-
-                  <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="no-underline text-foreground block mb-3 sm:mb-4">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                      {heroArticle.title}
-                    </h3>
-                  </Link>
-
-                  <p className="text-muted-foreground/90 text-xs sm:text-sm leading-relaxed mb-6 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                    {heroArticle.summary}
-                  </p>
 
                   {/* HERO ARTICLE IMAGE BANNER */}
                   {extractArticleImage(heroArticle) && (
-                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-48 sm:h-64 rounded-xl overflow-hidden mb-6 border border-border/70 bg-muted/20 shadow-xs">
+                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-52 sm:h-72 rounded-xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
                       <img
                         src={extractArticleImage(heroArticle)}
                         alt={heroArticle.title}
