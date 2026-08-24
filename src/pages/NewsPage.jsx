@@ -150,10 +150,10 @@ export default function NewsPage() {
         {/* HERO FEATURED HEADLINE */}
         {activeCategory === "all" && !searchQuery && currentPage === 1 && heroArticle && (
           <section className="mb-12">
-            <div className="flex items-center justify-between mb-6 pb-2 border-b border-border/80">
+            <div className="flex items-center justify-between mb-5 pb-2 border-b border-border/80">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary" />
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight">BERITA UTAMA & PILIHAN REDAKSI</h2>
+                <Sparkles className="w-4 h-4 text-primary" />
+                <h2 className="text-base sm:text-lg font-extrabold tracking-tight">BERITA UTAMA & PILIHAN REDAKSI</h2>
               </div>
               <span className="text-xs font-mono text-muted-foreground">{articles.length} Berita Terverifikasi</span>
             </div>
@@ -161,10 +161,10 @@ export default function NewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
               
               {/* HERO LEFT COLUMN CARD */}
-              <div className="lg:col-span-7 bg-card/60 backdrop-blur-xs border border-border/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-primary/50 transition-all group overflow-hidden">
+              <div className="lg:col-span-7 bg-card/60 backdrop-blur-xs border border-border/80 rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:border-primary/50 transition-all group overflow-hidden">
                 <div>
-                  <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono border ${getCategoryBadgeClass(heroArticle.category)}`}>
+                  <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold font-mono border ${getCategoryBadgeClass(heroArticle.category)}`}>
                       {getCategoryIcon(heroArticle.category)}
                       {heroArticle.categoryLabel || heroArticle.category}
                     </span>
@@ -172,22 +172,22 @@ export default function NewsPage() {
                   </div>
 
                   <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="no-underline text-foreground block">
-                    <h3 className="text-2xl sm:text-3xl font-black tracking-tight leading-snug group-hover:text-primary transition-colors mb-4 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-snug group-hover:text-primary transition-colors mb-2.5 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                       {heroArticle.title}
                     </h3>
                   </Link>
 
-                  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                  <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-4 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                     {heroArticle.summary}
                   </p>
 
                   {/* HERO ARTICLE IMAGE BANNER */}
                   {extractArticleImage(heroArticle) && (
-                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-56 sm:h-72 rounded-xl overflow-hidden mb-6 border border-border/60 bg-muted/20">
+                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-48 sm:h-64 rounded-xl overflow-hidden mb-4 border border-border/60 bg-muted/20">
                       <img
                         src={extractArticleImage(heroArticle)}
                         alt={heroArticle.title}
-                        className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                         loading="lazy"
                       />
                     </Link>

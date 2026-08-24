@@ -867,14 +867,14 @@ export default function LandingPage() {
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-4 leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-2.5 leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
                           {highlightedNews.title}
                         </Link>
                       </h3>
 
                       {/* Summary */}
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         {highlightedNews.summary}
                       </p>
 
