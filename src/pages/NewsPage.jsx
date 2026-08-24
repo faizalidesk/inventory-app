@@ -161,29 +161,29 @@ export default function NewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
               
               {/* HERO LEFT COLUMN CARD */}
-              <div className="lg:col-span-7 bg-card/60 backdrop-blur-xs border border-border/80 rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:border-primary/50 transition-all group overflow-hidden">
+              <div className="lg:col-span-7 bg-card/60 backdrop-blur-xs border border-border/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between hover:border-primary/50 transition-all group overflow-hidden">
                 <div>
-                  <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold font-mono border ${getCategoryBadgeClass(heroArticle.category)}`}>
+                  <div className="flex items-center gap-2.5 mb-4 sm:mb-5 flex-wrap">
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono border ${getCategoryBadgeClass(heroArticle.category)}`}>
                       {getCategoryIcon(heroArticle.category)}
                       {heroArticle.categoryLabel || heroArticle.category}
                     </span>
                     <span className="text-xs font-mono text-muted-foreground">• {heroArticle.readTime}</span>
                   </div>
 
-                  <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="no-underline text-foreground block">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-snug group-hover:text-primary transition-colors mb-2.5 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                  <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="no-underline text-foreground block mb-3 sm:mb-4">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                       {heroArticle.title}
                     </h3>
                   </Link>
 
-                  <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-4 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                  <p className="text-muted-foreground/90 text-xs sm:text-sm leading-relaxed mb-6 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                     {heroArticle.summary}
                   </p>
 
                   {/* HERO ARTICLE IMAGE BANNER */}
                   {extractArticleImage(heroArticle) && (
-                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-48 sm:h-64 rounded-xl overflow-hidden mb-4 border border-border/60 bg-muted/20">
+                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-48 sm:h-64 rounded-xl overflow-hidden mb-6 border border-border/70 bg-muted/20 shadow-xs">
                       <img
                         src={extractArticleImage(heroArticle)}
                         alt={heroArticle.title}
@@ -194,7 +194,7 @@ export default function NewsPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-border/60 text-xs text-muted-foreground flex-wrap gap-2">
+                <div className="flex items-center justify-between pt-5 mt-2 border-t border-border/60 text-xs text-muted-foreground flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <User className="w-3.5 h-3.5" />
                     <span>{heroArticle.author}</span>
@@ -220,14 +220,14 @@ export default function NewsPage() {
                       className="bg-card/40 backdrop-blur-xs border border-border/70 rounded-xl p-4 sm:p-5 hover:border-primary/50 transition-all group flex flex-col justify-between no-underline overflow-hidden"
                     >
                       <div>
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center justify-between mb-3">
                           <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono border ${getCategoryBadgeClass(item.category)}`}>
                             {item.categoryLabel || item.category}
                           </span>
                           <span className="text-[11px] font-mono text-muted-foreground">{item.date}</span>
                         </div>
 
-                        <div className="flex gap-3 items-start my-2">
+                        <div className="flex gap-3.5 items-start my-2">
                           {sideImg && (
                             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border border-border/60 bg-muted/20">
                               <img
@@ -239,17 +239,17 @@ export default function NewsPage() {
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors leading-snug line-clamp-2 mb-1.5 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                            <h4 className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors leading-snug line-clamp-2 mb-2 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                               {item.title}
                             </h4>
-                            <p className="text-xs text-muted-foreground line-clamp-2 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                            <p className="text-xs text-muted-foreground/90 line-clamp-2 leading-relaxed break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                               {item.summary}
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-2 border-t border-border/40 mt-1">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-3 border-t border-border/40 mt-2">
                         <span>{item.author}</span>
                         <span>{item.readTime}</span>
                       </div>

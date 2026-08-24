@@ -867,20 +867,20 @@ export default function LandingPage() {
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-2.5 leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-3 sm:mb-4 leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         <Link to={`/news/${highlightedNews.id}`} className="hover:underline">
                           {highlightedNews.title}
                         </Link>
                       </h3>
 
                       {/* Summary */}
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                      <p className="text-xs sm:text-sm text-muted-foreground/90 leading-relaxed mb-6 max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         {highlightedNews.summary}
                       </p>
 
                       {/* Highlighted News Image Banner */}
                       {extractArticleImage(highlightedNews) && (
-                        <Link to={`/news/${highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden mb-6 border border-border/60 bg-muted/20">
+                        <Link to={`/news/${highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden mb-6 border border-border/70 bg-muted/20 shadow-xs">
                           <img
                             src={extractArticleImage(highlightedNews)}
                             alt={highlightedNews.title}
