@@ -26,37 +26,57 @@ import DesktopalieMark from "../component/DesktopalieMark";
 import SiteNavbar from "../component/SiteNavbar";
 import "./LandingPage.css";
 import { NEWS_ARTICLES, NEWS_CATEGORIES } from "../data/newsData";
-import { toggleThemeWithTransition } from "../utils/theme";
+import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/auth-context";
+import { fetchNewsArticles } from "../services/workspaceService";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function NewsDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
+  const { theme } = useTheme();
+  const [allArticles, setAllArticles] = useState(NEWS_ARTICLES);
+  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState("normal"); // small, normal, large
 
   useEffect(() => {
-    localStorage.setItem("desktopalie-theme", theme);
-    document.documentElement.style.colorScheme = theme;
-  }, [theme]);
-
-  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    async function loadData() {
+      try {
+        const data = await fetchNewsArticles();
+        if (data && data.length > 0) {
+          setAllArticles(data);
+        }
+      } catch (e) {
+        console.error("Error loading news detail:", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
   }, [id]);
 
-  const article = NEWS_ARTICLES.find((a) => a.id === id);
+  const article = allArticles.find((a) => a.id === id || a.slug === id) || allArticles[0];
+
+  useEffect(() => {
+    if (article) {
+      document.title = `${article.title} — Desktopalie News`;
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.content = article.summary || "";
+    }
+  }, [article]);
 
   // If article not found, find by index or fallback
-  const currentIndex = NEWS_ARTICLES.findIndex((a) => a.id === id);
-  const prevArticle = currentIndex > 0 ? NEWS_ARTICLES[currentIndex - 1] : null;
-  const nextArticle = currentIndex < NEWS_ARTICLES.length - 1 ? NEWS_ARTICLES[currentIndex + 1] : null;
+  const currentIndex = allArticles.findIndex((a) => (a.id === id || a.slug === id));
+  const prevArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
+  const nextArticle = currentIndex >= 0 && currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
 
   // Related articles from same category
   const relatedArticles = article 
-    ? NEWS_ARTICLES.filter((a) => a.category === article.category && a.id !== article.id).slice(0, 3)
+    ? allArticles.filter((a) => a.category === article.category && a.id !== article.id).slice(0, 3)
     : [];
 
   const getCategoryIcon = (categoryId) => {

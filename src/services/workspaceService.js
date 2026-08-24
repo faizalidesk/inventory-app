@@ -310,3 +310,63 @@ export async function fetchLandingPageSettings() {
   }
   return null;
 }
+
+/**
+ * Fetch News articles from Supabase (table "news" or site_settings key "news_articles" with fallback to newsData)
+ */
+export async function fetchNewsArticles() {
+  // 1. Try "news" table
+  try {
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data && data.length > 0) {
+      localStorage.setItem("desktopalie_news_articles", JSON.stringify(data));
+      return data;
+    }
+  } catch (e) {}
+
+  // 2. Try "site_settings" key "news_articles"
+  try {
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("key", "news_articles")
+      .maybeSingle();
+
+    if (!error && data?.value) {
+      const parsed = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        localStorage.setItem("desktopalie_news_articles", JSON.stringify(parsed));
+        return parsed;
+      }
+    }
+  } catch (e) {}
+
+  // 3. Fallback to localStorage
+  const local = localStorage.getItem("desktopalie_news_articles");
+  if (local) {
+    try {
+      const parsed = JSON.parse(local);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch (e) {}
+  }
+
+  // 4. Default fallback to bundled newsData
+  try {
+    const { NEWS_ARTICLES } = await import("../data/newsData");
+    return NEWS_ARTICLES || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+/**
+ * Fetch a single news article by ID or slug
+ */
+export async function fetchNewsArticleById(idOrSlug) {
+  const articles = await fetchNewsArticles();
+  return articles.find(a => a.id === idOrSlug || a.slug === idOrSlug) || null;
+}

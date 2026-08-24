@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -61,7 +61,7 @@ import AntigravityLogo from "../component/AntigravityLogo";
 import SiteNavbar from "../component/SiteNavbar";
 import "./LandingPage.css";
 import { useTheme } from "../context/ThemeContext";
-import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings } from "../services/workspaceService";
+import { fetchCollection, fetchMaintenanceSettings, fetchLandingPageSettings, fetchNewsArticles } from "../services/workspaceService";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/auth-context";
 import { NEWS_CATEGORIES, NEWS_ARTICLES } from "../data/newsData";
@@ -309,6 +309,7 @@ export default function LandingPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [projectsList, setProjectsList] = useState(PROJECTS);
+  const [newsList, setNewsList] = useState(NEWS_ARTICLES);
   const [activeProjectTab, setActiveProjectTab] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -397,6 +398,21 @@ export default function LandingPage() {
         }
       } catch (e) {
         console.error("Error loading projects for landing:", e);
+      }
+
+      // 4. Live News from Supabase
+      try {
+        const liveNews = await fetchNewsArticles();
+        if (liveNews && liveNews.length > 0) {
+          const publishedNews = liveNews.filter(a => (a.status || "Published") === "Published");
+          if (publishedNews.length > 0) {
+            setNewsList(publishedNews);
+            const randomIndex = Math.floor(Math.random() * publishedNews.length);
+            setHighlightedNews(publishedNews[randomIndex] || publishedNews[0]);
+          }
+        }
+      } catch (e) {
+        console.error("Error loading news for landing:", e);
       }
     }
 
@@ -512,9 +528,9 @@ export default function LandingPage() {
     setTimeout(() => {
       let nextIndex;
       do {
-        nextIndex = Math.floor(Math.random() * NEWS_ARTICLES.length);
-      } while (NEWS_ARTICLES.length > 1 && NEWS_ARTICLES[nextIndex]?.id === highlightedNews?.id);
-      setHighlightedNews(NEWS_ARTICLES[nextIndex]);
+        nextIndex = Math.floor(Math.random() * newsList.length);
+      } while (newsList.length > 1 && newsList[nextIndex]?.id === highlightedNews?.id);
+      setHighlightedNews(newsList[nextIndex] || newsList[0]);
       setIsShufflingNews(false);
     }, 150);
   };
