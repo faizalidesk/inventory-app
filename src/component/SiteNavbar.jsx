@@ -51,7 +51,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                   <span className="w-8 h-8 flex items-center justify-center shrink-0">
                     <DesktopalieMark style={{ width: "28px", height: "26px", display: "block" }} />
                   </span>
-                  <span className="font-brand-script text-xl sm:text-2xl font-normal text-foreground group-hover:text-primary transition-colors tracking-wide">
+                  <span className="font-brand-script text-base sm:text-lg font-normal text-foreground group-hover:text-primary transition-colors tracking-normal pt-0.5">
                     Desktopalie
                   </span>
                 </Link>
@@ -196,7 +196,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                     <span className="w-6 h-6 flex items-center justify-center shrink-0">
                       <DesktopalieMark style={{ width: "24px", height: "22px", display: "block" }} />
                     </span>
-                    <SheetTitle className="font-brand-script text-xl font-normal">Desktopalie</SheetTitle>
+                    <SheetTitle className="font-brand-script text-base font-normal pt-0.5">Desktopalie</SheetTitle>
                   </div>
                 </SheetHeader>
                 <div className="flex flex-col gap-3 py-6 font-mono text-sm">
