@@ -34,8 +34,19 @@ export default function NewsPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const [articles, setArticles] = useState(NEWS_ARTICLES);
-  const [loading, setLoading] = useState(true);
+  const [articles, setArticles] = useState(() => {
+    try {
+      const cached = localStorage.getItem("desktopalie_news_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return NEWS_ARTICLES;
+  });
+  const [loading, setLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,7 +69,11 @@ export default function NewsPage() {
       try {
         const data = await fetchNewsArticles();
         if (data && data.length > 0) {
-          setArticles(data.filter(a => (a.status || "Published") === "Published"));
+          const published = data.filter(a => (a.status || "Published") === "Published");
+          setArticles(published);
+          try {
+            localStorage.setItem("desktopalie_news_cache", JSON.stringify(published));
+          } catch (e) {}
         }
       } catch (e) {
         console.error("Error fetching news:", e);
@@ -74,7 +89,11 @@ export default function NewsPage() {
         if (payload.new && payload.new.key === "news_articles") {
           const val = typeof payload.new.value === "string" ? JSON.parse(payload.new.value) : payload.new.value;
           if (Array.isArray(val)) {
-            setArticles(val.filter(a => (a.status || "Published") === "Published"));
+            const published = val.filter(a => (a.status || "Published") === "Published");
+            setArticles(published);
+            try {
+              localStorage.setItem("desktopalie_news_cache", JSON.stringify(published));
+            } catch (e) {}
           }
         }
       })

@@ -324,7 +324,31 @@ export default function LandingPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [projectsList, setProjectsList] = useState(PROJECTS);
-  const [newsList, setNewsList] = useState(NEWS_ARTICLES);
+  const [newsList, setNewsList] = useState(() => {
+    try {
+      const cached = localStorage.getItem("desktopalie_news_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return NEWS_ARTICLES;
+  });
+  const [highlightedNews, setHighlightedNews] = useState(() => {
+    try {
+      const cached = localStorage.getItem("desktopalie_news_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed[0];
+        }
+      }
+    } catch (e) {}
+    return NEWS_ARTICLES[0];
+  });
+  const [isShufflingNews, setIsShufflingNews] = useState(false);
   const [activeProjectTab, setActiveProjectTab] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -424,6 +448,9 @@ export default function LandingPage() {
             setNewsList(publishedNews);
             const randomIndex = Math.floor(Math.random() * publishedNews.length);
             setHighlightedNews(publishedNews[randomIndex] || publishedNews[0]);
+            try {
+              localStorage.setItem("desktopalie_news_cache", JSON.stringify(publishedNews));
+            } catch (e) {}
           }
         }
       } catch (e) {
@@ -530,13 +557,6 @@ export default function LandingPage() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  // Highlight 1 news randomly selected on every page refresh/load (1 of 75 articles)
-  const [highlightedNews, setHighlightedNews] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * NEWS_ARTICLES.length);
-    return NEWS_ARTICLES[randomIndex] || NEWS_ARTICLES[0];
-  });
-  const [isShufflingNews, setIsShufflingNews] = useState(false);
 
   const handleShuffleNews = () => {
     setIsShufflingNews(true);
