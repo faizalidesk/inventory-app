@@ -18,7 +18,8 @@ import {
   BookOpen, 
   ArrowRight,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Home
 } from "lucide-react";
 import { FaSun, FaMoon, FaArrowLeft, FaWhatsapp, FaTwitter, FaTelegram } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
@@ -125,15 +126,35 @@ Baca selengkapnya di: ${window.location.href}`)}`;
       <SiteNavbar activeNav="news" />
 
       <main className="site-wrap py-8 px-4 max-w-4xl mx-auto">
-        {/* BREADCRUMBS */}
-        <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-6 font-mono overflow-x-auto pb-1">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <ChevronRight className="w-3 h-3 shrink-0" />
-          <Link to="/news" className="hover:text-foreground">Warta</Link>
-          <ChevronRight className="w-3 h-3 shrink-0" />
-          <span className="text-primary font-bold uppercase">{article.categoryLabel}</span>
-          <ChevronRight className="w-3 h-3 shrink-0" />
-          <span className="truncate max-w-[200px] text-foreground">{article.title}</span>
+        {/* MODERN RESPONSIVE BREADCRUMB */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground mb-8 py-2.5 px-4 rounded-xl bg-card/70 border border-border/80 shadow-xs backdrop-blur-sm overflow-x-auto scrollbar-none">
+          <Link to="/" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0">
+            <Home className="w-3.5 h-3.5 text-muted-foreground" />
+            <span>Beranda</span>
+          </Link>
+          
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+          
+          <Link to="/news" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0">
+            <Newspaper className="w-3.5 h-3.5 text-muted-foreground" />
+            <span>Warta & Berita</span>
+          </Link>
+          
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+          
+          <Link 
+            to="/news" 
+            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md border transition-opacity hover:opacity-80 shrink-0 ${getCategoryBadgeClass(article.category)}`}
+          >
+            {getCategoryIcon(article.category)}
+            <span>{article.categoryLabel}</span>
+          </Link>
+          
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+          
+          <span className="text-foreground font-medium truncate max-w-[200px] sm:max-w-xs md:max-w-md shrink-0" title={article.title}>
+            {article.title}
+          </span>
         </nav>
 
         {/* ARTICLE HEADER */}
