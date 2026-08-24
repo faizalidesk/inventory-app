@@ -14,6 +14,11 @@ function PublicShell({ children }) {
   useEffect(() => { 
     localStorage.setItem("desktopalie-theme", theme); 
     document.documentElement.style.colorScheme = theme; 
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [theme]);
 
   return (
@@ -22,7 +27,7 @@ function PublicShell({ children }) {
       <main>{children}</main>
       <footer className="public-footer">
         <Link to="/" className="public-brand">
-          <DesktopalieMark className="public-brand-mark" />
+          <DesktopalieMark className="public-brand-mark" style={{ width: "26px", height: "24px", display: "inline-flex" }} />
           <span>Desktopalie</span>
         </Link>
         <span>Projects, experiments, and digital creations.</span>
