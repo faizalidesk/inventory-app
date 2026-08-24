@@ -256,13 +256,20 @@ Baca selengkapnya di: ${window.location.href}`)}`;
           </div>
 
           {/* Full Narrative Content */}
-          <div className={`space-y-5 text-foreground/90 leading-relaxed ${fontClass}`}>
-            <p>
-              {article.content}
-            </p>
-            <p>
-              Perkembangan ini menjadi salah satu tonggak strategis dalam agenda penguatan infrastruktur dan tata kelola di Indonesia. Sinergi antara pemerintah pusat, pemerintah daerah, dan partisipasi publik diharapkan dapat mengoptimalkan dampak positif bagi kemajuan masyarakat di seluruh pelosok Tanah Air.
-            </p>
+          <div className={`space-y-5 text-foreground/90 leading-relaxed article-content-rendered ${fontClass}`}>
+            {article.content && (article.content.includes('<') && article.content.includes('>')) ? (
+              <div 
+                dangerouslySetInnerHTML={{ __html: article.content }} 
+                className="rich-article-html space-y-4"
+              />
+            ) : (
+              <>
+                <p>{article.content}</p>
+                <p>
+                  Perkembangan ini menjadi salah satu tonggak strategis dalam agenda penguatan infrastruktur dan tata kelola di Indonesia. Sinergi antara pemerintah pusat, pemerintah daerah, dan partisipasi publik diharapkan dapat mengoptimalkan dampak positif bagi kemajuan masyarakat di seluruh pelosok Tanah Air.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Tag and Topic Badge */}
