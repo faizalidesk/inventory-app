@@ -250,11 +250,12 @@ export default function NewsPage() {
 
                         <div className="flex gap-3.5 items-start my-2">
                           {sideImg && (
-                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border border-border/60 bg-muted/20">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 aspect-square rounded-xl overflow-hidden shrink-0 border border-border/60 bg-muted/20">
                               <img
                                 src={sideImg}
                                 alt={item.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                className="side-news-thumb w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+                                style={{ width: "100%", height: "100%", aspectRatio: "1/1", objectFit: "cover" }}
                                 loading="lazy"
                               />
                             </div>

@@ -176,7 +176,7 @@ export default function NewsDetailPage() {
       {/* 1. UNIFIED SITE NAVBAR */}
       <SiteNavbar activeNav="news" />
 
-      <main className="site-wrap py-8 px-4 max-w-4xl mx-auto">
+      <main className="site-wrap py-8 px-4 max-w-6xl mx-auto">
         {/* MODERN RESPONSIVE BREADCRUMB */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground mb-8 py-2.5 px-4 rounded-xl bg-card/70 border border-border/80 shadow-xs backdrop-blur-sm overflow-x-auto scrollbar-none">
           <Link to="/" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0">
