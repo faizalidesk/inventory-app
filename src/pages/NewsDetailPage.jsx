@@ -25,7 +25,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   Send,
-  Eye
+  Layers,
+  FileText,
+  Info
 } from "lucide-react";
 import { FaSun, FaMoon, FaArrowLeft, FaWhatsapp, FaTwitter, FaTelegram } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
@@ -60,7 +62,6 @@ export default function NewsDetailPage() {
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState("normal"); // small, normal, large
   const [bookmarked, setBookmarked] = useState(false);
-  const [readProgress, setReadProgress] = useState(0);
   const [sidebarEmail, setSidebarEmail] = useState("");
   const [sidebarSubscribed, setSidebarSubscribed] = useState(false);
 
@@ -84,19 +85,6 @@ export default function NewsDetailPage() {
     }
     loadData();
   }, [id]);
-
-  // Scroll Progress Tracker
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        const currentProgress = (window.scrollY / totalHeight) * 100;
-        setReadProgress(Math.min(100, Math.max(0, Math.round(currentProgress))));
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const article = allArticles.find((a) => a.slug === id || a.id === id);
 
@@ -229,14 +217,6 @@ export default function NewsDetailPage() {
       {/* 1. UNIFIED SITE NAVBAR */}
       <SiteNavbar activeNav="news" />
 
-      {/* TOP READING PROGRESS BAR (STICKY AT VERY TOP) */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-transparent z-[60] pointer-events-none">
-        <div 
-          className="h-full bg-primary transition-all duration-150 shadow-[0_0_8px_rgba(157,124,255,0.8)]"
-          style={{ width: `${readProgress}%` }}
-        />
-      </div>
-
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8">
         
         {/* MODERN RESPONSIVE BREADCRUMB */}
@@ -274,98 +254,131 @@ export default function NewsDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
           
           {/* =========================================================================
-              LEFT COLUMN: STICKY FLOATING ACTION & PROGRESS BAR (Col 1-2 on desktop)
+              LEFT COLUMN: ELEGANT FLOATING DOCK & READING ASSISTANT (Col 1-2 on desktop)
              ========================================================================= */}
           <aside className="hidden lg:flex lg:col-span-2 flex-col gap-4 sticky top-24">
             
-            {/* Quick Back Button */}
+            {/* Quick Navigation Back Pill */}
             <Link 
               to="/news" 
-              className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-muted-foreground hover:text-foreground p-3 rounded-2xl bg-card border border-border/80 shadow-xs hover:border-primary/50 transition-all group no-underline"
+              className="flex items-center justify-between gap-2 text-xs font-mono font-semibold text-muted-foreground hover:text-foreground p-3 rounded-2xl bg-card border border-border/80 shadow-xs hover:border-primary/50 transition-all group no-underline"
             >
-              <ArrowLeft className="w-4 h-4 text-primary group-hover:-translate-x-1 transition-transform" />
-              <span>Semua Warta</span>
+              <span className="flex items-center gap-1.5">
+                <ArrowLeft className="w-4 h-4 text-primary group-hover:-translate-x-1 transition-transform" />
+                <span>Portal Berita</span>
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted font-mono">ESC</span>
             </Link>
 
-            {/* Reading Progress Indicator Card */}
-            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col gap-2.5">
-              <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <Eye className="w-3.5 h-3.5 text-primary" /> Baca
-                </span>
-                <span className="font-bold text-primary font-mono">{readProgress}%</span>
-              </div>
-              <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary rounded-full transition-all duration-150"
-                  style={{ width: `${readProgress}%` }}
-                />
-              </div>
-              <span className="text-[10px] font-mono text-muted-foreground/70">
-                {article.readTime || "2 mnt baca"}
+            {/* Quick Meta Badge Card */}
+            <div className="p-3.5 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col gap-2">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase font-bold tracking-wider">
+                Info Liputan
               </span>
+              <div className="flex flex-col gap-1.5 text-[11px] font-mono text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-3 h-3 text-primary" />
+                  <span>{article.readTime || "2 mnt baca"}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3 h-3 text-primary" />
+                  <span>{article.date}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Vertical Social Sharing & Actions */}
-            <div className="p-3 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col items-center gap-3">
-              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider font-semibold">
+            {/* Reading Font Size Controller Card */}
+            <div className="p-3.5 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col gap-2">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase font-bold tracking-wider">
+                Ukuran Teks
+              </span>
+              <div className="grid grid-cols-3 gap-1 bg-muted/60 p-1 rounded-xl">
+                <button
+                  type="button"
+                  onClick={() => setFontSize("small")}
+                  className={`py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${fontSize === "small" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  A-
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFontSize("normal")}
+                  className={`py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${fontSize === "normal" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  A
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFontSize("large")}
+                  className={`py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${fontSize === "large" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  A+
+                </button>
+              </div>
+            </div>
+
+            {/* Vertical Social Sharing Dock */}
+            <div className="p-3.5 rounded-2xl bg-card border border-border/80 shadow-xs flex flex-col items-center gap-2.5">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider font-bold">
                 Bagikan
               </span>
               
-              {/* WhatsApp */}
-              <button
-                type="button"
-                onClick={handleShareWhatsApp}
-                title="Bagikan ke WhatsApp"
-                className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all cursor-pointer shadow-xs"
-              >
-                <FaWhatsapp className="w-4 h-4" />
-              </button>
+              <div className="grid grid-cols-2 gap-2 w-full">
+                {/* WhatsApp */}
+                <button
+                  type="button"
+                  onClick={handleShareWhatsApp}
+                  title="Bagikan ke WhatsApp"
+                  className="h-9 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all cursor-pointer shadow-xs"
+                >
+                  <FaWhatsapp className="w-4 h-4" />
+                </button>
 
-              {/* Twitter / X */}
-              <button
-                type="button"
-                onClick={handleShareTwitter}
-                title="Bagikan ke Twitter / X"
-                className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all cursor-pointer shadow-xs"
-              >
-                <FaTwitter className="w-4 h-4" />
-              </button>
+                {/* Twitter / X */}
+                <button
+                  type="button"
+                  onClick={handleShareTwitter}
+                  title="Bagikan ke Twitter / X"
+                  className="h-9 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all cursor-pointer shadow-xs"
+                >
+                  <FaTwitter className="w-4 h-4" />
+                </button>
 
-              {/* Telegram */}
-              <button
-                type="button"
-                onClick={handleShareTelegram}
-                title="Bagikan ke Telegram"
-                className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all cursor-pointer shadow-xs"
-              >
-                <FaTelegram className="w-4 h-4" />
-              </button>
+                {/* Telegram */}
+                <button
+                  type="button"
+                  onClick={handleShareTelegram}
+                  title="Bagikan ke Telegram"
+                  className="h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all cursor-pointer shadow-xs"
+                >
+                  <FaTelegram className="w-4 h-4" />
+                </button>
 
-              {/* Copy Link */}
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                title="Salin Tautan Berita"
-                className="w-10 h-10 rounded-xl bg-card text-foreground border border-border/80 flex items-center justify-center hover:border-primary transition-all cursor-pointer shadow-xs"
-              >
-                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4 text-primary" />}
-              </button>
+                {/* Copy Link */}
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  title="Salin Tautan Berita"
+                  className="h-9 rounded-xl bg-muted/60 text-foreground border border-border/80 flex items-center justify-center hover:border-primary transition-all cursor-pointer shadow-xs"
+                >
+                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4 text-primary" />}
+                </button>
+              </div>
 
               <div className="w-full h-px bg-border/60 my-0.5" />
 
-              {/* Bookmark Toggle */}
+              {/* Bookmark Toggle Full Pill */}
               <button
                 type="button"
                 onClick={toggleBookmark}
-                title={bookmarked ? "Hapus dari Bookmark" : "Simpan Berita"}
-                className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all cursor-pointer shadow-xs ${
+                className={`w-full py-2 px-3 rounded-xl border text-xs font-mono font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs ${
                   bookmarked 
                     ? "bg-amber-500/20 text-amber-400 border-amber-500/40" 
                     : "bg-card text-muted-foreground border-border/80 hover:text-foreground hover:border-primary/50"
                 }`}
               >
-                <Bookmark className="w-4 h-4" />
+                <Bookmark className="w-3.5 h-3.5" />
+                <span>{bookmarked ? "Tersimpan" : "Simpan"}</span>
               </button>
             </div>
           </aside>
@@ -411,30 +424,9 @@ export default function NewsDetailPage() {
                   </div>
                 </div>
 
-                {/* Reading font size adjuster */}
-                <div className="inline-flex items-center gap-1 bg-card border border-border/60 rounded-xl p-1 text-xs self-start sm:self-auto">
-                  <span className="px-2 text-muted-foreground font-mono">Font:</span>
-                  <button
-                    type="button"
-                    onClick={() => setFontSize("small")}
-                    className={`px-2.5 py-1 rounded-lg ${fontSize === "small" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground"}`}
-                  >
-                    A-
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFontSize("normal")}
-                    className={`px-2.5 py-1 rounded-lg ${fontSize === "normal" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground"}`}
-                  >
-                    A
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFontSize("large")}
-                    className={`px-2.5 py-1 rounded-lg ${fontSize === "large" ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground"}`}
-                  >
-                    A+
-                  </button>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Liputan Terverifikasi</span>
                 </div>
               </div>
             </div>
@@ -576,27 +568,55 @@ export default function NewsDetailPage() {
           </div>
 
           {/* =========================================================================
-              RIGHT COLUMN: STICKY WIDGET SIDEBAR (Col 10-12 on desktop)
+              RIGHT COLUMN: EDITORIAL CHANNELS & CURATED PICKS (Col 10-12 on desktop)
              ========================================================================= */}
           <aside className="hidden lg:flex lg:col-span-3 flex-col gap-6 sticky top-24">
             
-            {/* Widget 1: Trending Warta Terhangat */}
-            <div className="p-5 rounded-2xl bg-card border border-border/80 shadow-xs">
-              <div className="flex items-center gap-2 pb-3 mb-3 border-b border-border/60">
-                <Flame className="w-4 h-4 text-amber-400" />
+            {/* Widget 1: Kanal Kategori Warta (Category Navigator) */}
+            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
+              <div className="flex items-center gap-2 pb-2.5 mb-2.5 border-b border-border/60">
+                <Layers className="w-4 h-4 text-primary" />
                 <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-foreground">
-                  Trending Saat Ini
+                  Kanal Warta
                 </h3>
               </div>
 
-              <div className="space-y-3.5">
+              <div className="flex flex-col gap-1.5">
+                {NEWS_CATEGORIES.filter(c => c.id !== "all").map((cat) => (
+                  <Link
+                    key={cat.id}
+                    to="/news"
+                    className="flex items-center justify-between p-2 rounded-xl hover:bg-muted/60 transition-colors text-xs font-medium text-muted-foreground hover:text-foreground no-underline group"
+                  >
+                    <span className="flex items-center gap-2">
+                      {getCategoryIcon(cat.id)}
+                      <span className="group-hover:text-primary transition-colors">{cat.label}</span>
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-muted/80 text-muted-foreground">
+                      15
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Widget 2: Trending Warta Terhangat */}
+            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
+              <div className="flex items-center gap-2 pb-2.5 mb-3 border-b border-border/60">
+                <Flame className="w-4 h-4 text-amber-400" />
+                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-foreground">
+                  Warta Terhangat
+                </h3>
+              </div>
+
+              <div className="space-y-3">
                 {trendingArticles.map((trend, idx) => (
                   <div
                     key={trend.id}
                     onClick={() => navigate(`/news/${trend.slug || trend.id}`)}
                     className="group cursor-pointer flex items-start gap-2.5"
                   >
-                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-primary group-hover:text-white transition-colors">
+                    <span className="w-5 h-5 rounded-md bg-primary/10 text-primary font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-primary group-hover:text-white transition-colors">
                       {idx + 1}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -612,44 +632,24 @@ export default function NewsDetailPage() {
               </div>
             </div>
 
-            {/* Widget 2: Verifikasi Sumber & Lisensi Publik */}
-            <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 shadow-xs">
-              <div className="flex items-center gap-2 mb-2">
+            {/* Widget 3: Transparansi Sumber & Regulasi */}
+            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
+              <div className="flex items-center gap-2 mb-2 text-primary font-mono text-xs font-bold">
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-xs font-bold text-emerald-400">
-                  Sumber Publik Terverifikasi
-                </span>
+                <span>Keterbukaan Informasi</span>
               </div>
               <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Liputan ini disusun berdasarkan keterbukaan informasi publik, siaran pers kementerian/lembaga terkait, dan fakta terkonfirmasi.
+                Portal warta independen menyajikan informasi terverifikasi sesuai prinsip transparansi publik dan rilis resmi kementerian/lembaga nasional.
               </p>
             </div>
 
-            {/* Widget 3: Tagar & Topik Populer */}
-            <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground block mb-3">
-                Topik Populer
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {["#Telekomunikasi", "#KecerdasanBuatan", "#MitigasiBencana", "#KurikulumCoding", "#KeamananSiber", "#EkonomiDigital"].map((topic) => (
-                  <Link
-                    key={topic}
-                    to="/news"
-                    className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted border border-border/60 transition-colors no-underline"
-                  >
-                    {topic}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
             {/* Widget 4: Quick Newsletter Box */}
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-card to-card/60 border border-border/80 shadow-xs">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-card to-muted/30 border border-border/80 shadow-xs">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary block mb-1">
-                Warta Terpilih Harian
+                Langganan Warta
               </span>
-              <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
-                Dapatkan kurasi warta penting langsung di inbox Anda setiap pagi.
+              <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">
+                Terima ringkasan warta terpenting langsung ke email Anda.
               </p>
               
               {sidebarSubscribed ? (
@@ -661,7 +661,7 @@ export default function NewsDetailPage() {
                 <form onSubmit={handleSidebarSubscribe} className="space-y-2">
                   <input
                     type="email"
-                    placeholder="email@domain.com"
+                    placeholder="nama@email.com"
                     value={sidebarEmail}
                     onChange={(e) => setSidebarEmail(e.target.value)}
                     className="w-full px-3 py-2 text-xs rounded-xl bg-background border border-border/80 focus:border-primary outline-none transition-colors"
