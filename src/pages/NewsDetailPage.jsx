@@ -24,6 +24,7 @@ import {
 import { FaSun, FaMoon, FaArrowLeft, FaWhatsapp, FaTwitter, FaTelegram } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import SiteNavbar from "../component/SiteNavbar";
+import "./LandingPage.css";
 import { NEWS_ARTICLES, NEWS_CATEGORIES } from "../data/newsData";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { useAuth } from "../context/auth-context";
@@ -119,7 +120,8 @@ Baca selengkapnya di: ${window.location.href}`)}`;
   const fontClass = fontSize === "large" ? "text-lg leading-relaxed" : fontSize === "small" ? "text-sm leading-relaxed" : "text-base leading-relaxed";
 
   return (
-    <div className="public-page" data-theme={theme}>
+    <div className="desktopalie" data-theme={theme}>
+      <div className="page-noise" aria-hidden="true" />
       <Toaster position="bottom-right" reverseOrder={false} />
 
       {/* 1. UNIFIED SITE NAVBAR */}
@@ -353,13 +355,19 @@ Baca selengkapnya di: ${window.location.href}`)}`;
       </main>
 
       {/* FOOTER */}
-      <footer className="public-footer">
-        <Link to="/news" className="public-brand" style={{ textDecoration: "none" }}>
-          <DesktopalieMark className="public-brand-mark" />
-          <span>Desktopalie News Portal</span>
-        </Link>
-        <span>Pusat Kurasi Berita Publik Terverifikasi Nusantara.</span>
-        <span>© {new Date().getFullYear()} DESKTOPALIE</span>
+      <footer className="site-footer">
+        <div className="site-wrap footer-inner">
+          <Link to="/" className="brand">
+            <DesktopalieMark className="brand-mark" />
+            <span>Desktopalie</span>
+          </Link>
+          <p className="text-xs font-mono text-muted-foreground">
+            Pusat Kurasi Berita Publik Terverifikasi Nusantara.
+          </p>
+          <span className="text-xs font-mono text-muted-foreground">
+            © {new Date().getFullYear()} DESKTOPALIE
+          </span>
+        </div>
       </footer>
     </div>
   );

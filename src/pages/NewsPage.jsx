@@ -26,6 +26,7 @@ import {
 import { FaSun, FaMoon, FaArrowLeft } from "react-icons/fa";
 import DesktopalieMark from "../component/DesktopalieMark";
 import SiteNavbar from "../component/SiteNavbar";
+import "./LandingPage.css";
 import { NEWS_CATEGORIES, NEWS_ARTICLES } from "../data/newsData";
 import { toggleThemeWithTransition } from "../utils/theme";
 import { useAuth } from "../context/auth-context";
@@ -116,24 +117,9 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="public-page" data-theme={theme}>
+    <div className="desktopalie" data-theme={theme}>
+      <div className="page-noise" aria-hidden="true" />
       <Toaster position="bottom-right" reverseOrder={false} />
-
-      {/* TOP BREAKING NEWS TICKER */}
-      <div className="bg-primary/10 border-b border-primary/20 text-xs py-2 px-4 flex items-center justify-between overflow-hidden">
-        <div className="site-wrap flex items-center gap-3 w-full">
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary text-primary-foreground font-bold tracking-wider text-[10px] uppercase shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            BERITA TERKINI
-          </span>
-          <div className="truncate text-muted-foreground font-medium flex-1 text-[11px] sm:text-xs">
-            <span>⚡ Satelit Nusantara Lima Sukses Mengorbit • BMKG Siagakan Ina-TEWS Megathrust • Kurikulum AI & Coding Masuk Sekolah • Bareskrim Bongkar Sindikat Siber Internasional</span>
-          </div>
-          <span className="text-[11px] font-mono text-muted-foreground hidden sm:inline shrink-0">
-            Senin, 24 Agustus 2026 • Edisi Nasional
-          </span>
-        </div>
-      </div>
 
       {/* 1. UNIFIED SITE NAVBAR */}
       <SiteNavbar activeNav="news" />
@@ -460,13 +446,19 @@ export default function NewsPage() {
       </main>
 
       {/* PORTAL FOOTER */}
-      <footer className="public-footer">
-        <Link to="/" className="public-brand" style={{ textDecoration: "none" }}>
-          <DesktopalieMark className="public-brand-mark" />
-          <span>Desktopalie News Portal</span>
-        </Link>
-        <span>Pusat Kurasi Berita Publik Terverifikasi Nusantara.</span>
-        <span>© {new Date().getFullYear()} DESKTOPALIE</span>
+      <footer className="site-footer">
+        <div className="site-wrap footer-inner">
+          <Link to="/" className="brand">
+            <DesktopalieMark className="brand-mark" />
+            <span>Desktopalie</span>
+          </Link>
+          <p className="text-xs font-mono text-muted-foreground">
+            Pusat Kurasi Berita Publik Terverifikasi Nusantara.
+          </p>
+          <span className="text-xs font-mono text-muted-foreground">
+            © {new Date().getFullYear()} DESKTOPALIE
+          </span>
+        </div>
       </footer>
     </div>
   );
