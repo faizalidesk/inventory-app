@@ -40,7 +40,35 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Search, Eye, ArrowRight, Sparkles, Layers, Cpu, Tag, ExternalLink } from "lucide-react";
+import { 
+  Search, 
+  Eye, 
+  ArrowRight, 
+  Sparkles, 
+  Layers, 
+  Cpu, 
+  Tag, 
+  ExternalLink,
+  CheckCircle2,
+  Globe,
+  Shield,
+  Terminal,
+  Zap,
+  Code2,
+  Rocket,
+  Compass,
+  HeartHandshake,
+  Laptop,
+  ArrowUpRight,
+  ShieldCheck,
+  Flame,
+  BookOpen,
+  Clock,
+  Calendar,
+  Mail,
+  Check,
+  User
+} from "lucide-react";
 
 export function PublicShell({ children }) {
   const { theme } = useTheme();
@@ -207,132 +235,383 @@ export function PublicInfoPage({ type }) {
   if (type === "about") {
     return (
       <PublicShell>
-        {/* HERO */}
-        <section className="public-hero">
-          <span>03 / ABOUT</span>
-          <h1>Building to learn. Sharing to connect.</h1>
-          <p>
-            <strong>Desktopalie</strong> is an independent digital space and creative studio for projects, experiments, and modern web creations, exploring the space between technology, human experience, and thoughtful engineering.
-          </p>
+        {/* HERO SECTION */}
+        <section className="py-20 md:py-28 relative overflow-hidden border-b border-border/60 bg-gradient-to-b from-primary/5 via-background to-background">
+          <div className="site-wrap relative z-10">
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-6">
+              <Link to="/" className="hover:text-foreground transition-colors">Beranda</Link>
+              <span>/</span>
+              <span className="text-primary font-bold">About Studio</span>
+            </div>
+
+            <div className="max-w-4xl">
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+                <Badge variant="purple" className="flex items-center gap-1.5 py-1 px-3">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>02 / ABOUT DESKTOPALIE</span>
+                </Badge>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Available for Q1/Q2 Collaborative Builds
+                </span>
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08] mb-6">
+                Building to learn.<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-[#73e6ce] to-primary">
+                  Sharing to connect.
+                </span>
+              </h1>
+
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl mb-8">
+                <strong>Desktopalie</strong> is an independent digital creative studio & software ecosystem crafting human-centered UI/UX design, resilient modern web applications, and multi-tenant architectures.
+              </p>
+
+              <div className="flex items-center gap-3 flex-wrap">
+                <Button asChild size="default" className="font-bold gap-2 shadow-sm rounded-xl">
+                  <Link to="/projects">
+                    <span>Explore Selected Work</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="default" className="font-bold gap-2 rounded-xl">
+                  <Link to="/contact">
+                    <span>Get in Touch</span>
+                    <Mail className="w-3.5 h-3.5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="default" className="font-bold gap-2 rounded-xl text-muted-foreground hover:text-foreground">
+                  <Link to="/news">
+                    <span>News & Warta</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </section>
 
-        {/* STATS & THE STORY */}
-        <section className="public-content-grid">
-          <div>
-            <span className="public-label">THE STORY</span>
-            <p>
-              <strong>Desktopalie</strong> is an independent digital space—a growing archive of projects, lessons, and experiments. We care about simple ideas, precise details, accessible interfaces, and digital work with a clear reason to exist.
+        {/* THE STORY & STUDIO PROFILE GRID */}
+        <section className="py-16 md:py-24 border-b border-border/60 bg-muted/10">
+          <div className="site-wrap">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+              
+              {/* Left Column: Narrative */}
+              <div className="lg:col-span-7 space-y-6">
+                <div>
+                  <Badge variant="outline" className="text-primary font-mono text-[10px] mb-3">THE ORIGIN & CRAFT</Badge>
+                  <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
+                    Where Strategy, Design, and Code Converge.
+                  </h2>
+                </div>
+
+                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                  <strong>Desktopalie</strong> started as a personal digital laboratory exploring modern frontend tooling and fluid micro-interactions. Over the years, it has grown into a cohesive ecosystem of production web portals, telemetry systems, native mobile clients, and automated content engines.
+                </p>
+
+                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                  We believe that digital products should not only be visually distinctive, but also resilient, accessible, and fast. Every interface is built with strict semantic HTML, responsive layout tokens, and real-time backend synchronization.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 pt-4">
+                  <div className="p-4 rounded-xl bg-card border border-border/70">
+                    <div className="flex items-center gap-2 font-bold text-sm text-foreground mb-1">
+                      <Zap className="w-4 h-4 text-amber-400" />
+                      <span>Zero-Lag Performance</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Optimized Vite bundles, lightweight assets, and 98+ Lighthouse scores.</p>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-card border border-border/70">
+                    <div className="flex items-center gap-2 font-bold text-sm text-foreground mb-1">
+                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                      <span>Enterprise Security</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">PostgreSQL Row-Level Security (RLS) with role-based auth tokens.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Studio Card & Metrics */}
+              <div className="lg:col-span-5">
+                <Card className="bg-card/90 backdrop-blur-md border-border/80 shadow-xl overflow-hidden">
+                  <CardHeader className="p-6 pb-4 border-b border-border/60 bg-muted/20">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
+                          <DesktopalieMark size={24} />
+                        </div>
+                        <div>
+                          <CardTitle className="text-base font-bold">Desktopalie Studio</CardTitle>
+                          <CardDescription className="text-xs font-mono">Independent Creative Lab</CardDescription>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-[10px] font-mono border-emerald-500/40 text-emerald-400 bg-emerald-500/10">
+                        EST. 2023
+                      </Badge>
+                    </div>
+                  </CardHeader>
+
+                  <div className="p-6 grid grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border/60">
+                      <div className="text-2xl sm:text-3xl font-extrabold text-primary font-mono">4+</div>
+                      <div className="text-xs font-bold text-foreground mt-1">Years Journey</div>
+                      <div className="text-[11px] text-muted-foreground">Iterating & shipping</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border/60">
+                      <div className="text-2xl sm:text-3xl font-extrabold text-[#73e6ce] font-mono">20+</div>
+                      <div className="text-xs font-bold text-foreground mt-1">Projects Shipped</div>
+                      <div className="text-[11px] text-muted-foreground">Live web applications</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border/60">
+                      <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">75+</div>
+                      <div className="text-xs font-bold text-foreground mt-1">News & Articles</div>
+                      <div className="text-[11px] text-muted-foreground">Archived insights</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border/60">
+                      <div className="text-2xl sm:text-3xl font-extrabold text-indigo-400 font-mono">99.9%</div>
+                      <div className="text-xs font-bold text-foreground mt-1">Uptime Reliability</div>
+                      <div className="text-[11px] text-muted-foreground">Edge CDN network</div>
+                    </div>
+                  </div>
+
+                  <CardFooter className="p-6 pt-2 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5 text-primary" /> Indonesia • Global Ready
+                    </span>
+                    <span className="font-mono text-[10px]">v2.6.0 • Production</span>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CORE PHILOSOPHY & PILLARS */}
+        <section className="py-16 md:py-24 border-b border-border/60">
+          <div className="site-wrap">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <Badge variant="purple" className="mb-3">PHILOSOPHY & STANDARDS</Badge>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                Craft Principles That Guide Every Build
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base mt-3">
+                No bloated dependencies, no neglected accessibility. Just clean engineering and intentional design.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="bg-card border-border/80 hover:border-primary/50 transition-all hover:-translate-y-1">
+                <CardHeader className="p-6">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
+                    <FaPalette className="text-lg" />
+                  </div>
+                  <CardTitle className="text-base font-bold mb-2">Clarity & UI Systems</CardTitle>
+                  <CardDescription className="text-xs leading-relaxed">
+                    Accessible typography scales, strict design tokens, and uncluttered layouts that minimize cognitive load for users.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              <Card className="bg-card border-border/80 hover:border-primary/50 transition-all hover:-translate-y-1">
+                <CardHeader className="p-6">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+                    <FaCode className="text-lg" />
+                  </div>
+                  <CardTitle className="text-base font-bold mb-2">Resilient Architecture</CardTitle>
+                  <CardDescription className="text-xs leading-relaxed">
+                    Powered by React 19, Supabase Realtime, and Edge Functions for near-instant response times and high availability.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              <Card className="bg-card border-border/80 hover:border-primary/50 transition-all hover:-translate-y-1">
+                <CardHeader className="p-6">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
+                    <FaLayerGroup className="text-lg" />
+                  </div>
+                  <CardTitle className="text-base font-bold mb-2">Multi-Platform Flavor</CardTitle>
+                  <CardDescription className="text-xs leading-relaxed">
+                    Unified multi-tenant codebase powering Alpha, Beta (Logistics), Gamma (Video), and Delta (Enterprise ERP) seamlessly.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              <Card className="bg-card border-border/80 hover:border-primary/50 transition-all hover:-translate-y-1">
+                <CardHeader className="p-6">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4">
+                    <FaBrain className="text-lg" />
+                  </div>
+                  <CardTitle className="text-base font-bold mb-2">AI-Augmented Workflows</CardTitle>
+                  <CardDescription className="text-xs leading-relaxed">
+                    Deep integration with agentic code intelligence, Obsidian knowledge management, and automated content operations.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* TOOLCHAIN & ENGINEERING STACK */}
+        <section className="py-16 md:py-24 border-b border-border/60 bg-muted/10">
+          <div className="site-wrap">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <Badge variant="outline" className="text-primary font-mono text-[10px] mb-3">ENGINEERING TOOLCHAIN</Badge>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                Modern Technologies in Active Production
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="p-5 rounded-2xl bg-card border border-border/80 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono font-bold text-primary">01 / FRONTEND</span>
+                    <Code2 className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="font-bold text-sm text-foreground mb-1">React 19 & Vite 8</h3>
+                  <p className="text-xs text-muted-foreground mb-4">Fast HMR development, optimized production trees, and modern hook lifecycle.</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="outline" className="text-[9px]">Tailwind CSS</Badge>
+                  <Badge variant="outline" className="text-[9px]">shadcn UI</Badge>
+                  <Badge variant="outline" className="text-[9px]">Radix</Badge>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-card border border-border/80 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono font-bold text-emerald-400">02 / BACKEND</span>
+                    <FaServer className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <h3 className="font-bold text-sm text-foreground mb-1">PostgreSQL & Supabase</h3>
+                  <p className="text-xs text-muted-foreground mb-4">Row-Level Security (RLS), real-time websockets, and managed storage buckets.</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="outline" className="text-[9px]">Realtime PubSub</Badge>
+                  <Badge variant="outline" className="text-[9px]">RLS Auth</Badge>
+                  <Badge variant="outline" className="text-[9px]">REST APIs</Badge>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-card border border-border/80 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono font-bold text-blue-400">03 / MOBILE NATIVE</span>
+                    <Laptop className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <h3 className="font-bold text-sm text-foreground mb-1">Capacitor Android</h3>
+                  <p className="text-xs text-muted-foreground mb-4">Native Android APK packaging with live server asset synchronization.</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="outline" className="text-[9px]">Android SDK</Badge>
+                  <Badge variant="outline" className="text-[9px]">Capacitor 6</Badge>
+                  <Badge variant="outline" className="text-[9px]">Offline Sync</Badge>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-card border border-border/80 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono font-bold text-indigo-400">04 / INTELLIGENCE</span>
+                    <Cpu className="w-4 h-4 text-indigo-400" />
+                  </div>
+                  <h3 className="font-bold text-sm text-foreground mb-1">AI Systems & Agents</h3>
+                  <p className="text-xs text-muted-foreground mb-4">Autonomous coding engines, computer vision analysis, and Obsidian graph sync.</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="outline" className="text-[9px]">Agentic AI</Badge>
+                  <Badge variant="outline" className="text-[9px]">Vision OCR</Badge>
+                  <Badge variant="outline" className="text-[9px]">Obsidian Hub</Badge>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* JOURNEY & TIMELINE */}
+        <section className="py-16 md:py-24 border-b border-border/60">
+          <div className="site-wrap max-w-4xl">
+            <div className="text-center mb-14">
+              <Badge variant="purple" className="mb-3">EVOLUTION</Badge>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                Studio Milestones & Timeline
+              </h2>
+            </div>
+
+            <div className="space-y-6">
+              <div className="p-6 rounded-2xl bg-card border border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/40 transition-colors">
+                <div className="flex items-start gap-4">
+                  <Badge variant="purple" className="font-mono text-xs py-1 px-3 mt-0.5 shrink-0">
+                    2023 — 2024
+                  </Badge>
+                  <div>
+                    <h3 className="font-bold text-base text-foreground mb-1">Foundations & Interactive UI/UX Design</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                      Created early design systems, bespoke UI components, and accessible interactive prototypes focusing on core performance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-card border border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/40 transition-colors">
+                <div className="flex items-start gap-4">
+                  <Badge variant="accent" className="font-mono text-xs py-1 px-3 mt-0.5 shrink-0">
+                    2025
+                  </Badge>
+                  <div>
+                    <h3 className="font-bold text-base text-foreground mb-1">Multi-Platform Flavors & Supabase RLS</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                      Architected 4-tenant platform architecture (Alpha, Beta, Gamma, Delta) with isolated data security and live backoffice management.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-card border border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/40 transition-colors">
+                <div className="flex items-start gap-4">
+                  <Badge variant="purple" className="font-mono text-xs py-1 px-3 mt-0.5 shrink-0">
+                    2026
+                  </Badge>
+                  <div>
+                    <h3 className="font-bold text-base text-foreground mb-1">Native Android App & AI Knowledge Sync</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                      Shipped native Capacitor Android APK, 75+ dynamic news publishing system, and synchronized Obsidian graph intelligence.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CALL TO ACTION */}
+        <section className="py-20 bg-gradient-to-b from-background via-primary/5 to-background">
+          <div className="site-wrap max-w-3xl text-center">
+            <Badge variant="purple" className="mb-4">LET'S COLLABORATE</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+              Have an ambitious idea or project in mind?
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base mb-8 max-w-xl mx-auto">
+              Whether you need modern web engineering, UI/UX design systems, or a multi-platform architecture, let's craft something memorable.
             </p>
-            <p style={{ marginTop: "1rem" }}>
-              What started as personal design explorations has evolved into a unified multi-tenant platform architecture, spanning web portals, real-time telemetry systems, and cross-platform native Android integration.
-            </p>
-          </div>
-          <div className="public-facts">
-            <div>
-              <strong>4+</strong>
-              <span>Years exploring</span>
-            </div>
-            <div>
-              <strong>20+</strong>
-              <span>Projects created</span>
-            </div>
-            <div>
-              <strong>∞</strong>
-              <span>Ideas in progress</span>
-            </div>
-          </div>
-        </section>
-
-        {/* PHILOSOPHY CARDS */}
-        <section className="about-detail-section">
-          <div className="section-header-centered">
-            <span className="public-label">PHILOSOPHY</span>
-            <h2>Core Principles & Design Craft</h2>
-          </div>
-          <div className="about-cards-grid">
-            <div className="about-card">
-              <div className="card-icon"><FaPalette /></div>
-              <h3>Clarity in Design</h3>
-              <p>Interfaces should reduce cognitive load, emphasizing clean typography, intentional negative space, and responsive micro-interactions.</p>
-            </div>
-            <div className="about-card">
-              <div className="card-icon"><FaCode /></div>
-              <h3>Resilient Architecture</h3>
-              <p>Built on modern React 19, Supabase PostgreSQL Row-Level Security (RLS), and zero-latency Edge caching for high-speed resilience.</p>
-            </div>
-            <div className="about-card">
-              <div className="card-icon"><FaLayerGroup /></div>
-              <h3>Multi-Platform Ecosystem</h3>
-              <p>Supporting multiple domain flavors and native mobile apps seamlessly within a single unified codebase.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* TECH STACK GRID */}
-        <section className="about-detail-section">
-          <div className="section-header-centered">
-            <span className="public-label">TOOLCHAIN</span>
-            <h2>Technologies & Stack</h2>
-          </div>
-          <div className="tech-stack-grid">
-            <div className="tech-item">
-              <FaCode className="tech-icon" />
-              <div>
-                <strong>Frontend</strong>
-                <span>React 19, Vite, Tailwind CSS, shadcn/ui</span>
-              </div>
-            </div>
-            <div className="tech-item">
-              <FaServer className="tech-icon" />
-              <div>
-                <strong>Backend & Data</strong>
-                <span>PostgreSQL, Supabase RLS, Edge Functions</span>
-              </div>
-            </div>
-            <div className="tech-item">
-              <FaMobileAlt className="tech-icon" />
-              <div>
-                <strong>Mobile Native</strong>
-                <span>Capacitor Android, Live Server Sync</span>
-              </div>
-            </div>
-            <div className="tech-item">
-              <FaBrain className="tech-icon" />
-              <div>
-                <strong>Intelligence</strong>
-                <span>Agentic AI Workflows, Obsidian Knowledge Sync</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* TIMELINE */}
-        <section className="about-detail-section" style={{ paddingBottom: "120px" }}>
-          <div className="section-header-centered">
-            <span className="public-label">EVOLUTION</span>
-            <h2>Milestones & Journey</h2>
-          </div>
-          <div className="timeline-list">
-            <div className="timeline-item">
-              <div className="timeline-badge">2023 — 2024</div>
-              <div className="timeline-content">
-                <h4>Foundations & UI/UX Explorations</h4>
-                <p>Created early interactive prototypes, design systems, and component libraries focusing on web performance.</p>
-              </div>
-            </div>
-            <div className="timeline-item">
-              <div className="timeline-badge">2025</div>
-              <div className="timeline-content">
-                <h4>Multi-Platform Flavoring & Supabase RLS</h4>
-                <p>Architected 4-tenant platforms with isolated data security, realtime synchronization, and backoffice controls.</p>
-              </div>
-            </div>
-            <div className="timeline-item">
-              <div className="timeline-badge">2026</div>
-              <div className="timeline-content">
-                <h4>Native Mobile APK & AI Knowledge Sync</h4>
-                <p>Launched Capacitor Android release and integrated live sync with Obsidian intelligence systems.</p>
-              </div>
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              <Button asChild size="lg" className="font-bold gap-2 rounded-xl shadow-lg">
+                <Link to="/contact">
+                  <span>Start a Conversation</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="font-bold rounded-xl">
+                <Link to="/projects">
+                  <span>Browse Portfolio</span>
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
