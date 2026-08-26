@@ -463,13 +463,15 @@ export default function LandingPage() {
         const liveProjects = await fetchCollection("projects");
         if (liveProjects && liveProjects.length > 0) {
           setProjectsList(liveProjects.map((p, idx) => ({
-            number: String(idx + 1).padStart(2, "0"),
+            id: p.id || `proj-${idx + 1}`,
+            number: p.number || String(idx + 1).padStart(2, "0"),
             slug: p.slug,
-            type: p.type || "Web application",
-            category: (p.type || "").toLowerCase().includes("design") ? "design" : (p.type || "").toLowerCase().includes("digital") ? "digital" : "web",
+            type: p.type || "Web Application",
+            category: p.category || ((p.type || "").toLowerCase().includes("design") ? "design" : (p.type || "").toLowerCase().includes("digital") ? "digital" : "web"),
             title: p.title,
             description: p.description,
-            tags: [p.type || "Web", p.status || "Published", ...(p.tags || [])],
+            image_url: p.image_url || p.cover_url || `/project-${(idx % 6) + 1}.png`,
+            tags: Array.isArray(p.tags) ? p.tags : (typeof p.tags === 'string' ? p.tags.split(',').map(t => t.trim()) : [p.type || "Web", p.status || "Published"]),
             className: idx % 3 === 0 ? "project-orbit" : idx % 3 === 1 ? "project-frame" : "project-mono",
             stats: p.stats || "Featured Project",
           })));
