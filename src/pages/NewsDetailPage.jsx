@@ -73,24 +73,15 @@ export default function NewsDetailPage() {
     loadData();
   }, [id]);
 
-  const article = allArticles.find((a) => 
-    a.slug === id || 
-    a.id === id || 
-    (Array.isArray(a.old_slugs) && a.old_slugs.includes(id))
-  );
+  const article = allArticles.find((a) => a.slug === id || a.id === id);
 
   useEffect(() => {
     if (article) {
       document.title = `${article.title} — Desktopalie News`;
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.content = article.summary || "";
-
-      // Auto-canonicalize / callback URL to follow current title slug
-      if (article.slug && id !== article.slug) {
-        navigate(`/news/${article.slug}`, { replace: true });
-      }
     }
-  }, [article, id, navigate]);
+  }, [article]);
 
   // If article not found, find by index or fallback
   const currentIndex = article ? allArticles.findIndex((a) => a.id === article.id) : -1;

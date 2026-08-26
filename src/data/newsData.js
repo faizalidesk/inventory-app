@@ -53,11 +53,7 @@ export const NEWS_ARTICLES = [
     "image_url": "",
     "created_at": "2026-08-24T08:45:24.735Z",
     "updated_at": "2026-08-26T01:49:29.289Z",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "evolusi-desktopalie-transformasi-ekosistem-digital-kreatif-menuju-integrasi-ai",
-      "news-1787561124735"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-01",
@@ -73,10 +69,7 @@ export const NEWS_ARTICLES = [
     "readTime": "2 mnt baca",
     "image_url": "",
     "updated_at": "2026-08-24T09:21:05.078Z",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-01"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "ben-02",
@@ -92,10 +85,7 @@ export const NEWS_ARTICLES = [
     "readTime": "1 mnt baca",
     "image_url": "",
     "updated_at": "2026-08-24T09:53:43.060Z",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-02"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "pen-01",
@@ -111,10 +101,7 @@ export const NEWS_ARTICLES = [
     "readTime": "1 mnt baca",
     "image_url": "",
     "updated_at": "2026-08-24T09:54:31.970Z",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-01"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pol-01",
@@ -127,10 +114,7 @@ export const NEWS_ARTICLES = [
     "summary": "Regulasi baru perkuat otoritas independen pengawas data pribadi serta sanksi denda maksimal bagi institusi pelanggar.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-01"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "krim-01",
@@ -143,10 +127,7 @@ export const NEWS_ARTICLES = [
     "summary": "Sebanyak 35 tersangka diamankan dari berbagai lokasi markas siber dengan barang bukti ratusan ponsel dan server kripto.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-01"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "tek-02",
@@ -162,10 +143,7 @@ export const NEWS_ARTICLES = [
     "readTime": "2 mnt baca",
     "image_url": "",
     "updated_at": "2026-08-24T09:22:37.933Z",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-02"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "news-1787558570579",
@@ -182,10 +160,7 @@ export const NEWS_ARTICLES = [
     "image_url": "",
     "created_at": "2026-08-24T08:02:50.579Z",
     "updated_at": "2026-08-24T09:18:34.681Z",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "news-1787558570579"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-03",
@@ -199,10 +174,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pusat komputasi berkinerja tinggi berbasis GPU generasi terbaru kini mendukung riset bioteknologi dan simulasi anomali cuaca ekstrem.",
     "category": "teknologi",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-03"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-04",
@@ -216,10 +188,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penerapan latensi ultra-rendah 5G SA memungkinkan integrasi robotik AGV dan computer vision real-time pada manufaktur otomotif.",
     "category": "teknologi",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-04"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-05",
@@ -233,10 +202,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kolaborasi peneliti lokal dan mitra global melahirkan desain mikrokontroler hemat daya untuk sensor pertanian dan mitigasi bencana.",
     "category": "teknologi",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-05"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-06",
@@ -250,10 +216,7 @@ export const NEWS_ARTICLES = [
     "summary": "Regulasi panduan transparansi algoritma kredit dan pencegahan bias data diskriminatif resmi diberlakukan bagi fintech dan perbankan.",
     "category": "teknologi",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-06"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-07",
@@ -267,10 +230,7 @@ export const NEWS_ARTICLES = [
     "summary": "Teknologi NLP mutakhir kini mampu menerjemahkan sastra dan percakapan bahasa lokal secara akurat dan bernilai pelestarian budaya.",
     "category": "teknologi",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-07"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "tek-08",
@@ -284,10 +244,7 @@ export const NEWS_ARTICLES = [
     "summary": "Jaringan listrik pintar berbasis sensor otomatis dan pembangkit surya terdistribusi memastikan suplai listrik hijau tanpa kedip.",
     "category": "teknologi",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Teknologi",
-    "old_slugs": [
-      "tek-08"
-    ]
+    "categoryLabel": "Teknologi"
   },
   {
     "id": "ben-01",
@@ -300,10 +257,7 @@ export const NEWS_ARTICLES = [
     "summary": "Jaringan kabel optik bawah laut dan pelampung Ina-TEWS diperkuat untuk mendeteksi potensi gelombang tsunami dalam hitungan detik.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-01"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-03",
@@ -316,10 +270,7 @@ export const NEWS_ARTICLES = [
     "summary": "Dapur umum, air bersih, dan layanan trauma healing didistribusikan ke posko pengungsian warga terdampak luapan sungai.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-03"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-04",
@@ -332,10 +283,7 @@ export const NEWS_ARTICLES = [
     "summary": "BMKG meminta pemerintah daerah di wilayah rawan hidrometeorologi meningkatkan kapasitas drainase dan tanggul sungai.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-04"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-05",
@@ -348,10 +296,7 @@ export const NEWS_ARTICLES = [
     "summary": "Sensor pergerakan tanah otomatis berbasis telemetri dipasang untuk melindungi permukiman warga di kawasan perbukitan terjal.",
     "category": "bencana",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-05"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-06",
@@ -364,10 +309,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penyemaian garam higroskopis oleh TNI AU dan BRIN di awan konvektif sukses mengalihkan potensi banjir besar di wilayah hilir.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-06"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-07",
@@ -380,10 +322,7 @@ export const NEWS_ARTICLES = [
     "summary": "Latihan kesiapsiagaan serentak digelar untuk melatih respon cepat menuju Tempat Evakuasi Sementara (TES) dalam 15 menit.",
     "category": "bencana",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-07"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-08",
@@ -396,10 +335,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penanaman bibit bakau berakar tunjang kuat dipercepat sebagai benteng alami penahan gelombang pasang air laut.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-08"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-09",
@@ -412,10 +348,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pemadaman udara difokuskan pada titik panas terisolir untuk mencegah asap lintas batas menyelimuti wilayah permukiman.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-09"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-10",
@@ -428,10 +361,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penempatan stasiun seismometer mikro densitas tinggi memastikan rekaman pergerakan mikro-tektonik dapat dianalisis secara akurat.",
     "category": "bencana",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-10"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-11",
@@ -444,10 +374,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kombinasi tanggul laut terpadu dengan tol laut mampu melindungi ribuan hektare kawasan industri dan perumahan warga.",
     "category": "bencana",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-11"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-12",
@@ -460,10 +387,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pemerintah sediakan rumah tahan gempa tipe 36 lengkap dengan fasilitas air bersih, listrik, dan puskesmas pembantu.",
     "category": "bencana",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-12"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-13",
@@ -476,10 +400,7 @@ export const NEWS_ARTICLES = [
     "summary": "Tiga rangkaian sabo dam baru di Daerah Aliran Sungai Besuk Kobokan mampu membendung hingga 1,5 juta meter kubik material lahar.",
     "category": "bencana",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-13"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-14",
@@ -492,10 +413,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pakar meteorologi dunia ingatkan dampak pemanasan global terhadap ekosistem terumbu karang dan anomali badai laut tropis.",
     "category": "bencana",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-14"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "ben-15",
@@ -508,10 +426,7 @@ export const NEWS_ARTICLES = [
     "summary": "Platform ponsel pintar memandu warga menuju titik kumpul terdekat secara offline tanpa membutuhkan koneksi seluler aktif.",
     "category": "bencana",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Bencana",
-    "old_slugs": [
-      "ben-15"
-    ]
+    "categoryLabel": "Bencana"
   },
   {
     "id": "pen-02",
@@ -524,10 +439,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pembelajaran logika komputasional interaktif berbasis permainan edukatif disiapkan untuk mengasah daya kritis generasi penerus.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-02"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-03",
@@ -540,10 +452,7 @@ export const NEWS_ARTICLES = [
     "summary": "Sebanyak 3.500 beasiswa magister dan doktoral ke perguruan tinggi top dunia disiapkan untuk riset bioteknologi dan transisi energi.",
     "category": "pendidikan",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-03"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-04",
@@ -556,10 +465,7 @@ export const NEWS_ARTICLES = [
     "summary": "Program link and match kurikulum industri memastikan 85% lulusan SMK langsung terserap di pasar kerja profesional berstandar internasional.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-04"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-05",
@@ -572,10 +478,7 @@ export const NEWS_ARTICLES = [
     "summary": "Peningkatan dana hibah riset dan fasilitas laboratorium bersama mendorong lonjakan publikasi ilmiah bereputasi tinggi.",
     "category": "pendidikan",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-05"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-06",
@@ -588,10 +491,7 @@ export const NEWS_ARTICLES = [
     "summary": "Papan tulis interaktif bertenaga surya dengan ribuan konten e-book dan video eksperimen sains tiba di kepulauan terluar.",
     "category": "pendidikan",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-06"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-07",
@@ -604,10 +504,7 @@ export const NEWS_ARTICLES = [
     "summary": "Sertifikasi pendidik menekankan metode pengajaran berdiferensiasi untuk mendampingi siswa dengan kebutuhan khusus.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-07"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-08",
@@ -620,10 +517,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kolaborasi riset antara universitas dan sektor swasta menghasilkan hilirisasi 150 produk paten komersial bernilai tinggi.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-08"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-09",
@@ -636,10 +530,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kampus berkonsep Smart Forest University siap menampung 10.000 mahasiswa dengan fakultas masa depan dan riset antariksa.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-09"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-10",
@@ -652,10 +543,7 @@ export const NEWS_ARTICLES = [
     "summary": "Sertifikasi keahlian spesifik jangka pendek diakui setara dengan 20 SKS perkuliahan reguler di berbagai perguruan tinggi.",
     "category": "pendidikan",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-10"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-11",
@@ -668,10 +556,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pemberian asupan gizi seimbang harian di sekolah dasar menurunkan angka stunting dan meningkatkan skor tes pemahaman literasi.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-11"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-12",
@@ -684,10 +569,7 @@ export const NEWS_ARTICLES = [
     "summary": "Satgas Pencegahan Kekerasan dibentuk di setiap satuan pendidikan dengan saluran pengaduan aman dan rahasia bagi murid.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-12"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-13",
@@ -700,10 +582,7 @@ export const NEWS_ARTICLES = [
     "summary": "Mahasiswa teknik penerbangan rancang satelit kubus (CubeSat) untuk mendeteksi perubahan suhu lapisan atmosfer atas bumi.",
     "category": "pendidikan",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-13"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-14",
@@ -716,10 +595,7 @@ export const NEWS_ARTICLES = [
     "summary": "Akses tanpa batas ke jutaan buku referensi internasional, jurnal sains, dan audio book kini dapat dinikmati seluruh pelajar.",
     "category": "pendidikan",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-14"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pen-15",
@@ -732,10 +608,7 @@ export const NEWS_ARTICLES = [
     "summary": "Sistem pendidikan kedokteran berbasis rumah sakit (hospital-based) resmi dibuka untuk mencetak dokter spesialis daerah.",
     "category": "pendidikan",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Pendidikan",
-    "old_slugs": [
-      "pen-15"
-    ]
+    "categoryLabel": "Pendidikan"
   },
   {
     "id": "pol-02",
@@ -748,10 +621,7 @@ export const NEWS_ARTICLES = [
     "summary": "Fokus utama kebijakan mencakup swasembada pangan, percepatan hilirisasi industri, serta peningkatan kualitas SDM nasional.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-02"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-03",
@@ -764,10 +634,7 @@ export const NEWS_ARTICLES = [
     "summary": "Tingkat partisipasi pemilih tercatat tinggi, KPU persiapkan sistem rekapitulasi elektronik transparan berbasis blockchain.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-03"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-04",
@@ -780,10 +647,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kesepakatan bilateral mencakup pembangunan pabrik panel surya efisiensi tinggi dan rantai pasok mineral kritis berkelanjutan.",
     "category": "politik",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-04"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-05",
@@ -796,10 +660,7 @@ export const NEWS_ARTICLES = [
     "summary": "KemenPAN-RB umumkan digitalisasi 90% proses izin perizinan usaha dan layanan kepegawaian aparatur sipil negara.",
     "category": "politik",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-05"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-06",
@@ -812,10 +673,7 @@ export const NEWS_ARTICLES = [
     "summary": "Putusan MK menegaskan bahwa penetapan ambang batas parlemen dan teknis pemilihan merupakan ranah open legal policy pembuat UU.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-06"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-07",
@@ -828,10 +686,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penerimaan perpajakan dan PNBP melampaui target berkat stabilnya konsumsi domestik dan ekspor manufaktur bernilai tambah.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-07"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-08",
@@ -844,10 +699,7 @@ export const NEWS_ARTICLES = [
     "summary": "Integrasi e-Katalog LKPP dengan sistem audit AI forensik KPK berhasil mendeteksi dini potensi penggelembungan harga anggaran.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-08"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-09",
@@ -860,10 +712,7 @@ export const NEWS_ARTICLES = [
     "summary": "Infrastruktur gedung perkantoran ramah lingkungan dengan sertifikasi Green Building Platinum siap digunakan aparatur negara.",
     "category": "politik",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-09"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-10",
@@ -876,10 +725,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pengamat politik apresiasi kedewasaan masyarakat dalam menyikapi dinamika kontestasi kepemimpinan daerah secara damai.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-10"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-11",
@@ -892,10 +738,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pengawasan ketat melalui portal aduan publik berbasis daring tindak lanjuti setiap laporan dugaan pelanggaran netralitas.",
     "category": "politik",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-11"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-12",
@@ -908,10 +751,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penghapusan tarif bea masuk untuk produk kelapa sawit bersertifikasi, tekstil, dan nikel membuka akses pasar luas di Eropa.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-12"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-13",
@@ -924,10 +764,7 @@ export const NEWS_ARTICLES = [
     "summary": "Payung hukum kepastian investasi properti dan industri komersial di ibu kota baru memberikan insentif pajak hingga 30 tahun.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-13"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-14",
@@ -940,10 +777,7 @@ export const NEWS_ARTICLES = [
     "summary": "Diplomasi aktif Indonesia di Dewan Keamanan PBB konsisten menyuarakan bantuan kemanusiaan dan solusi dua negara.",
     "category": "politik",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-14"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "pol-15",
@@ -956,10 +790,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kajian strategis berkala berfokus pada ketahanan rantai pasok pangan domestik dan peningkatan pendapatan per kapita rakyat.",
     "category": "politik",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Politik",
-    "old_slugs": [
-      "pol-15"
-    ]
+    "categoryLabel": "Politik"
   },
   {
     "id": "krim-02",
@@ -972,10 +803,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penyitaan mencakup puluhan unit properti mewah, kendaraan sport, dan rekening giro korporasi yang terafiliasi.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-02"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-03",
@@ -988,10 +816,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penyebaran file APK palsu berkedok undangan pernikahan dan tagihan kurir berhasil diblokir sebelum menjebol rekening nasabah.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-03"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-04",
@@ -1004,10 +829,7 @@ export const NEWS_ARTICLES = [
     "summary": "Penyelundupan sabu kristal dan ekstasi kualitas tinggi digagalkan berkat koordinasi intelijen bea cukai dan kepolisian.",
     "category": "kriminal",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-04"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-05",
@@ -1020,10 +842,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kolaborasi PPATK, OJK, dan Komkomdigi tutup akses perputaran uang haram dan seret operator bandar ke pengadilan.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-05"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-06",
@@ -1036,10 +855,7 @@ export const NEWS_ARTICLES = [
     "summary": "Calon pekerja migran non-prosedural yang hendak diberangkatkan ke kasino online ilegal berhasil dievakuasi di pelabuhan tikus.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-06"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-07",
@@ -1052,10 +868,7 @@ export const NEWS_ARTICLES = [
     "summary": "Aparat amankan 40 ton solar bersubsidi yang dimodifikasi menggunakan truk tangki siluman untuk dijual ke industri tambang liar.",
     "category": "kriminal",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-07"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-08",
@@ -1068,10 +881,7 @@ export const NEWS_ARTICLES = [
     "summary": "Terdakwa terbukti menjalankan skema ponzi berkedok trading komoditas emas yang merugikan 1.500 nasabah hingga Rp350 miliar.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-08"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-09",
@@ -1084,10 +894,7 @@ export const NEWS_ARTICLES = [
     "summary": "Uang tunai Rp3,5 miliar dalam koper disita saat operasi tangkap tangan pejabat dinas pekerjaan umum dan kontraktor swasta.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-09"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-10",
@@ -1100,10 +907,7 @@ export const NEWS_ARTICLES = [
     "summary": "Puluhan akun bot media sosial yang secara terstruktur memproduksi video deepfake bermuatan provokasi berhasil dinonaktifkan.",
     "category": "kriminal",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-10"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-11",
@@ -1116,10 +920,7 @@ export const NEWS_ARTICLES = [
     "summary": "Buronan kasus pembobolan kas bank pelat merah senilai Rp80 miliar berhasil diringkus berkat koordinasi Red Notice Interpol.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-11"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-12",
@@ -1132,10 +933,7 @@ export const NEWS_ARTICLES = [
     "summary": "Pelaku menyebarkan link web tiruan (website spoofing) yang mirip dengan tampilan portal pembayaran marketplace terkemuka.",
     "category": "kriminal",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-12"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-13",
@@ -1148,10 +946,7 @@ export const NEWS_ARTICLES = [
     "summary": "Majelis hakim batalkan puluhan sertifikat palsu yang diterbitkan sindikat oknum notaris dan mantan pegawai agraria.",
     "category": "kriminal",
     "readTime": "5 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-13"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-14",
@@ -1164,10 +959,7 @@ export const NEWS_ARTICLES = [
     "summary": "Kapal cepat (high-speed craft) tanpa izin manifes dicegat saat berlayar di perairan gelap Selat Malaka menuju pelabuhan tikus.",
     "category": "kriminal",
     "readTime": "4 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-14"
-    ]
+    "categoryLabel": "Kriminal"
   },
   {
     "id": "krim-15",
@@ -1180,9 +972,6 @@ export const NEWS_ARTICLES = [
     "summary": "Penyisiran titik rawan begal dan balap liar di malam hari oleh tim patroli gabungan berhasil ciptakan rasa aman bagi warga.",
     "category": "kriminal",
     "readTime": "3 mnt baca",
-    "categoryLabel": "Kriminal",
-    "old_slugs": [
-      "krim-15"
-    ]
+    "categoryLabel": "Kriminal"
   }
 ];
