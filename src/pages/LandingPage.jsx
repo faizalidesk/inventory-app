@@ -114,55 +114,50 @@ const extractArticleImage = (article) => {
 
 const PROJECTS = [
   {
+    id: "proj-2",
     number: "01",
-    slug: "orbit-analytics",
-    type: "Web Application",
-    category: "web",
-    title: "Orbit Analytics",
-    description: "A focused analytics experience that turns complex product data into clear, useful decisions.",
-    tags: ["React 19", "Data Visualization", "Product Design", "Supabase"],
-    image_url: "/project-1.png",
-    className: "project-orbit",
-    stats: "99.8% Uptime • Realtime Sync",
-  },
-  {
-    number: "02",
-    slug: "frame-archive",
+    slug: "bio-link-latsuborn",
     type: "Digital Experience",
     category: "digital",
-    title: "Frame Archive",
+    title: "Bio Link Latsuborn",
     description: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
-    tags: ["Creative Development", "UI/UX", "Motion", "Tailwind CSS"],
+    tags: ["Creative Development", "UI/UX Design", "Motion", "Tailwind CSS"],
     image_url: "/project-2.png",
     className: "project-frame",
     stats: "60 FPS Animations • Fluid UX",
+    status: "Published",
   },
   {
-    number: "03",
-    slug: "mono-systems",
+    id: "proj-3",
+    number: "02",
+    slug: "design-product",
     type: "Design Systems",
     category: "design",
-    title: "Mono Systems",
+    title: "Design Product",
     description: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
     tags: ["Design System", "shadcn UI", "Art Direction", "Figma Tokens"],
     image_url: "/project-3.png",
     className: "project-mono",
     stats: "30+ Components • Multi-theme",
+    status: "Published",
   },
   {
-    number: "04",
-    slug: "fleet-telemetry-beta",
+    id: "proj-4",
+    number: "03",
+    slug: "design-media-interactive",
     type: "Logistics & Telemetry",
     category: "web",
-    title: "Fleet Telemetry Beta",
+    title: "Design media interactive",
     description: "Real-time cold-chain vehicle tracking and distance matrix route calculations for modern distribution fleets.",
     tags: ["IoT Telemetry", "Distance Matrix", "Route Optimization", "Live GPS"],
     image_url: "/project-4.png",
     className: "project-orbit",
     stats: "Sub-second Latency • IoT Sync",
+    status: "Published",
   },
   {
-    number: "05",
+    id: "proj-5",
+    number: "04",
     slug: "video-intelligence-gamma",
     type: "AI & Video Cloud",
     category: "digital",
@@ -172,18 +167,35 @@ const PROJECTS = [
     image_url: "/project-5.png",
     className: "project-frame",
     stats: "4K 60fps Transcode • AI Vision",
+    status: "Published",
   },
   {
-    number: "06",
-    slug: "enterprise-erp-delta",
+    id: "proj-6",
+    number: "05",
+    slug: "foto-cooperation",
     type: "Enterprise Suite",
     category: "design",
-    title: "Enterprise ERP Delta",
+    title: "Foto Cooperation",
     description: "Unified enterprise resource management system featuring intelligent OCR document scanning and automated ledger accounting.",
     tags: ["OCR Scanner", "Multi-tenant", "Automated Invoicing", "RBAC Auth"],
     image_url: "/project-6.png",
     className: "project-mono",
     stats: "99.9% Accuracy • Multi-tenant",
+    status: "Published",
+  },
+  {
+    id: "proj-1",
+    number: "06",
+    slug: "bio-link-multimedia",
+    type: "Web Application",
+    category: "web",
+    title: "Bio Link Multimedia",
+    description: "A focused analytics experience that turns complex product data into clear, useful decisions with sub-second queries.",
+    tags: ["React 19", "Data Visualization", "Product Design", "Supabase"],
+    image_url: "https://nxuumfzpmvolcnswfsqz.supabase.co/storage/v1/object/public/workspace-media/projects/1787725993872_yq7nnv.jpg",
+    className: "project-orbit",
+    stats: "99.8% Uptime • Realtime Sync",
+    status: "Published",
   },
 ];
 
@@ -372,7 +384,24 @@ const DEFAULT_LANDING_CONTENT = {
 export default function LandingPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const [projectsList, setProjectsList] = useState(PROJECTS);
+  const [projectsList, setProjectsList] = useState(() => {
+    try {
+      const cached = localStorage.getItem("desktopalie_projects_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.filter(p => {
+            const st = (p.status || "Published").toLowerCase();
+            return st !== "unpublished" && st !== "draft" && st !== "archived";
+          });
+        }
+      }
+    } catch (e) {}
+    return PROJECTS.filter(p => {
+      const st = (p.status || "Published").toLowerCase();
+      return st !== "unpublished" && st !== "draft" && st !== "archived";
+    });
+  });
   const [newsList, setNewsList] = useState(() => {
     try {
       const cached = localStorage.getItem("desktopalie_news_cache");
@@ -397,7 +426,6 @@ export default function LandingPage() {
     } catch (e) {}
     return NEWS_ARTICLES[0];
   });
-  const [isShufflingNews, setIsShufflingNews] = useState(false);
   const [activeProjectTab, setActiveProjectTab] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -486,7 +514,7 @@ export default function LandingPage() {
             const st = (p.status || "Published").toLowerCase();
             return st !== "unpublished" && st !== "draft" && st !== "archived";
           });
-          setProjectsList(visibleProjects.map((p, idx) => ({
+          const mapped = visibleProjects.map((p, idx) => ({
             id: p.id || `proj-${idx + 1}`,
             number: p.number || String(idx + 1).padStart(2, "0"),
             slug: p.slug,
@@ -498,7 +526,12 @@ export default function LandingPage() {
             tags: Array.isArray(p.tags) ? p.tags : (typeof p.tags === 'string' ? p.tags.split(',').map(t => t.trim()) : [p.type || "Web", p.status || "Published"]),
             className: idx % 3 === 0 ? "project-orbit" : idx % 3 === 1 ? "project-frame" : "project-mono",
             stats: p.stats || "Featured Project",
-          })));
+            status: p.status || "Published",
+          }));
+          setProjectsList(mapped);
+          try {
+            localStorage.setItem("desktopalie_projects_cache", JSON.stringify(mapped));
+          } catch (e) {}
         }
       } catch (e) {
         console.error("Error loading projects for landing:", e);
@@ -511,8 +544,7 @@ export default function LandingPage() {
           const publishedNews = liveNews.filter(a => (a.status || "Published") === "Published");
           if (publishedNews.length > 0) {
             setNewsList(publishedNews);
-            const randomIndex = Math.floor(Math.random() * publishedNews.length);
-            setHighlightedNews(publishedNews[randomIndex] || publishedNews[0]);
+            setHighlightedNews(publishedNews[0]);
             try {
               localStorage.setItem("desktopalie_news_cache", JSON.stringify(publishedNews));
             } catch (e) {}
@@ -540,6 +572,33 @@ export default function LandingPage() {
             if (payload.new.key === "maintenance") {
               const val = typeof payload.new.value === "string" ? JSON.parse(payload.new.value) : payload.new.value;
               setMaintenance(val);
+            }
+            if (payload.new.key === "projects_data") {
+              const val = typeof payload.new.value === "string" ? JSON.parse(payload.new.value) : payload.new.value;
+              if (Array.isArray(val)) {
+                const visible = val.filter(p => {
+                  const st = (p.status || "Published").toLowerCase();
+                  return st !== "unpublished" && st !== "draft" && st !== "archived";
+                });
+                const mapped = visible.map((p, idx) => ({
+                  id: p.id || `proj-${idx + 1}`,
+                  number: p.number || String(idx + 1).padStart(2, "0"),
+                  slug: p.slug,
+                  type: p.type || "Web Application",
+                  category: p.category || ((p.type || "").toLowerCase().includes("design") ? "design" : (p.type || "").toLowerCase().includes("digital") ? "digital" : "web"),
+                  title: p.title,
+                  description: p.description,
+                  image_url: p.image_url || p.cover_url || `/project-${(idx % 6) + 1}.png`,
+                  tags: Array.isArray(p.tags) ? p.tags : (typeof p.tags === 'string' ? p.tags.split(',').map(t => t.trim()) : [p.type || "Web", p.status || "Published"]),
+                  className: idx % 3 === 0 ? "project-orbit" : idx % 3 === 1 ? "project-frame" : "project-mono",
+                  stats: p.stats || "Featured Project",
+                  status: p.status || "Published",
+                }));
+                setProjectsList(mapped);
+                try {
+                  localStorage.setItem("desktopalie_projects_cache", JSON.stringify(mapped));
+                } catch (e) {}
+              }
             }
           }
         }
@@ -621,18 +680,6 @@ export default function LandingPage() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleShuffleNews = () => {
-    setIsShufflingNews(true);
-    setTimeout(() => {
-      let nextIndex;
-      do {
-        nextIndex = Math.floor(Math.random() * newsList.length);
-      } while (newsList.length > 1 && newsList[nextIndex]?.id === highlightedNews?.id);
-      setHighlightedNews(newsList[nextIndex] || newsList[0]);
-      setIsShufflingNews(false);
-    }, 150);
   };
 
   const getCategoryIcon = (categoryId) => {
@@ -908,16 +955,6 @@ export default function LandingPage() {
                 </div>
                 
                 <div className="flex items-center gap-3 flex-wrap">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleShuffleNews}
-                    className="gap-2 font-bold hover:border-primary/50 text-xs cursor-pointer shadow-xs rounded-xl h-9"
-                  >
-                    <Sparkles className={`w-3.5 h-3.5 text-primary ${isShufflingNews ? "animate-spin" : ""}`} />
-                    <span>Shuffle Spotlight 🎲</span>
-                  </Button>
                   <Button asChild variant="default" size="sm" className="gap-2 font-bold shadow-xs text-xs cursor-pointer rounded-xl h-9">
                     <Link to="/news">
                       <Newspaper className="w-3.5 h-3.5" />
