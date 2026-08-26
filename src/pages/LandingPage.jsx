@@ -336,6 +336,16 @@ function ThemeIcon({ theme }) {
 }
 
 const DEFAULT_LANDING_CONTENT = {
+  show_hero: true,
+  show_work: true,
+  show_about: true,
+  show_capabilities: true,
+  show_workflow: true,
+  show_news: true,
+  show_faq: true,
+  show_contact: true,
+
+  availability_badge: "AVAILABLE FOR Q1/Q2",
   hero_badge: "INDEPENDENT DESIGNER & DEVELOPER",
   hero_title: "Ideas, crafted into digital experiences.",
   hero_description: "Desktopalie is my personal space for projects, experiments, and digital creationsâ€”documenting my journey through web development, UI/UX design, and modern technology.",
@@ -701,6 +711,7 @@ export default function LandingPage() {
 
         <main id="top">
           {/* 2. HERO SECTION WITH SHADCN UI BADGES, BUTTONS & INTERACTIVE TABS */}
+          {landingContent.show_hero !== false && (
           <section className="hero-section">
             <div className="hero-glow hero-glow-one" aria-hidden="true" />
             <div className="hero-glow hero-glow-two" aria-hidden="true" />
@@ -859,8 +870,10 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* 3. HIGHLIGHT 1 BERITA PILIHAN (DIPILIH SECARA ACAK SETIAP REFRESH) */}
+          {landingContent.show_news !== false && (
           <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="news-highlight">
             <div className="site-wrap">
               {/* Section Header */}
@@ -993,8 +1006,10 @@ export default function LandingPage() {
               )}
             </div>
           </section>
+          )}
 
           {/* 4. SELECTED WORK / PROJECTS SECTION WITH SHADCN TABS, CARDS & MODAL DIALOG */}
+          {landingContent.show_work !== false && (
           <section className="section" id="work">
             <div className="site-wrap">
               <div className="section-heading split-heading">
@@ -1096,6 +1111,7 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* PROJECT QUICK VIEW MODAL (SHADCN DIALOG) */}
           <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
@@ -1148,6 +1164,7 @@ export default function LandingPage() {
           </Dialog>
 
           {/* 5. ABOUT SECTION WITH SHADCN CARDS, TABS & STATS */}
+          {landingContent.show_about !== false && (
           <section className="section about-section" id="about">
             <div className="site-wrap about-grid">
               <div className="about-visual group">
@@ -1226,8 +1243,10 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* 6. CAPABILITIES SECTION WITH SHADCN CARDS & FEATURE LISTS */}
+          {landingContent.show_capabilities !== false && (
           <section className="section" id="capabilities">
             <div className="site-wrap">
               <div className="section-heading centered-heading text-center flex flex-col items-center justify-center mx-auto">
@@ -1283,8 +1302,10 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* 7. NEW SECTION: WORKFLOW PROCESS & FAQ WITH SHADCN ACCORDIONS */}
+          {(landingContent.show_workflow !== false || landingContent.show_faq !== false) && (
           <section className="section bg-card/30 border-y border-border/60" id="workflow">
             <div className="site-wrap">
               <div className="section-heading split-heading">
@@ -1348,8 +1369,10 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* 8. CONTACT SECTION WITH SHADCN CARD, BUTTONS, EMAIL COPY & INQUIRY MODAL */}
+          {landingContent.show_contact !== false && (
           <section className="contact-section relative overflow-hidden" id="contact">
             <div className="site-wrap contact-inner">
               <Badge variant="pulse" className="mb-4">HAVE AN IDEA?</Badge>
@@ -1440,6 +1463,7 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          )}
         </main>
 
         {/* 9. FOOTER WITH SHADCN SEPARATOR, TOOLTIPS & BACK TO TOP BUTTON */}
