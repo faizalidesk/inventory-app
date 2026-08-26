@@ -191,7 +191,7 @@ export default function NewsPage() {
                       <span className="text-xs font-mono text-muted-foreground">• {heroArticle.readTime}</span>
                     </div>
 
-                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="no-underline text-foreground block mb-3 sm:mb-3.5">
+                    <Link to={`/news/${heroArticle.slug || heroArticle.id}`} className="no-underline text-foreground block mb-3 sm:mb-3.5">
                       <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                         {heroArticle.title}
                       </h3>
@@ -204,7 +204,7 @@ export default function NewsPage() {
 
                   {/* HERO ARTICLE IMAGE BANNER */}
                   {extractArticleImage(heroArticle) && (
-                    <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="block relative w-full h-52 sm:h-72 rounded-xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
+                    <Link to={`/news/${heroArticle.slug || heroArticle.id}`} className="block relative w-full h-52 sm:h-72 rounded-xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
                       <img
                         src={extractArticleImage(heroArticle)}
                         alt={heroArticle.title}
@@ -224,7 +224,7 @@ export default function NewsPage() {
                     <Calendar className="w-3.5 h-3.5" />
                     <span>{heroArticle.date}</span>
                   </div>
-                  <Link to={`/news/${heroArticle.id || heroArticle.slug}`} className="font-bold text-primary flex items-center gap-1 hover:gap-2 transition-all no-underline ml-auto">
+                  <Link to={`/news/${heroArticle.slug || heroArticle.id}`} className="font-bold text-primary flex items-center gap-1 hover:gap-2 transition-all no-underline ml-auto">
                     Baca Selengkapnya <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -237,7 +237,7 @@ export default function NewsPage() {
                   return (
                     <Link 
                       key={item.id || idx} 
-                      to={`/news/${item.id || item.slug}`} 
+                      to={`/news/${item.slug || item.id}`} 
                       className="bg-card/40 backdrop-blur-xs border border-border/70 rounded-xl p-4 sm:p-5 hover:border-primary/50 transition-all group flex flex-col justify-between no-underline overflow-hidden"
                     >
                       <div>
@@ -356,7 +356,7 @@ export default function NewsPage() {
                         <span className="text-[11px] font-mono text-muted-foreground">{article.date}</span>
                       </div>
 
-                      <Link to={`/news/${article.id || article.slug}`} className="no-underline text-foreground block">
+                      <Link to={`/news/${article.slug || article.id}`} className="no-underline text-foreground block">
                         <h3 className="font-bold text-base text-foreground group-hover:text-primary transition-colors leading-snug mb-2.5 line-clamp-2 break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
                           {article.title}
                         </h3>
@@ -372,7 +372,7 @@ export default function NewsPage() {
                         <User className="w-3 h-3" />
                         <span>{article.author}</span>
                       </div>
-                      <Link to={`/news/${article.id || article.slug}`} className="font-bold text-primary text-xs flex items-center gap-1 group-hover:gap-1.5 transition-all no-underline">
+                      <Link to={`/news/${article.slug || article.id}`} className="font-bold text-primary text-xs flex items-center gap-1 group-hover:gap-1.5 transition-all no-underline">
                         Baca <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>

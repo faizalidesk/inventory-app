@@ -73,15 +73,22 @@ export default function NewsDetailPage() {
     loadData();
   }, [id]);
 
-  const article = allArticles.find((a) => a.slug === id || a.id === id);
+  const article = allArticles.find(
+    (a) => a.slug === id || a.id === id || (Array.isArray(a.old_slugs) && a.old_slugs.includes(id))
+  );
 
   useEffect(() => {
     if (article) {
       document.title = `${article.title} — Desktopalie News`;
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.content = article.summary || "";
+
+      // Seamlessly sync address bar to SEO slug if opened via ID or old slug
+      if (article.slug && id !== article.slug && window.history?.replaceState) {
+        window.history.replaceState(null, '', `/news/${article.slug}`);
+      }
     }
-  }, [article]);
+  }, [article, id]);
 
   // If article not found, find by index or fallback
   const currentIndex = article ? allArticles.findIndex((a) => a.id === article.id) : -1;
@@ -342,7 +349,7 @@ export default function NewsDetailPage() {
         <nav className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-6 border-y border-border/70 mb-12">
           {prevArticle ? (
             <Link
-              to={`/news/${prevArticle.id}`}
+              to={`/news/${prevArticle.slug || prevArticle.id}`}
               className="p-4 rounded-xl border border-border/70 bg-card hover:border-primary/50 transition-all text-left flex flex-col justify-between group"
             >
               <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1 mb-1">
@@ -356,7 +363,7 @@ export default function NewsDetailPage() {
 
           {nextArticle && (
             <Link
-              to={`/news/${nextArticle.id}`}
+              to={`/news/${nextArticle.slug || nextArticle.id}`}
               className="p-4 rounded-xl border border-border/70 bg-card hover:border-primary/50 transition-all text-right flex flex-col justify-between group"
             >
               <span className="text-[11px] font-mono text-muted-foreground flex items-center justify-end gap-1 mb-1">
@@ -386,7 +393,7 @@ export default function NewsDetailPage() {
               {relatedArticles.map((rel) => (
                 <div
                   key={rel.id}
-                  onClick={() => navigate(`/news/${rel.id}`)}
+                  onClick={() => navigate(`/news/${rel.slug || rel.id}`)}
                   className="p-4 rounded-xl border border-border/70 bg-card hover:border-primary/40 transition-all cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
