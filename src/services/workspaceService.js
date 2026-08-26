@@ -44,6 +44,25 @@ function fileToBase64(file) {
  * Optional platformId filter for multi-platform support (Alpha, Beta, Gamma, Delta)
  */
 export async function fetchCollection(type, userId = null, platformId = null) {
+  if (type === "projects") {
+    try {
+      const { data: settingData } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "projects_data")
+        .maybeSingle();
+
+      if (settingData && settingData.value) {
+        const parsed = typeof settingData.value === "string" ? JSON.parse(settingData.value) : settingData.value;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn("Error fetching projects from site_settings:", e);
+    }
+  }
+
   let query = supabase
     .from(type)
     .select("*");
