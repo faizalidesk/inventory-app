@@ -73,7 +73,11 @@ export default function NewsDetailPage() {
     loadData();
   }, [id]);
 
-  const article = allArticles.find((a) => a.slug === id || a.id === id);
+  const article = allArticles.find((a) => 
+    a.slug === id || 
+    a.id === id || 
+    (Array.isArray(a.old_slugs) && a.old_slugs.includes(id))
+  );
 
   useEffect(() => {
     if (article) {
@@ -81,8 +85,8 @@ export default function NewsDetailPage() {
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.content = article.summary || "";
 
-      // Auto-canonicalize URL if opened via raw ID to clean title slug
-      if (article.slug && id === article.id && id !== article.slug) {
+      // Auto-canonicalize / callback URL to follow current title slug
+      if (article.slug && id !== article.slug) {
         navigate(`/news/${article.slug}`, { replace: true });
       }
     }
