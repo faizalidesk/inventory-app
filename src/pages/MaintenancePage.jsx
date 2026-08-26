@@ -341,7 +341,7 @@ export default function MaintenancePage() {
             <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">
               <FaLinkedinIn />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/desktopalie" target="_blank" rel="noreferrer" aria-label="Instagram">
               <FaInstagram />
             </a>
           </div>

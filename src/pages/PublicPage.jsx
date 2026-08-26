@@ -108,7 +108,7 @@ export function PublicShell({ children }) {
                 <a href="https://linkedin.com/in/faizalidesk" target="_blank" rel="noreferrer" title="LinkedIn">
                   <FaLinkedin />
                 </a>
-                <a href="https://instagram.com/faizalidesk" target="_blank" rel="noreferrer" title="Instagram">
+                <a href="https://www.instagram.com/desktopalie" target="_blank" rel="noreferrer" title="Instagram">
                   <FaInstagram />
                 </a>
               </div>
@@ -184,7 +184,7 @@ export function PublicInfoPage({ type }) {
             "sameAs": [
               "https://github.com/faizalidesk",
               "https://linkedin.com/in/faizalidesk",
-              "https://instagram.com/faizalidesk"
+              "https://www.instagram.com/desktopalie"
             ]
           }
         });
