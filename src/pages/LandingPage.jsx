@@ -116,35 +116,74 @@ const PROJECTS = [
   {
     number: "01",
     slug: "orbit-analytics",
-    type: "Web application",
+    type: "Web Application",
     category: "web",
     title: "Orbit Analytics",
     description: "A focused analytics experience that turns complex product data into clear, useful decisions.",
-    tags: ["React", "Data visualization", "Product design", "Supabase"],
+    tags: ["React 19", "Data Visualization", "Product Design", "Supabase"],
+    image_url: "/project-1.png",
     className: "project-orbit",
-    stats: "99.8% Uptime â€¢ Realtime Sync",
+    stats: "99.8% Uptime • Realtime Sync",
   },
   {
     number: "02",
     slug: "frame-archive",
-    type: "Digital experience",
+    type: "Digital Experience",
     category: "digital",
     title: "Frame Archive",
     description: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
-    tags: ["Creative development", "UI/UX", "Motion", "Tailwind CSS"],
+    tags: ["Creative Development", "UI/UX", "Motion", "Tailwind CSS"],
+    image_url: "/project-2.png",
     className: "project-frame",
-    stats: "60 FPS Animations â€¢ Fluid UX",
+    stats: "60 FPS Animations • Fluid UX",
   },
   {
     number: "03",
     slug: "mono-systems",
-    type: "Design experiment",
+    type: "Design Systems",
     category: "design",
     title: "Mono Systems",
     description: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
-    tags: ["Design system", "Prototype", "Art direction", "Figma Tokens"],
+    tags: ["Design System", "shadcn UI", "Art Direction", "Figma Tokens"],
+    image_url: "/project-3.png",
     className: "project-mono",
-    stats: "30+ Components â€¢ Multi-theme",
+    stats: "30+ Components • Multi-theme",
+  },
+  {
+    number: "04",
+    slug: "fleet-telemetry-beta",
+    type: "Logistics & Telemetry",
+    category: "web",
+    title: "Fleet Telemetry Beta",
+    description: "Real-time cold-chain vehicle tracking and distance matrix route calculations for modern distribution fleets.",
+    tags: ["IoT Telemetry", "Distance Matrix", "Route Optimization", "Live GPS"],
+    image_url: "/project-4.png",
+    className: "project-orbit",
+    stats: "Sub-second Latency • IoT Sync",
+  },
+  {
+    number: "05",
+    slug: "video-intelligence-gamma",
+    type: "AI & Video Cloud",
+    category: "digital",
+    title: "AI Video Intelligence Gamma",
+    description: "Intelligent cloud transcoding and automated computer vision analysis pipeline for high-throughput video streaming.",
+    tags: ["Agentic AI", "Video Transcoding", "Multimodal Analysis", "Cloud Edge"],
+    image_url: "/project-5.png",
+    className: "project-frame",
+    stats: "4K 60fps Transcode • AI Vision",
+  },
+  {
+    number: "06",
+    slug: "enterprise-erp-delta",
+    type: "Enterprise Suite",
+    category: "design",
+    title: "Enterprise ERP Delta",
+    description: "Unified enterprise resource management system featuring intelligent OCR document scanning and automated ledger accounting.",
+    tags: ["OCR Scanner", "Multi-tenant", "Automated Invoicing", "RBAC Auth"],
+    image_url: "/project-6.png",
+    className: "project-mono",
+    stats: "99.9% Accuracy • Multi-tenant",
   },
 ];
 
@@ -979,16 +1018,31 @@ export default function LandingPage() {
                     className="group relative overflow-hidden bg-card/80 border-border/70 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between"
                   >
                     <div>
-                      {/* Project Visual Header */}
-                      <div className={`project-visual ${project.className || "project-orbit"} h-48 relative overflow-hidden rounded-t-xl`}>
-                        <span className="project-number">{project.number}</span>
-                        <div className="project-window">
-                          <div className="project-window-bar"><span /><span /><span /></div>
-                          <div className="project-window-body">
-                            <i /><i /><i /><i />
+                      {/* Project Visual Header / Image */}
+                      {project.image_url ? (
+                        <div className="h-48 relative overflow-hidden rounded-t-xl bg-muted/20 border-b border-border/60">
+                          <img
+                            src={project.image_url}
+                            alt={project.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent pointer-events-none" />
+                          <span className="project-number absolute top-3 left-3 bg-background/80 backdrop-blur-md px-2.5 py-1 rounded-md text-xs font-mono font-bold border border-border/80 shadow-xs">
+                            {project.number}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className={`project-visual ${project.className || "project-orbit"} h-48 relative overflow-hidden rounded-t-xl`}>
+                          <span className="project-number">{project.number}</span>
+                          <div className="project-window">
+                            <div className="project-window-bar"><span /><span /><span /></div>
+                            <div className="project-window-body">
+                              <i /><i /><i /><i />
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
 
                       <CardHeader className="p-5 pb-2">
                         <div className="flex items-center justify-between gap-2 mb-1">

@@ -25,6 +25,23 @@ import { fetchCollection, fetchItemBySlug, subscribeToCollection } from "../serv
 import { usePlatform } from "../context/PlatformContext";
 import { useTheme } from "../context/ThemeContext";
 
+// shadcn UI Components & Icons
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Search, Eye, ArrowRight, Sparkles, Layers, Cpu, Tag, ExternalLink } from "lucide-react";
+
 export function PublicShell({ children }) {
   const { theme } = useTheme();
 
@@ -400,21 +417,140 @@ export function PublicInfoPage({ type }) {
   );
 }
 
+const DEFAULT_SHOWCASE_PROJECTS = [
+  {
+    id: "p1",
+    number: "01",
+    slug: "orbit-analytics",
+    type: "Web Application",
+    category: "web",
+    title: "Orbit Analytics",
+    description: "A focused analytics experience that turns complex product data into clear, useful decisions with sub-second queries.",
+    tags: ["React 19", "Data Visualization", "Product Design", "Supabase"],
+    image_url: "/project-1.png",
+    stats: "99.8% Uptime • Realtime Sync",
+    progress: 100,
+    status: "Published",
+  },
+  {
+    id: "p2",
+    number: "02",
+    slug: "frame-archive",
+    type: "Digital Experience",
+    category: "digital",
+    title: "Frame Archive",
+    description: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
+    tags: ["Creative Development", "UI/UX Design", "Motion", "Tailwind CSS"],
+    image_url: "/project-2.png",
+    stats: "60 FPS Animations • Fluid UX",
+    progress: 100,
+    status: "Published",
+  },
+  {
+    id: "p3",
+    number: "03",
+    slug: "mono-systems",
+    type: "Design Systems",
+    category: "design",
+    title: "Mono Systems",
+    description: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
+    tags: ["Design System", "shadcn UI", "Art Direction", "Figma Tokens"],
+    image_url: "/project-3.png",
+    stats: "30+ Components • Multi-theme",
+    progress: 100,
+    status: "Published",
+  },
+  {
+    id: "p4",
+    number: "04",
+    slug: "fleet-telemetry-beta",
+    type: "Logistics & Telemetry",
+    category: "web",
+    title: "Fleet Telemetry Beta",
+    description: "Real-time cold-chain vehicle tracking and distance matrix route calculations for modern distribution fleets.",
+    tags: ["IoT Telemetry", "Distance Matrix", "Route Optimization", "Live GPS"],
+    image_url: "/project-4.png",
+    stats: "Sub-second Latency • IoT Sync",
+    progress: 95,
+    status: "Active Beta",
+  },
+  {
+    id: "p5",
+    number: "05",
+    slug: "video-intelligence-gamma",
+    type: "AI & Video Cloud",
+    category: "digital",
+    title: "AI Video Intelligence Gamma",
+    description: "Intelligent cloud transcoding and automated computer vision analysis pipeline for high-throughput video streaming.",
+    tags: ["Agentic AI", "Video Transcoding", "Multimodal Analysis", "Cloud Edge"],
+    image_url: "/project-5.png",
+    stats: "4K 60fps Transcode • AI Vision",
+    progress: 90,
+    status: "Active Alpha",
+  },
+  {
+    id: "p6",
+    number: "06",
+    slug: "enterprise-erp-delta",
+    type: "Enterprise Suite",
+    category: "design",
+    title: "Enterprise ERP Delta",
+    description: "Unified enterprise resource management system featuring intelligent OCR document scanning and automated ledger accounting.",
+    tags: ["OCR Scanner", "Multi-tenant", "Automated Invoicing", "RBAC Auth"],
+    image_url: "/project-6.png",
+    stats: "99.9% Accuracy • Multi-tenant",
+    progress: 85,
+    status: "Staging",
+  },
+];
+
 export function ProjectsPage() {
   const { activePlatform, activePlatformId } = usePlatform();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(DEFAULT_SHOWCASE_PROJECTS);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
+    document.title = "Selected Projects & Portfolio — Desktopalie";
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.content = "Explore selected projects, design systems, and digital experiments built with React 19, Vite, and Tailwind CSS by Desktopalie.";
+    }
+
     async function loadProjects() {
       setLoading(true);
-      let data = await fetchCollection("projects", null, activePlatformId);
-      if (!data || data.length === 0) {
-        const allData = await fetchCollection("projects");
-        data = allData;
+      try {
+        let data = await fetchCollection("projects", null, activePlatformId);
+        if (!data || data.length === 0) {
+          data = await fetchCollection("projects");
+        }
+        if (data && data.length > 0) {
+          const merged = data.map((p, idx) => ({
+            id: p.id || `p-${idx}`,
+            number: String(idx + 1).padStart(2, "0"),
+            slug: p.slug || `project-${idx + 1}`,
+            type: p.type || "Web Application",
+            category: (p.type || "").toLowerCase().includes("design") ? "design" : (p.type || "").toLowerCase().includes("digital") ? "digital" : "web",
+            title: p.title,
+            description: p.description,
+            image_url: p.image_url || p.cover_url || `/project-${(idx % 6) + 1}.png`,
+            tags: [p.type || "Web", ...(Array.isArray(p.tags) ? p.tags : ["React 19", "Tailwind CSS"])],
+            stats: p.stats || "Featured Showcase",
+            progress: p.progress || 100,
+            status: p.status || "Published",
+          }));
+          setProjects(merged);
+        } else {
+          setProjects(DEFAULT_SHOWCASE_PROJECTS);
+        }
+      } catch (e) {
+        console.error("Error loading projects:", e);
+        setProjects(DEFAULT_SHOWCASE_PROJECTS);
+      } finally {
+        setLoading(false);
       }
-      setProjects(data);
-      setLoading(false);
     }
     loadProjects();
 
@@ -427,34 +563,219 @@ export function ProjectsPage() {
     };
   }, [activePlatformId]);
 
+  const filteredProjects = projects.filter((p) => {
+    const matchesCat = selectedCategory === "all" || p.category === selectedCategory;
+    const q = searchQuery.toLowerCase().trim();
+    const matchesSearch =
+      !q ||
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      (p.tags && p.tags.some((t) => t.toLowerCase().includes(q)));
+    return matchesCat && matchesSearch;
+  });
+
   return (
     <PublicShell>
-      <section className="public-hero">
-        <span style={{ color: activePlatform.color }}>01 / SELECTED WORK • {activePlatform.name}</span>
-        <h1>Projects shaped by curiosity and craft.</h1>
-        <p>Filtered for <strong>{activePlatform.name}</strong> ({activePlatform.tagline}).</p>
-      </section>
-      {loading ? (
-        <div style={{ textAlign: "center", padding: "60px 0", color: "var(--muted)" }}>
-          <FaSpinner className="fa-spin" style={{ fontSize: "24px", color: activePlatform.color }} />
-          <p style={{ marginTop: "12px" }}>Fetching projects from Supabase ({activePlatform.id})...</p>
+      {/* 1. HERO SECTION WITH SHADCN BADGES */}
+      <section className="site-wrap pt-12 pb-6">
+        <div className="max-w-3xl space-y-4">
+          <div className="flex items-center gap-2">
+            <Badge variant="purple" className="text-xs px-3 py-1 font-mono uppercase tracking-wider">
+              01 / SELECTED WORK
+            </Badge>
+            <Badge variant="outline" className="text-xs font-mono">
+              {projects.length} Total Projects
+            </Badge>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">
+            Projects shaped by curiosity, craft, and engineering.
+          </h1>
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            A curated index of production applications, design systems, and software experiments developed across the Desktopalie platform ecosystem.
+          </p>
         </div>
-      ) : (
-        <section className="public-card-grid">
-          {projects.map((project, index) => (
-            <Link className={`public-project-card ${project.tone || "violet"}`} to={`/projects/${project.slug}`} key={project.id || project.slug}>
-              <div className="public-project-art">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>{project.title.slice(0, 2).toUpperCase()}</div>
+
+        {/* 2. SEARCH & FILTER TOOLBAR */}
+        <div className="mt-8 pt-6 border-t border-border/60 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          {/* Search Box */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <Input
+              type="text"
+              placeholder="Search projects by name, tag, or tech..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-card/60 border-border/80 text-sm h-10"
+            />
+          </div>
+
+          {/* Category Filter Tabs */}
+          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full md:w-auto">
+            <TabsList className="grid grid-cols-4 w-full md:w-auto">
+              <TabsTrigger value="all">All ({projects.length})</TabsTrigger>
+              <TabsTrigger value="web">Web</TabsTrigger>
+              <TabsTrigger value="digital">Motion</TabsTrigger>
+              <TabsTrigger value="design">Systems</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      </section>
+
+      {/* 3. SHADCN CARDS GRID */}
+      <section className="site-wrap pb-20">
+        {loading ? (
+          <div className="text-center py-20 text-muted-foreground flex flex-col items-center justify-center gap-3">
+            <FaSpinner className="animate-spin text-2xl text-primary" />
+            <p className="text-sm font-mono">Fetching projects database...</p>
+          </div>
+        ) : filteredProjects.length === 0 ? (
+          <div className="text-center py-16 border border-dashed border-border/80 rounded-2xl bg-card/40 my-8">
+            <p className="text-muted-foreground text-sm">No projects matched your search criteria.</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("all");
+              }}
+              className="mt-4"
+            >
+              Reset Filters
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+            {filteredProjects.map((project) => (
+              <Card
+                key={project.slug || project.id}
+                className="group relative overflow-hidden bg-card/80 border-border/70 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between"
+              >
+                <div>
+                  {/* Project Visual Cover Image */}
+                  <div className="h-52 relative overflow-hidden rounded-t-xl bg-muted/20 border-b border-border/60">
+                    <img
+                      src={project.image_url}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent pointer-events-none" />
+                    <span className="project-number absolute top-3 left-3 bg-background/80 backdrop-blur-md px-2.5 py-1 rounded-md text-xs font-mono font-bold border border-border/80 shadow-xs">
+                      {project.number}
+                    </span>
+                    <Badge
+                      variant="outline"
+                      className="absolute top-3 right-3 bg-background/80 backdrop-blur-md text-[10px] font-mono border-border/80"
+                    >
+                      {project.status}
+                    </Badge>
+                  </div>
+
+                  <CardHeader className="p-5 pb-2">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <Badge variant="accent" className="text-[10px]">{project.type}</Badge>
+                      <span className="text-[10px] font-mono text-muted-foreground">{project.stats}</span>
+                    </div>
+                    <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                      {project.title}
+                    </CardTitle>
+                    <CardDescription className="text-xs line-clamp-2 mt-2 leading-relaxed">
+                      {project.description}
+                    </CardDescription>
+                  </CardHeader>
+                </div>
+
+                <CardFooter className="p-5 pt-3 flex flex-col gap-4 border-t border-border/40 mt-4">
+                  <div className="flex flex-wrap gap-1.5 w-full">
+                    {(project.tags || []).slice(0, 3).map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-[9px] py-0 px-2 font-mono">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center justify-between w-full pt-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs gap-1.5 h-8 px-2.5"
+                      onClick={() => setSelectedProject(project)}
+                    >
+                      <Eye className="w-3.5 h-3.5" /> Quick View
+                    </Button>
+
+                    <Button asChild size="sm" variant="default" className="text-xs gap-1 h-8 px-3">
+                      <Link to={`/projects/${project.slug}`}>
+                        Case Study <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </Button>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* 4. PROJECT QUICK VIEW MODAL (SHADCN DIALOG) */}
+      <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
+        <DialogContent className="max-w-lg">
+          {selectedProject && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="purple">{selectedProject.number}</Badge>
+                  <Badge variant="accent">{selectedProject.type}</Badge>
+                </div>
+                <DialogTitle className="text-2xl font-bold">{selectedProject.title}</DialogTitle>
+                <DialogDescription className="text-sm pt-2">
+                  {selectedProject.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              {/* Cover Image in Modal */}
+              <div className="rounded-lg overflow-hidden border border-border/70 my-2 aspect-video bg-muted/20">
+                <img
+                  src={selectedProject.image_url}
+                  alt={selectedProject.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <span>{project.type} {project.platform_id ? `• ${project.platform_id.toUpperCase()}` : ""}</span>
-              <h2>{project.title}</h2>
-              <p>{project.description}</p>
-              <b>View case study <FaArrowRight /></b>
-            </Link>
-          ))}
-        </section>
-      )}
+
+              <div className="py-2 space-y-3">
+                <div>
+                  <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block mb-2">
+                    Technologies & Architecture
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(selectedProject.tags || []).map((t) => (
+                      <Badge key={t} variant="pulse" className="text-xs">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-lg bg-muted/40 border border-border/50 text-xs font-mono text-muted-foreground flex items-center justify-between">
+                  <span>Status: {selectedProject.status}</span>
+                  <span>{selectedProject.stats}</span>
+                </div>
+              </div>
+
+              <DialogFooter className="gap-2 sm:gap-0">
+                <DialogClose asChild>
+                  <Button variant="outline" size="sm">Close</Button>
+                </DialogClose>
+                <Button asChild size="sm" variant="glow" className="gap-2">
+                  <Link to={`/projects/${selectedProject.slug}`}>
+                    Read Full Case Study <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </PublicShell>
   );
 }
