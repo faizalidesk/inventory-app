@@ -8,8 +8,16 @@ import {
   ExternalLink, 
   Sparkles, 
   Layers, 
-  Newspaper 
+  Newspaper,
+  Briefcase,
+  User,
+  Cpu,
+  HelpCircle,
+  Mail,
+  ChevronRight,
+  Code
 } from "lucide-react";
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 import DesktopalieMark from "./DesktopalieMark";
 import { useAuth } from "../context/auth-context";
 import { useTheme } from "../context/ThemeContext";
@@ -219,68 +227,165 @@ export default function SiteNavbar({ activeNav = "" }) {
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[320px] flex flex-col justify-between bg-card border-border">
-                <SheetHeader>
-                  <div className="flex items-center gap-2 pt-2 pb-4 border-b border-border/60">
-                    <span className="w-6 h-6 flex items-center justify-center shrink-0">
-                      <DesktopalieMark style={{ width: "24px", height: "22px", display: "block" }} />
+              <SheetContent side="right" className="w-[300px] sm:w-[340px] flex flex-col justify-between bg-card border-border p-5 overflow-y-auto">
+                <div>
+                  <SheetHeader className="text-left pb-4 border-b border-border/60">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                          <DesktopalieMark size={20} />
+                        </span>
+                        <div>
+                          <SheetTitle className="font-brand-script text-lg font-normal leading-none">Desktopalie</SheetTitle>
+                          <span className="text-[10px] font-mono text-muted-foreground block mt-0.5">Creative Studio & Lab</span>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-[9px] font-mono border-emerald-500/40 text-emerald-400 bg-emerald-500/10 py-0.5 px-2">
+                        ● Active
+                      </Badge>
+                    </div>
+                  </SheetHeader>
+
+                  {/* Navigation List */}
+                  <div className="flex flex-col gap-1.5 py-4">
+                    <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-wider px-2 mb-1">
+                      Menu Utama
                     </span>
-                    <SheetTitle className="font-brand-script text-base font-normal pt-0.5">Desktopalie</SheetTitle>
+
+                    <Link
+                      to={isHomePage ? "/#work" : "/projects"}
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
+                        location.pathname.startsWith("/projects") ? "bg-primary/15 text-primary font-bold" : "text-foreground hover:bg-muted/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Briefcase className="w-4 h-4 text-primary" />
+                        <span>01. Selected Work</span>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+                    </Link>
+
+                    <Link
+                      to={isHomePage ? "/#about" : "/about"}
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
+                        location.pathname === "/about" ? "bg-primary/15 text-primary font-bold" : "text-foreground hover:bg-muted/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <User className="w-4 h-4 text-primary" />
+                        <span>02. About Studio</span>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+                    </Link>
+
+                    <Link
+                      to="/news"
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
+                        location.pathname.startsWith("/news") ? "bg-primary/15 text-primary font-bold" : "text-foreground hover:bg-muted/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Newspaper className="w-4 h-4 text-primary" />
+                        <span>03. News & Warta</span>
+                      </div>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary text-primary-foreground font-mono font-bold">
+                        75+
+                      </span>
+                    </Link>
+
+                    <Link
+                      to="/experiments"
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
+                        location.pathname === "/experiments" ? "bg-primary/15 text-primary font-bold" : "text-foreground hover:bg-muted/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Cpu className="w-4 h-4 text-primary" />
+                        <span>04. Lab Experiments</span>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+                    </Link>
+
+                    <a
+                      href="/#workflow"
+                      className="flex items-center justify-between p-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-muted/60 transition-all no-underline"
+                    >
+                      <div className="flex items-center gap-3">
+                        <HelpCircle className="w-4 h-4 text-primary" />
+                        <span>05. Workflow & FAQ</span>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+                    </a>
+
+                    <Link
+                      to="/contact"
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
+                        location.pathname === "/contact" ? "bg-primary/15 text-primary font-bold" : "text-foreground hover:bg-muted/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-4 h-4 text-primary" />
+                        <span>06. Contact</span>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+                    </Link>
                   </div>
-                </SheetHeader>
-                <div className="flex flex-col gap-3 py-6 font-mono text-sm">
-                  <a 
-                    href={isHomePage ? "#work" : "/projects"} 
-                    className="py-2 px-3 rounded-lg hover:bg-muted transition-colors no-underline text-foreground"
-                  >
-                    01. Selected Work
-                  </a>
-                  <a 
-                    href={isHomePage ? "#about" : "/about"} 
-                    className="py-2 px-3 rounded-lg hover:bg-muted transition-colors no-underline text-foreground"
-                  >
-                    02. About Studio
-                  </a>
-                  <Link 
-                    to="/news" 
-                    className="py-2 px-3 rounded-lg bg-primary/10 text-primary font-bold hover:bg-primary/20 transition-colors flex items-center justify-between no-underline"
-                  >
-                    <span>03. News & Warta</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary text-primary-foreground font-mono">75</span>
-                  </Link>
-                  <a 
-                    href="/#tech" 
-                    className="py-2 px-3 rounded-lg hover:bg-muted transition-colors no-underline text-foreground"
-                  >
-                    04. Tech Stack
-                  </a>
-                  <a 
-                    href="/#workflow" 
-                    className="py-2 px-3 rounded-lg hover:bg-muted transition-colors no-underline text-foreground"
-                  >
-                    05. Workflow & FAQ
-                  </a>
-                  <a 
-                    href={isHomePage ? "#contact" : "/contact"} 
-                    className="py-2 px-3 rounded-lg hover:bg-muted transition-colors no-underline text-foreground"
-                  >
-                    06. Contact
-                  </a>
+
+                  {/* Quick Socials & Ecosystem */}
+                  <div className="pt-3 pb-2 border-t border-border/60">
+                    <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-wider px-2 block mb-2">
+                      Connect & Socials
+                    </span>
+                    <div className="flex items-center gap-2 px-1">
+                      <a
+                        href="https://github.com/faizalidesk"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 p-2 rounded-lg bg-muted/40 hover:bg-muted border border-border/60 flex items-center justify-center text-foreground transition-colors"
+                        title="GitHub"
+                      >
+                        <FaGithub className="text-sm" />
+                      </a>
+                      <a
+                        href="https://linkedin.com/in/faizalidesk"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 p-2 rounded-lg bg-muted/40 hover:bg-muted border border-border/60 flex items-center justify-center text-foreground transition-colors"
+                        title="LinkedIn"
+                      >
+                        <FaLinkedin className="text-sm" />
+                      </a>
+                      <a
+                        href="https://www.instagram.com/desktopalie"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 p-2 rounded-lg bg-muted/40 hover:bg-muted border border-border/60 flex items-center justify-center text-foreground transition-colors"
+                        title="Instagram"
+                      >
+                        <FaInstagram className="text-sm" />
+                      </a>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Footer Auth & Theme Switcher */}
                 <div className="pt-4 border-t border-border/60 flex flex-col gap-3">
                   {user ? (
-                    <Button asChild className="w-full font-bold">
+                    <Button asChild className="w-full font-bold rounded-xl shadow-xs">
                       <Link to="/dashboard" className="no-underline">Go to Dashboard</Link>
                     </Button>
                   ) : allowLogin ? (
-                    <Button asChild className="w-full font-bold">
+                    <Button asChild className="w-full font-bold rounded-xl shadow-xs">
                       <Link to="/login" className="no-underline">Sign In</Link>
                     </Button>
                   ) : null}
-                  <div className="flex justify-between items-center text-xs text-muted-foreground pt-2">
-                    <span>Theme: {theme.toUpperCase()}</span>
-                    <Button variant="outline" size="sm" onClick={toggleTheme}>
-                      Toggle Mode
+
+                  <div className="flex justify-between items-center text-xs p-2 rounded-xl bg-muted/40 border border-border/60">
+                    <span className="font-mono text-muted-foreground flex items-center gap-2">
+                      <ThemeIcon theme={theme} /> Theme: <strong className="text-foreground">{theme.toUpperCase()}</strong>
+                    </span>
+                    <Button variant="outline" size="sm" onClick={toggleTheme} className="h-7 text-xs px-2.5 rounded-lg">
+                      Switch
                     </Button>
                   </div>
                 </div>
