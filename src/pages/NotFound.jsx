@@ -331,7 +331,7 @@ export default function NotFound() {
         <div className="nf-chip">
           <FaShieldAlt /> <span>Protected Endpoint</span>
         </div>
-        <span>© {new Date().getFullYear()} Desktopalie Workspace by Faiz Ali</span>
+        <span>© {new Date().getFullYear()} Desktopalie Workspace. All rights reserved.</span>
       </footer>
     </div>
   );
