@@ -1,10 +1,10 @@
-﻿import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { toggleThemeWithTransition } from "../utils/theme";
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "dark");
+  const [theme, setTheme] = useState(() => localStorage.getItem("desktopalie-theme") || "light");
 
   useEffect(() => {
     localStorage.setItem("desktopalie-theme", theme);
@@ -34,7 +34,7 @@ export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
     // Fallback if not wrapped in provider
-    const local = localStorage.getItem("desktopalie-theme") || "dark";
+    const local = localStorage.getItem("desktopalie-theme") || "light";
     return {
       theme: local,
       setTheme: () => {},
