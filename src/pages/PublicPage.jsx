@@ -527,12 +527,16 @@ export function ProjectsPage() {
           data = await fetchCollection("projects");
         }
         if (data && data.length > 0) {
-          const merged = data.map((p, idx) => ({
+          const visible = data.filter(p => {
+            const st = (p.status || "Published").toLowerCase();
+            return st !== "unpublished" && st !== "draft" && st !== "archived";
+          });
+          const merged = visible.map((p, idx) => ({
             id: p.id || `p-${idx}`,
-            number: String(idx + 1).padStart(2, "0"),
+            number: p.number || String(idx + 1).padStart(2, "0"),
             slug: p.slug || `project-${idx + 1}`,
             type: p.type || "Web Application",
-            category: (p.type || "").toLowerCase().includes("design") ? "design" : (p.type || "").toLowerCase().includes("digital") ? "digital" : "web",
+            category: p.category || ((p.type || "").toLowerCase().includes("design") ? "design" : (p.type || "").toLowerCase().includes("digital") ? "digital" : "web"),
             title: p.title,
             description: p.description,
             image_url: p.image_url || p.cover_url || `/project-${(idx % 6) + 1}.png`,
@@ -788,15 +792,27 @@ export function ProjectDetailPage() {
       setLoading(true);
       const data = await fetchItemBySlug("projects", slug);
       if (data) {
-        setProject(data);
-        document.title = `${data.title} — Desktopalie Case Study`;
-        let metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc) metaDesc.content = data.description || "";
+        const st = (data.status || "Published").toLowerCase();
+        if (st === "unpublished" || st === "draft" || st === "archived") {
+          setProject(null);
+        } else {
+          setProject(data);
+          document.title = `${data.title} — Desktopalie Case Study`;
+          let metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.content = data.description || "";
+        }
       } else {
         const fallback = DEFAULT_SHOWCASE_PROJECTS.find(p => p.slug === slug || p.id === slug);
-        setProject(fallback || null);
         if (fallback) {
-          document.title = `${fallback.title} — Desktopalie Case Study`;
+          const st = (fallback.status || "Published").toLowerCase();
+          if (st === "unpublished" || st === "draft" || st === "archived") {
+            setProject(null);
+          } else {
+            setProject(fallback);
+            document.title = `${fallback.title} — Desktopalie Case Study`;
+          }
+        } else {
+          setProject(null);
         }
       }
       setLoading(false);

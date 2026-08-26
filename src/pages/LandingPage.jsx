@@ -458,11 +458,15 @@ export default function LandingPage() {
         console.error("Error loading maintenance settings:", e);
       }
 
-      // 3. Projects from Supabase
+      // 3. Projects from Supabase (Only display Published / Active projects)
       try {
         const liveProjects = await fetchCollection("projects");
         if (liveProjects && liveProjects.length > 0) {
-          setProjectsList(liveProjects.map((p, idx) => ({
+          const visibleProjects = liveProjects.filter(p => {
+            const st = (p.status || "Published").toLowerCase();
+            return st !== "unpublished" && st !== "draft" && st !== "archived";
+          });
+          setProjectsList(visibleProjects.map((p, idx) => ({
             id: p.id || `proj-${idx + 1}`,
             number: p.number || String(idx + 1).padStart(2, "0"),
             slug: p.slug,
