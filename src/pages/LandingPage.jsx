@@ -882,138 +882,219 @@ export default function LandingPage() {
           </section>
           )}
 
-          {/* 3. HIGHLIGHT 1 BERITA PILIHAN (DIPILIH SECARA ACAK SETIAP REFRESH) */}
+          {/* 3. EDITORIAL NEWS & INSIGHTS SHOWCASE */}
           {landingContent.show_news !== false && (
-          <section className="py-16 border-y border-border/60 bg-muted/10 relative overflow-hidden" id="news-highlight">
+          <section className="py-20 border-y border-border/60 bg-gradient-to-b from-muted/20 via-background to-background relative overflow-hidden" id="news-highlight">
             <div className="site-wrap">
               {/* Section Header */}
-              <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-8">
+              <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-10">
                 <div>
                   <div className="flex items-center gap-2 mb-3 flex-wrap">
                     <Badge variant="purple" className="flex items-center gap-1.5 py-1 px-3">
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>SOROTAN WARTA PILIHAN</span>
+                      <span>03 / NEWS & INSIGHTS</span>
                     </Badge>
-                    <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Berganti Acak Setiap Refresh (1 dari 75 Berita)
+                    <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      75+ Curated Editorial Stories
                     </span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
-                    Kabar Terhangat Hari Ini
+                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                    Dispatches from the Lab & Studio
                   </h2>
+                  <p className="text-sm text-muted-foreground mt-2 max-w-xl">
+                    In-depth engineering studies, technology insights, and digital dispatches from Desktopalie.
+                  </p>
                 </div>
-                <div className="flex items-center gap-3">
+                
+                <div className="flex items-center gap-3 flex-wrap">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={handleShuffleNews}
-                    className="gap-1.5 font-bold hover:border-primary/50 text-xs cursor-pointer shadow-sm"
+                    className="gap-2 font-bold hover:border-primary/50 text-xs cursor-pointer shadow-xs rounded-xl h-9"
                   >
                     <Sparkles className={`w-3.5 h-3.5 text-primary ${isShufflingNews ? "animate-spin" : ""}`} />
-                    <span>Acak Berita Lain 🎲</span>
+                    <span>Shuffle Spotlight 🎲</span>
                   </Button>
-                  <Button asChild variant="default" size="sm" className="gap-2 font-bold shadow-sm text-xs cursor-pointer">
+                  <Button asChild variant="default" size="sm" className="gap-2 font-bold shadow-xs text-xs cursor-pointer rounded-xl h-9">
                     <Link to="/news">
                       <Newspaper className="w-3.5 h-3.5" />
-                      <span>Buka Portal Berita (75 Berita) →</span>
+                      <span>Explore All Articles →</span>
                     </Link>
                   </Button>
                 </div>
               </div>
 
-              {/* The Single Highlighted Card */}
-              {highlightedNews && (
-                <div className="rounded-3xl border border-border/80 bg-card/90 p-6 sm:p-10 backdrop-blur-md relative overflow-hidden shadow-lg group hover:border-primary/50 transition-all duration-300">
-                  <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/15 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/25 transition-colors" />
+              {/* Magazine 2-Column Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Left Column: Featured Spotlight (7 Cols) */}
+                {highlightedNews && (
+                  <div className="lg:col-span-7 rounded-3xl border border-border/80 bg-card/90 p-6 sm:p-8 backdrop-blur-md relative overflow-hidden shadow-xl group hover:border-primary/50 transition-all duration-300 flex flex-col justify-between h-full">
+                    <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/20 transition-colors" />
 
-                  <div className="relative z-10 flex flex-col justify-between gap-6 sm:gap-7">
-                    {/* Top metadata */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-lg border ${getCategoryBadgeClass(highlightedNews.category)}`}>
-                          {getCategoryIcon(highlightedNews.category)}
-                          <span>{highlightedNews.categoryLabel || highlightedNews.category}</span>
-                        </span>
-                        <span className="text-xs font-mono text-muted-foreground">
-                          ID: #{highlightedNews.id.toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {highlightedNews.date}
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5" />
-                          {highlightedNews.readTime}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-6 sm:gap-7">
-                      <div>
-                        {/* Title */}
-                        <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-3 leading-normal sm:leading-snug group-hover:text-primary transition-colors break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                          <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`} className="hover:underline">
-                            {highlightedNews.title}
-                          </Link>
-                        </h3>
-
-                        {/* Summary */}
-                        <p className="text-xs sm:text-sm text-muted-foreground/90 leading-relaxed max-w-4xl break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                          {highlightedNews.summary}
-                        </p>
-                      </div>
-
-                      {/* Highlighted News Image Banner */}
-                      {extractArticleImage(highlightedNews) && (
-                        <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`} className="block relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs">
+                    <div>
+                      {/* Image Banner */}
+                      {extractArticleImage(highlightedNews) ? (
+                        <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`} className="block relative w-full aspect-video rounded-2xl overflow-hidden border border-border/70 bg-muted/20 shadow-xs mb-6">
                           <img
                             src={extractArticleImage(highlightedNews)}
                             alt={highlightedNews.title}
-                            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
+                          <div className="absolute top-3 left-3">
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-background/90 backdrop-blur-md border border-border/80 text-foreground shadow-xs">
+                              Lead Spotlight
+                            </span>
+                          </div>
                         </Link>
+                      ) : (
+                        <div className="w-full aspect-video rounded-2xl bg-gradient-to-br from-primary/10 via-muted/30 to-background border border-border/70 flex items-center justify-center mb-6">
+                          <Newspaper className="w-12 h-12 text-primary/40" />
+                        </div>
                       )}
+
+                      {/* Meta pills */}
+                      <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-lg border ${getCategoryBadgeClass(highlightedNews.category)}`}>
+                            {getCategoryIcon(highlightedNews.category)}
+                            <span>{highlightedNews.categoryLabel || highlightedNews.category}</span>
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2.5 text-xs text-muted-foreground font-mono">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {highlightedNews.date}
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            {highlightedNews.readTime}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Title & Summary */}
+                      <h3 className="text-xl sm:text-2xl font-extrabold mb-3 leading-snug group-hover:text-primary transition-colors">
+                        <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`} className="hover:underline">
+                          {highlightedNews.title}
+                        </Link>
+                      </h3>
+
+                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-6">
+                        {highlightedNews.summary}
+                      </p>
                     </div>
 
-                    {/* Bottom Bar: Author, Tag & CTAs */}
+                    {/* Author & CTA */}
                     <div className="pt-6 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center text-primary font-bold text-xs">
                           <User className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-foreground">{highlightedNews.author}</div>
+                          <div className="text-xs font-bold text-foreground">{highlightedNews.author || "Desktopalie Newsroom"}</div>
                           <div className="text-[11px] text-muted-foreground font-mono flex items-center gap-1.5">
                             <Tag className="w-3 h-3 text-primary" />
-                            <span>{highlightedNews.tag}</span>
+                            <span>{highlightedNews.tag || "Editorial"}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 w-full sm:w-auto">
-                        <Button asChild variant="default" size="default" className="font-bold gap-2 text-xs sm:text-sm flex-1 sm:flex-none">
-                          <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`}>
-                            <span>Baca Berita Lengkap</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </Link>
-                        </Button>
-                        <Button asChild variant="outline" size="default" className="font-bold gap-2 text-xs sm:text-sm flex-1 sm:flex-none">
-                          <Link to="/news">
-                            <span>Lihat Semua Berita</span>
-                            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
-                          </Link>
-                        </Button>
-                      </div>
+                      <Button asChild variant="default" size="sm" className="font-bold gap-2 text-xs rounded-xl shadow-xs w-full sm:w-auto">
+                        <Link to={`/news/${highlightedNews.slug || highlightedNews.id}`}>
+                          <span>Read Full Story</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </Button>
                     </div>
                   </div>
+                )}
+
+                {/* Right Column: Trending / Recent Highlights (5 Cols) */}
+                <div className="lg:col-span-5 flex flex-col gap-4">
+                  <div className="flex items-center justify-between px-1 mb-1">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 text-amber-400" />
+                      More Recent Dispatches
+                    </span>
+                    <Link to="/news" className="text-xs text-primary hover:underline font-semibold flex items-center gap-1">
+                      Browse 75+ <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+
+                  {newsList
+                    .filter((n) => n.id !== highlightedNews?.id)
+                    .slice(0, 3)
+                    .map((item) => {
+                      const itemImg = extractArticleImage(item);
+                      return (
+                        <Card
+                          key={item.id || item.slug}
+                          className="p-4 bg-card/70 border-border/70 hover:border-primary/50 hover:bg-card/90 transition-all duration-200 group flex gap-4 items-center rounded-2xl shadow-xs"
+                        >
+                          {itemImg ? (
+                            <Link to={`/news/${item.slug || item.id}`} className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-muted/20 border border-border/60">
+                              <img
+                                src={itemImg}
+                                alt={item.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                loading="lazy"
+                              />
+                            </Link>
+                          ) : (
+                            <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-muted/30 border border-border/60 flex items-center justify-center text-muted-foreground">
+                              {getCategoryIcon(item.category)}
+                            </div>
+                          )}
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${getCategoryBadgeClass(item.category)}`}>
+                                {item.categoryLabel || item.category}
+                              </span>
+                              <span className="text-[10px] font-mono text-muted-foreground">
+                                {item.date}
+                              </span>
+                            </div>
+
+                            <h4 className="text-sm font-bold leading-snug line-clamp-2 text-foreground group-hover:text-primary transition-colors mb-1">
+                              <Link to={`/news/${item.slug || item.id}`}>
+                                {item.title}
+                              </Link>
+                            </h4>
+
+                            <div className="flex items-center justify-between pt-1">
+                              <span className="text-[11px] text-muted-foreground font-mono flex items-center gap-1">
+                                <Clock className="w-3 h-3" /> {item.readTime}
+                              </span>
+                              <Link
+                                to={`/news/${item.slug || item.id}`}
+                                className="text-[11px] font-bold text-primary inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                              >
+                                Read <ArrowRight className="w-3 h-3" />
+                              </Link>
+                            </div>
+                          </div>
+                        </Card>
+                      );
+                    })}
+
+                  {/* Newsletter Quick Card */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-primary/10 via-card to-card border border-primary/20 flex items-center justify-between gap-4 mt-2">
+                    <div className="space-y-0.5">
+                      <h5 className="text-xs font-bold text-foreground">Desktopalie Newsroom</h5>
+                      <p className="text-[11px] text-muted-foreground">Stay tuned with daily technical articles & creative case studies.</p>
+                    </div>
+                    <Button asChild size="sm" variant="outline" className="text-xs font-bold shrink-0 rounded-xl h-8">
+                      <Link to="/news">Open Newsroom</Link>
+                    </Button>
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           </section>
           )}
