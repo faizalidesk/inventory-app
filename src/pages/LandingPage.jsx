@@ -1227,6 +1227,154 @@ export default function LandingPage() {
             </div>
           </section>
 
+          {/* INSTAGRAM SOCIAL FEED SECTION (SHADCN UI) */}
+          <section className="section py-16 sm:py-24 relative overflow-hidden" id="instagram">
+            <div className="site-wrap max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Header */}
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                <div className="space-y-3 max-w-2xl">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-amber-500/10 border border-pink-500/20 text-pink-500 text-xs font-mono font-semibold tracking-wider">
+                    <FaInstagram className="w-3.5 h-3.5" />
+                    <span>SOCIAL & VISUAL LOG</span>
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
+                    Follow the craft on Instagram.
+                  </h2>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                    Behind-the-scenes interface design, interactive prototypes, and daily creative notes from <strong className="text-foreground">@desktopalie</strong>.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Button asChild variant="glow" size="lg" className="rounded-xl shadow-lg gap-2 text-sm">
+                    <a href="https://www.instagram.com/desktopalie" target="_blank" rel="noreferrer">
+                      <FaInstagram className="w-4 h-4 text-pink-400" />
+                      <span>Follow @desktopalie</span>
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </a>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Instagram Cards Showcase */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  {
+                    image: "/project-1.png",
+                    title: "Orbit Analytics UI",
+                    tag: "#UIUX #React19 #Dashboard",
+                    desc: "Exploring sub-second queries & real-time telemetry graphs for modern web tools.",
+                    date: "Recent Post"
+                  },
+                  {
+                    image: "/project-2.png",
+                    title: "Frame Archive Motion",
+                    tag: "#Motion #DesignSystem #WebDev",
+                    desc: "Crafting fluid 60fps micro-interactions with Tailwind CSS & CSS spring physics.",
+                    date: "Motion Reel"
+                  },
+                  {
+                    image: "/project-3.png",
+                    title: "Mono Design Tokens",
+                    tag: "#shadcn #DesignTokens #Figma",
+                    desc: "Atomic design tokens and reusable multi-theme components built for scalable apps.",
+                    date: "Design Notes"
+                  },
+                  {
+                    image: "/project-6.png",
+                    title: "Enterprise Suite & OCR",
+                    tag: "#Fullstack #Supabase #Architecture",
+                    desc: "Intelligent document scanning pipeline and automated ledger accounting architecture.",
+                    date: "Architecture"
+                  },
+                ].map((post, pIdx) => (
+                  <a
+                    key={pIdx}
+                    href="https://www.instagram.com/desktopalie"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group block focus:outline-hidden"
+                  >
+                    <Card className="h-full overflow-hidden bg-card/80 border-border/70 hover:border-pink-500/50 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1.5 flex flex-col justify-between">
+                      <div>
+                        {/* Image Preview with Instagram Overlay */}
+                        <div className="relative aspect-square overflow-hidden bg-muted/20 border-b border-border/60">
+                          <img
+                            src={post.image}
+                            alt={post.title}
+                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold border border-white/30 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                              <FaInstagram className="w-3.5 h-3.5 text-pink-300" />
+                              <span>View on Instagram</span>
+                            </div>
+                          </div>
+                          <Badge variant="purple" className="absolute top-3 left-3 text-[10px] backdrop-blur-md bg-background/80">
+                            {post.date}
+                          </Badge>
+                        </div>
+
+                        {/* Card Body */}
+                        <CardHeader className="p-4 pb-2">
+                          <div className="text-[11px] font-mono text-pink-500 font-semibold mb-1">
+                            {post.tag}
+                          </div>
+                          <CardTitle className="text-base group-hover:text-pink-500 transition-colors">
+                            {post.title}
+                          </CardTitle>
+                          <CardDescription className="text-xs line-clamp-2 mt-1.5 leading-relaxed">
+                            {post.desc}
+                          </CardDescription>
+                        </CardHeader>
+                      </div>
+
+                      {/* Card Footer */}
+                      <CardFooter className="p-4 pt-2 border-t border-border/40 flex items-center justify-between text-xs text-muted-foreground font-mono">
+                        <span className="flex items-center gap-1.5 text-foreground/80">
+                          <FaInstagram className="w-3.5 h-3.5 text-pink-500" />
+                          @desktopalie
+                        </span>
+                        <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-pink-500" />
+                      </CardFooter>
+                    </Card>
+                  </a>
+                ))}
+              </div>
+
+              {/* Instagram Banner Profile Highlight */}
+              <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-pink-500/5 via-purple-500/5 to-amber-500/5 border border-pink-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-[2px] shadow-md flex-shrink-0">
+                    <div className="w-full h-full bg-card rounded-[14px] flex items-center justify-center text-foreground font-bold font-mono text-sm">
+                      FA
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-sm text-foreground">Desktopalie Visual Lab</h4>
+                      <Badge variant="accent" className="text-[10px]">Official</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Daily stories, interface breakdown & coding experiments.
+                    </p>
+                  </div>
+                </div>
+
+                <Button asChild size="sm" variant="outline" className="rounded-xl border-pink-500/30 hover:bg-pink-500/10 hover:text-pink-500 text-xs font-semibold gap-1.5 flex-shrink-0">
+                  <a href="https://www.instagram.com/desktopalie" target="_blank" rel="noreferrer">
+                    <FaInstagram className="w-3.5 h-3.5 text-pink-500" />
+                    <span>instagram.com/desktopalie</span>
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </a>
+                </Button>
+              </div>
+
+            </div>
+          </section>
+
           {/* 6. CAPABILITIES SECTION WITH SHADCN CARDS & FEATURE LISTS */}
           <section className="section" id="capabilities">
             <div className="site-wrap">
