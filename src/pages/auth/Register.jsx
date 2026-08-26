@@ -127,7 +127,7 @@ export default function Register() {
               name="username"
               type="text"
               autoComplete="username"
-              placeholder="username (e.g. faizali)"
+              placeholder="username (e.g. desktopalie)"
               value={form.username}
               onChange={updateField}
               required

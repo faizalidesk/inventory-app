@@ -338,7 +338,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                     </span>
                     <div className="flex items-center gap-2 px-1">
                       <a
-                        href="https://github.com/faizalidesk"
+                        href="https://github.com/desktopalie"
                         target="_blank"
                         rel="noreferrer"
                         className="flex-1 p-2 rounded-lg bg-muted/40 hover:bg-muted border border-border/60 flex items-center justify-center text-foreground transition-colors"
@@ -347,7 +347,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                         <FaGithub className="text-sm" />
                       </a>
                       <a
-                        href="https://linkedin.com/in/faizalidesk"
+                        href="https://linkedin.com/company/desktopalie"
                         target="_blank"
                         rel="noreferrer"
                         className="flex-1 p-2 rounded-lg bg-muted/40 hover:bg-muted border border-border/60 flex items-center justify-center text-foreground transition-colors"

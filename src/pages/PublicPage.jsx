@@ -130,10 +130,10 @@ export function PublicShell({ children }) {
                 <a href="mailto:desktopalie@gmail.com">desktopalie@gmail.com</a>
               </div>
               <div className="footer-socials">
-                <a href="https://github.com/faizalidesk" target="_blank" rel="noreferrer" title="GitHub">
+                <a href="https://github.com/desktopalie" target="_blank" rel="noreferrer" title="GitHub">
                   <FaGithub />
                 </a>
-                <a href="https://linkedin.com/in/faizalidesk" target="_blank" rel="noreferrer" title="LinkedIn">
+                <a href="https://linkedin.com/company/desktopalie" target="_blank" rel="noreferrer" title="LinkedIn">
                   <FaLinkedin />
                 </a>
                 <a href="https://www.instagram.com/desktopalie" target="_blank" rel="noreferrer" title="Instagram">
@@ -210,8 +210,8 @@ export function PublicInfoPage({ type }) {
             "url": "https://desktopalie.my.id",
             "logo": "https://desktopalie.my.id/favicon-512x512.png",
             "sameAs": [
-              "https://github.com/faizalidesk",
-              "https://linkedin.com/in/faizalidesk",
+              "https://github.com/desktopalie",
+              "https://linkedin.com/company/desktopalie",
               "https://www.instagram.com/desktopalie"
             ]
           }
@@ -626,12 +626,12 @@ export function PublicInfoPage({ type }) {
         <section className="public-hero">
           <span>04 / SERVICES</span>
           <h1>From first sketch to final interaction.</h1>
-          <p>I help shape thoughtful digital experiences through strategy, interface design, and modern frontend development.</p>
+          <p>Desktopalie shapes thoughtful digital experiences through strategy, interface design, and modern frontend development.</p>
         </section>
         <section className="public-content-grid">
           <div>
             <span className="public-label">THE APPROACH</span>
-            <p>Every engagement starts by understanding the real problem. From there, I create a clear visual direction, build reusable systems, and turn them into fast, responsive interfaces.</p>
+            <p>Desktopalie approaches every build by understanding the core challenge. From there, we create a clear visual direction, build reusable systems, and turn them into fast, responsive interfaces.</p>
           </div>
           <div className="public-service-list">
             <article>
@@ -667,12 +667,12 @@ export function PublicInfoPage({ type }) {
       <section className="public-hero">
         <span>05 / CONTACT</span>
         <h1>Let’s make something worth remembering.</h1>
-        <p>Have a project, an idea, or simply want to talk about the web? I would love to hear from you.</p>
+        <p>Have a project, an idea, or want to collaborate with Desktopalie? We would love to hear from you.</p>
       </section>
       <section className="public-content-grid">
         <div>
           <span className="public-label">COLLABORATION</span>
-          <p>Share a little about what you are building, where you are in the process, and how I might help. I usually reply within two working days.</p>
+          <p>Share a little about what you are building, where you are in the process, and how Desktopalie can assist. The team usually replies within one working day.</p>
         </div>
         <div className="contact-options">
           <a href="mailto:desktopalie@gmail.com">
@@ -680,12 +680,12 @@ export function PublicInfoPage({ type }) {
             <strong>desktopalie@gmail.com</strong>
             <FaArrowRight />
           </a>
-          <a href="https://github.com/faizalidesk" target="_blank" rel="noreferrer">
+          <a href="https://github.com/desktopalie" target="_blank" rel="noreferrer">
             <span>Code</span>
             <strong>View GitHub</strong>
             <FaArrowRight />
           </a>
-          <a href="https://linkedin.com/in/faizalidesk" target="_blank" rel="noreferrer">
+          <a href="https://linkedin.com/company/desktopalie" target="_blank" rel="noreferrer">
             <span>Network</span>
             <strong>Connect on LinkedIn</strong>
             <FaArrowRight />
