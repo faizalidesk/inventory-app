@@ -1,48 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg width="800" height="480" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgGrad_coverstudio1svg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2b1263" />
-      <stop offset="100%" stop-color="#12072e" />
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad_studio1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f1042" />
+      <stop offset="100%" stop-color="#0b041a" />
     </linearGradient>
-    <linearGradient id="accentGrad_coverstudio1svg" x1="0%" y1="0%" x2="100%" y2="100%">
+
+    <!-- Accent Gradient -->
+    <linearGradient id="accGrad_studio1" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#9d7cff" />
       <stop offset="100%" stop-color="#73e6ce" />
     </linearGradient>
-    <pattern id="grid_coverstudio1svg" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-    </pattern>
-    <filter id="blur_coverstudio1svg" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="45" />
+
+    <!-- Glow Filter -->
+    <filter id="glow_studio1" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
     </filter>
+
+    <!-- Ambient Blur Filter -->
+    <filter id="ambient_studio1" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="60" />
+    </filter>
+
+    <!-- Background Pattern -->
+    <pattern id="pat_studio1" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    </pattern>
   </defs>
 
-  <rect width="800" height="480" fill="url(#bgGrad_coverstudio1svg)" />
-  <rect width="800" height="480" fill="url(#grid_coverstudio1svg)" />
+  <!-- Background Base -->
+  <rect width="800" height="480" fill="url(#bgGrad_studio1)" />
+  <rect width="800" height="480" fill="url(#pat_studio1)" />
 
-  <circle cx="650" cy="120" r="200" fill="#9d7cff" opacity="0.35" filter="url(#blur_coverstudio1svg)" />
-  <circle cx="180" cy="380" r="180" fill="#73e6ce" opacity="0.25" filter="url(#blur_coverstudio1svg)" />
+  <!-- Luminous Ambient Orbs -->
+  <circle cx="680" cy="100" r="220" fill="#9d7cff" opacity="0.32" filter="url(#ambient_studio1)" />
+  <circle cx="120" cy="380" r="200" fill="#73e6ce" opacity="0.25" filter="url(#ambient_studio1)" />
+  <circle cx="400" cy="240" r="140" fill="#c084fc" opacity="0.2" filter="url(#ambient_studio1)" />
 
-  <g transform="translate(560, 240) rotate(-15)">
-    <rect x="-140" y="-140" width="280" height="280" rx="60" fill="none" stroke="url(#accentGrad_coverstudio1svg)" stroke-width="4" opacity="0.8" />
-    <rect x="-100" y="-100" width="200" height="200" rx="45" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
-    <circle cx="0" cy="0" r="45" fill="url(#accentGrad_coverstudio1svg)" opacity="0.9" />
-    <circle cx="-100" cy="-100" r="8" fill="#73e6ce" />
-    <circle cx="100" cy="100" r="8" fill="#9d7cff" />
-  </g>
-
-  <path d="M 0 360 Q 200 240 400 380 T 800 280" fill="none" stroke="url(#accentGrad_coverstudio1svg)" stroke-width="3" opacity="0.6" />
-  <path d="M 0 390 Q 220 280 440 410 T 800 320" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
-
-  <g transform="translate(48, 64)">
-    <rect x="0" y="0" width="200" height="32" rx="8" fill="rgba(0,0,0,0.35)" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
-    <circle cx="16" cy="16" r="4" fill="#73e6ce" />
-    <text x="30" y="20" font-family="sans-serif" font-size="10" font-weight="700" fill="#ffffff" letter-spacing="1.5">01 / COMPUTATIONAL LAB</text>
-  </g>
-
-  <text x="48" y="160" font-family="sans-serif" font-size="34" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Interactive Surfaces</text>
+  <!-- Central Artwork Geometry -->
   
-  <g transform="translate(48, 380)">
-    <rect x="0" y="0" width="170" height="30" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
-    <text x="16" y="19" font-family="monospace" font-size="11" font-weight="600" fill="#9d7cff">Web Architecture</text>
-  </g>
+      <!-- Concentric Orbital Portal -->
+      <g transform="translate(400, 240)">
+        <circle cx="0" cy="0" r="160" fill="none" stroke="url(#accGrad_studio1)" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
+        <circle cx="0" cy="0" r="125" fill="none" stroke="url(#accGrad_studio1)" stroke-width="3" opacity="0.75" />
+        <rect x="-85" y="-85" width="170" height="170" rx="42" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.25)" stroke-width="2" transform="rotate(25)" />
+        <circle cx="0" cy="0" r="48" fill="url(#accGrad_studio1)" opacity="0.9" filter="url(#glow_studio1)" />
+        <circle cx="0" cy="0" r="24" fill="#ffffff" opacity="0.9" />
+        <circle cx="-110" cy="-60" r="7" fill="#73e6ce" filter="url(#glow_studio1)" />
+        <circle cx="110" cy="60" r="7" fill="#9d7cff" filter="url(#glow_studio1)" />
+        <circle cx="60" cy="-110" r="5" fill="#ffffff" />
+      </g>
+      <!-- Fluid Wave Ribbons -->
+      <path d="M 0 340 Q 200 220 400 360 T 800 260" fill="none" stroke="url(#accGrad_studio1)" stroke-width="3.5" opacity="0.6" />
+      <path d="M 0 380 Q 240 270 480 400 T 800 310" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" />
+    
 </svg>
