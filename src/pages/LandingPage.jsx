@@ -192,7 +192,7 @@ const PROJECTS = [
     title: "Bio Link Multimedia",
     description: "A focused analytics experience that turns complex product data into clear, useful decisions with sub-second queries.",
     tags: ["React 19", "Data Visualization", "Product Design", "Supabase"],
-    image_url: "https://nxuumfzpmvolcnswfsqz.supabase.co/storage/v1/object/public/workspace-media/projects/1787725993872_yq7nnv.jpg",
+    image_url: "/project-1.png",
     className: "project-orbit",
     stats: "99.8% Uptime • Realtime Sync",
     status: "Published",
