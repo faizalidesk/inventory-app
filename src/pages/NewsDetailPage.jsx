@@ -183,14 +183,14 @@ export default function NewsDetailPage() {
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground mb-8 py-2.5 px-4 rounded-xl bg-card/70 border border-border/80 shadow-xs backdrop-blur-sm overflow-x-auto scrollbar-none">
           <Link to="/" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0">
             <Home className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>Beranda</span>
+            <span>Home</span>
           </Link>
           
           <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
           
           <Link to="/news" className="inline-flex items-center gap-1.5 hover:text-foreground font-semibold transition-colors shrink-0">
             <Newspaper className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>Warta & Berita</span>
+            <span>News & Insights</span>
           </Link>
           
           <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />

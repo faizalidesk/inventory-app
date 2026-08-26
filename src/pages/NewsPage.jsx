@@ -54,9 +54,9 @@ export default function NewsPage() {
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
-    document.title = "News & Warta — Desktopalie Newsroom";
+    document.title = "News & Insights — Desktopalie Newsroom";
     let metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.content = "Warta terkini, berita teknologi, sains, pendidikan, dan inovasi digital kurasi Desktopalie.";
+    if (metaDesc) metaDesc.content = "Latest insights, tech innovations, creative engineering, and software ecosystem updates from Desktopalie.";
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement("link");

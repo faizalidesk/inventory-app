@@ -103,7 +103,7 @@ export function PublicShell({ children }) {
                 <li><Link to="/">Home Overview</Link></li>
                 <li><Link to="/projects">Selected Work</Link></li>
                 <li><Link to="/about" className="footer-active-link">About Desktopalie</Link></li>
-                <li><Link to="/news">News & Warta</Link></li>
+                <li><Link to="/news">News & Insights</Link></li>
                 <li><Link to="/experiments">Lab Experiments</Link></li>
                 <li><Link to="/services">Services & Pricing</Link></li>
                 <li><Link to="/contact">Get in Touch</Link></li>
@@ -170,7 +170,7 @@ export function PublicInfoPage({ type }) {
       // 2. Dynamic Meta Description highlighting Desktopalie
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
-        metaDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
+        metaDesc.content = "Desktopalie is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.";
       }
 
       // 3. Dynamic Canonical Tag
@@ -187,7 +187,7 @@ export function PublicInfoPage({ type }) {
       if (ogTitle) ogTitle.content = "About Desktopalie — Creative Technology Studio & Digital Lab";
 
       let ogDesc = document.querySelector('meta[property="og:description"]');
-      if (ogDesc) ogDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
+      if (ogDesc) ogDesc.content = "Desktopalie is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.";
 
       let ogUrl = document.querySelector('meta[property="og:url"]');
       if (ogUrl) ogUrl.content = `https://desktopalie.my.id/${type}`;
@@ -203,7 +203,7 @@ export function PublicInfoPage({ type }) {
           "@type": "AboutPage",
           "name": "About Desktopalie — Creative Technology Studio & Digital Lab",
           "url": "https://desktopalie.my.id/about",
-          "description": "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.",
+          "description": "Desktopalie is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.",
           "mainEntity": {
             "@type": "Organization",
             "name": "Desktopalie",
@@ -241,7 +241,7 @@ export function PublicInfoPage({ type }) {
           <div className="site-wrap relative z-10">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-6">
-              <Link to="/" className="hover:text-foreground transition-colors">Beranda</Link>
+              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
               <span>/</span>
               <span className="text-primary font-bold">About Studio</span>
             </div>
@@ -284,7 +284,7 @@ export function PublicInfoPage({ type }) {
                 </Button>
                 <Button asChild variant="ghost" size="default" className="font-bold gap-2 rounded-xl text-muted-foreground hover:text-foreground">
                   <Link to="/news">
-                    <span>News & Warta</span>
+                    <span>News & Insights</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                 </Button>
@@ -796,7 +796,7 @@ export function ProjectsPage() {
     document.title = "Selected Projects & Portfolio — Desktopalie Creative Technology Studio";
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.content = "Eksplorasi portofolio proyek perangkat lunak, sistem desain UI/UX, dan aplikasi web modern dari Desktopalie Creative Technology Studio & Digital Lab.";
+      metaDesc.content = "Explore selected software projects, UI/UX systems, and full-stack web applications crafted by Desktopalie Creative Technology Studio & Digital Lab.";
     }
 
     async function loadProjects() {
@@ -1236,7 +1236,7 @@ export function ExperimentsPage() {
     document.title = "Lab Experiments & Prototypes — Desktopalie Digital Lab";
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.content = "Eksplorasi kode kreatif, prototipe antarmuka, dan inovasi arsitektur perangkat lunak dari Desktopalie Digital Lab.";
+      metaDesc.content = "Explore creative code experiments, UI prototypes, and software architecture studies from Desktopalie Digital Lab.";
     }
 
     async function loadExperiments() {

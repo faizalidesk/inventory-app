@@ -249,7 +249,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                   {/* Navigation List */}
                   <div className="flex flex-col gap-1.5 py-4">
                     <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-wider px-2 mb-1">
-                      Menu Utama
+                      Main Navigation
                     </span>
 
                     <Link
@@ -286,7 +286,7 @@ export default function SiteNavbar({ activeNav = "" }) {
                     >
                       <div className="flex items-center gap-3">
                         <Newspaper className="w-4 h-4 text-primary" />
-                        <span>03. News & Warta</span>
+                        <span>03. News & Insights</span>
                       </div>
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary text-primary-foreground font-mono font-bold">
                         75+

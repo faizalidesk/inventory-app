@@ -447,12 +447,12 @@ export default function LandingPage() {
     document.title = "Desktopalie — Creative Technology Studio & Digital Lab";
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
+      metaDesc.content = "Desktopalie is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.";
     }
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.content = "Desktopalie — Creative Technology Studio & Digital Lab";
     let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
+    if (ogDesc) ogDesc.content = "Desktopalie is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.";
 
     async function loadSettings() {
       // 1. Landing Page Content
