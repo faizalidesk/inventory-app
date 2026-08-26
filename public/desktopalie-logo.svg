@@ -1,12 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 700" role="img" aria-labelledby="title desc">
-  <title id="title">Desktopalie</title>
-  <desc id="desc">Desktopalie symbol and wordmark</desc>
-  <rect width="640" height="700" fill="#ffffff"/>
-  <g transform="translate(64 55)" fill="none" stroke="#181818">
-    <path d="M72 420V132C72 95 102 65 139 65H373C410 65 440 95 440 132V420" stroke-width="30" stroke-linejoin="round"/>
-    <path d="M126 145V339C126 369 151 394 181 394H331C361 394 386 369 386 339V145" stroke-width="28"/>
-    <path d="M181 340V181C181 154 202 133 229 133H283C310 133 331 154 331 181V340" stroke-width="28"/>
-    <rect x="219" y="181" width="74" height="157" rx="20" fill="#181818" stroke="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <g transform="translate(0, 16)">
+    <path d="M72 420V132C72 94.9969 101.997 65 139 65H373C410.003 65 440 94.9969 440 132V420" stroke="#0f172a" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M126 145V339C126 369.376 150.624 394 181 394H331C361.376 394 386 369.376 386 339V145" stroke="#0f172a" stroke-width="30" stroke-linecap="round" />
+    <path d="M181 340V181C181 154.49 202.49 133 229 133H283C309.51 133 331 154.49 331 181V340" stroke="#0f172a" stroke-width="28" stroke-linecap="round" />
+    <rect x="219" y="181" width="74" height="157" rx="20" fill="#0f172a" />
   </g>
-  <text x="320" y="600" fill="#181818" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="500" letter-spacing="18">DESKTOPALIE</text>
 </svg>

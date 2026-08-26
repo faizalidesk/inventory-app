@@ -444,6 +444,16 @@ export default function LandingPage() {
 
   // Load customizable landing page settings & maintenance settings from Supabase
   useEffect(() => {
+    document.title = "Desktopalie — Creative Technology Studio & Digital Lab";
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
+    }
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.content = "Desktopalie — Creative Technology Studio & Digital Lab";
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
+
     async function loadSettings() {
       // 1. Landing Page Content
       try {

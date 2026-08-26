@@ -164,13 +164,13 @@ export function PublicShell({ children }) {
 export function PublicInfoPage({ type }) {
   useEffect(() => {
     if (type === "about") {
-      // 1. Dynamic Title highlighting Desktopalie
-      document.title = "About Desktopalie — Projects, Experiments & Digital Creations";
+      // 1. Dynamic Title highlighting Desktopalie Creative Technology Studio
+      document.title = "About Desktopalie — Creative Technology Studio & Digital Lab";
 
       // 2. Dynamic Meta Description highlighting Desktopalie
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
-        metaDesc.content = "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.";
+        metaDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
       }
 
       // 3. Dynamic Canonical Tag
@@ -184,10 +184,10 @@ export function PublicInfoPage({ type }) {
 
       // 4. OpenGraph
       let ogTitle = document.querySelector('meta[property="og:title"]');
-      if (ogTitle) ogTitle.content = "About Desktopalie — Projects, Experiments & Digital Creations";
+      if (ogTitle) ogTitle.content = "About Desktopalie — Creative Technology Studio & Digital Lab";
 
       let ogDesc = document.querySelector('meta[property="og:description"]');
-      if (ogDesc) ogDesc.content = "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.";
+      if (ogDesc) ogDesc.content = "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.";
 
       let ogUrl = document.querySelector('meta[property="og:url"]');
       if (ogUrl) ogUrl.content = `https://desktopalie.my.id/${type}`;
@@ -201,14 +201,15 @@ export function PublicInfoPage({ type }) {
         script.text = JSON.stringify({
           "@context": "https://schema.org",
           "@type": "AboutPage",
-          "name": "About Desktopalie — Projects, Experiments & Digital Creations",
+          "name": "About Desktopalie — Creative Technology Studio & Digital Lab",
           "url": "https://desktopalie.my.id/about",
-          "description": "Desktopalie is an independent digital space for projects, experiments, web development, UI/UX design, and digital creations.",
+          "description": "Desktopalie adalah Creative Technology Studio & Digital Lab independen yang merancang desain UI/UX modern, rekayasa web performa tinggi, dan ekosistem perangkat lunak cerdas.",
           "mainEntity": {
             "@type": "Organization",
             "name": "Desktopalie",
             "url": "https://desktopalie.my.id",
             "logo": "https://desktopalie.my.id/favicon-512x512.png",
+            "image": "https://desktopalie.my.id/og-image.png",
             "sameAs": [
               "https://github.com/desktopalie",
               "https://linkedin.com/company/desktopalie",
@@ -219,9 +220,9 @@ export function PublicInfoPage({ type }) {
         document.head.appendChild(script);
       }
     } else if (type === "services") {
-      document.title = "Services & Capabilities — Desktopalie";
+      document.title = "Services & Capabilities — Desktopalie Creative Technology Studio";
     } else if (type === "contact") {
-      document.title = "Contact & Inquiries — Desktopalie";
+      document.title = "Contact & Inquiries — Desktopalie Creative Technology Studio";
     }
 
     window.scrollTo(0, 0);
@@ -792,10 +793,10 @@ export function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
-    document.title = "Selected Projects & Portfolio — Desktopalie";
+    document.title = "Selected Projects & Portfolio — Desktopalie Creative Technology Studio";
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.content = "Explore selected projects, design systems, and digital experiments built with React 19, Vite, and Tailwind CSS by Desktopalie.";
+      metaDesc.content = "Eksplorasi portofolio proyek perangkat lunak, sistem desain UI/UX, dan aplikasi web modern dari Desktopalie Creative Technology Studio & Digital Lab.";
     }
 
     async function loadProjects() {
@@ -1232,6 +1233,12 @@ export function ExperimentsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "Lab Experiments & Prototypes — Desktopalie Digital Lab";
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.content = "Eksplorasi kode kreatif, prototipe antarmuka, dan inovasi arsitektur perangkat lunak dari Desktopalie Digital Lab.";
+    }
+
     async function loadExperiments() {
       setLoading(true);
       let data = await fetchCollection("experiments", null, activePlatformId);
