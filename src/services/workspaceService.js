@@ -327,6 +327,17 @@ export async function fetchMaintenanceSettings() {
  */
 export async function fetchLandingPageSettings() {
   try {
+    const { data: p1Data } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("key", "landing_page_platform1")
+      .maybeSingle();
+
+    if (p1Data?.value) {
+      const val = typeof p1Data.value === "string" ? JSON.parse(p1Data.value) : p1Data.value;
+      return val;
+    }
+
     const { data, error } = await supabase
       .from("site_settings")
       .select("*")
