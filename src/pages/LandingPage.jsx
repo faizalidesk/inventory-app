@@ -1276,7 +1276,17 @@ export default function LandingPage() {
                 <div className="about-glow" aria-hidden="true" />
                 <Card className="portrait-card relative overflow-hidden border-border/80 shadow-2xl">
                   <div className="portrait-grid" />
-                  <div className="portrait-monogram">FA</div>
+                  <div className="portrait-monogram flex flex-col items-center justify-center gap-3">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-center p-4 shadow-lg backdrop-blur-md group-hover:scale-105 transition-transform duration-500">
+                      <DesktopalieMark className="w-full h-full text-primary" />
+                    </div>
+                    <span className="portrait-brand-text">
+                      Desktopalie
+                    </span>
+                    <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-background/80 border border-border/80">
+                      Studio &amp; Digital Lab
+                    </span>
+                  </div>
                   <span className="portrait-caption flex items-center gap-2.5">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#73e6ce] opacity-75" />
