@@ -1236,13 +1236,13 @@ export default function LandingPage() {
                 <div className="space-y-3 max-w-2xl">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-amber-500/10 border border-pink-500/20 text-pink-500 text-xs font-mono font-semibold tracking-wider">
                     <FaInstagram className="w-3.5 h-3.5" />
-                    <span>SOCIAL & VISUAL LOG</span>
+                    <span>SOCIAL & VISUAL LOG • @DESKTOPALIE</span>
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
                     Follow the craft on Instagram.
                   </h2>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                    Behind-the-scenes interface design, interactive prototypes, and daily creative notes from <strong className="text-foreground">@desktopalie</strong>.
+                    Behind-the-scenes interface design, interactive prototypes, and daily creative notes from <strong className="text-foreground">@desktopalie</strong> (1.2K+ Followers • 6 Posts).
                   </p>
                 </div>
 
@@ -1257,36 +1257,56 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Instagram Cards Showcase */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Instagram Cards Showcase - 6 Posts Grid matching Instagram profile */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                   {
                     image: "/project-1.png",
-                    title: "Orbit Analytics UI",
-                    tag: "#UIUX #React19 #Dashboard",
-                    desc: "Exploring sub-second queries & real-time telemetry graphs for modern web tools.",
-                    date: "Recent Post"
+                    title: "Orbit Analytics",
+                    type: "Web Application",
+                    tag: "#React19 #DataVisualization #UIUX #Supabase",
+                    desc: "A focused analytics experience that turns complex product data into clear, useful decisions with sub-second queries.",
+                    date: "01 • Post"
                   },
                   {
                     image: "/project-2.png",
-                    title: "Frame Archive Motion",
-                    tag: "#Motion #DesignSystem #WebDev",
-                    desc: "Crafting fluid 60fps micro-interactions with Tailwind CSS & CSS spring physics.",
-                    date: "Motion Reel"
+                    title: "Frame Archive",
+                    type: "Digital Experience",
+                    tag: "#MotionDesign #CreativeDev #Tailwind #60FPS",
+                    desc: "A cinematic digital archive designed around discovery, motion, and thoughtful interaction.",
+                    date: "02 • Reel"
                   },
                   {
                     image: "/project-3.png",
-                    title: "Mono Design Tokens",
-                    tag: "#shadcn #DesignTokens #Figma",
-                    desc: "Atomic design tokens and reusable multi-theme components built for scalable apps.",
-                    date: "Design Notes"
+                    title: "Mono Systems",
+                    type: "Design Systems",
+                    tag: "#DesignSystem #shadcnUI #FigmaTokens #Tokens",
+                    desc: "An exploration of modular interfaces, expressive typography, and reusable design systems.",
+                    date: "03 • Post"
+                  },
+                  {
+                    image: "/project-4.png",
+                    title: "Fleet Telemetry Beta",
+                    type: "Logistics & Telemetry",
+                    tag: "#IoTTelemetry #DistanceMatrix #LiveGPS #Route",
+                    desc: "Real-time cold-chain vehicle tracking and distance matrix route calculations for modern distribution fleets.",
+                    date: "04 • Architecture"
+                  },
+                  {
+                    image: "/project-5.png",
+                    title: "AI Video Intelligence Gamma",
+                    type: "AI & Video Cloud",
+                    tag: "#AgenticAI #VideoTranscoding #Multimodal #Cloud",
+                    desc: "Intelligent cloud transcoding and automated computer vision analysis pipeline for high-throughput video streaming.",
+                    date: "05 • Reel"
                   },
                   {
                     image: "/project-6.png",
-                    title: "Enterprise Suite & OCR",
-                    tag: "#Fullstack #Supabase #Architecture",
-                    desc: "Intelligent document scanning pipeline and automated ledger accounting architecture.",
-                    date: "Architecture"
+                    title: "Enterprise ERP Delta",
+                    type: "Enterprise Suite",
+                    tag: "#OCRScanner #MultiTenant #AutomatedInvoicing",
+                    desc: "Unified enterprise resource management system featuring intelligent OCR document scanning and automated ledger accounting.",
+                    date: "06 • Fullstack"
                   },
                 ].map((post, pIdx) => (
                   <a
@@ -1299,21 +1319,24 @@ export default function LandingPage() {
                     <Card className="h-full overflow-hidden bg-card/80 border-border/70 hover:border-pink-500/50 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1.5 flex flex-col justify-between">
                       <div>
                         {/* Image Preview with Instagram Overlay */}
-                        <div className="relative aspect-square overflow-hidden bg-muted/20 border-b border-border/60">
+                        <div className="relative aspect-video overflow-hidden bg-muted/20 border-b border-border/60">
                           <img
                             src={post.image}
                             alt={post.title}
-                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold border border-white/30 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <FaInstagram className="w-3.5 h-3.5 text-pink-300" />
-                              <span>View on Instagram</span>
+                              <span>Lihat di Instagram</span>
                             </div>
                           </div>
                           <Badge variant="purple" className="absolute top-3 left-3 text-[10px] backdrop-blur-md bg-background/80">
                             {post.date}
+                          </Badge>
+                          <Badge variant="accent" className="absolute top-3 right-3 text-[10px] backdrop-blur-md bg-background/80">
+                            {post.type}
                           </Badge>
                         </div>
 
@@ -1322,7 +1345,7 @@ export default function LandingPage() {
                           <div className="text-[11px] font-mono text-pink-500 font-semibold mb-1">
                             {post.tag}
                           </div>
-                          <CardTitle className="text-base group-hover:text-pink-500 transition-colors">
+                          <CardTitle className="text-lg group-hover:text-pink-500 transition-colors">
                             {post.title}
                           </CardTitle>
                           <CardDescription className="text-xs line-clamp-2 mt-1.5 leading-relaxed">
@@ -1337,7 +1360,9 @@ export default function LandingPage() {
                           <FaInstagram className="w-3.5 h-3.5 text-pink-500" />
                           @desktopalie
                         </span>
-                        <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-pink-500" />
+                        <span className="text-pink-500 flex items-center gap-1 text-[11px] font-semibold group-hover:underline">
+                          View Post <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </span>
                       </CardFooter>
                     </Card>
                   </a>
@@ -1347,19 +1372,23 @@ export default function LandingPage() {
               {/* Instagram Banner Profile Highlight */}
               <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-pink-500/5 via-purple-500/5 to-amber-500/5 border border-pink-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-[2px] shadow-md flex-shrink-0">
-                    <div className="w-full h-full bg-card rounded-[14px] flex items-center justify-center text-foreground font-bold font-mono text-sm">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-[2.5px] shadow-md flex-shrink-0">
+                    <div className="w-full h-full bg-card rounded-[14px] flex items-center justify-center text-foreground font-bold font-mono text-base">
                       FA
                     </div>
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-sm text-foreground">Desktopalie Visual Lab</h4>
-                      <Badge variant="accent" className="text-[10px]">Official</Badge>
+                      <h4 className="font-bold text-base text-foreground">Desktopalie (@desktopalie)</h4>
+                      <Badge variant="accent" className="text-[10px]">Verified Creator</Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      Daily stories, interface breakdown & coding experiments.
-                    </p>
+                    <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground mt-1">
+                      <span><strong>6</strong> Posts</span>
+                      <span>•</span>
+                      <span><strong>1,293</strong> Followers</span>
+                      <span>•</span>
+                      <span><strong>174</strong> Following</span>
+                    </div>
                   </div>
                 </div>
 
