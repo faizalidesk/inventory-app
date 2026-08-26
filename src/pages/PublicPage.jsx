@@ -787,19 +787,31 @@ export function ProjectDetailPage() {
     async function loadProject() {
       setLoading(true);
       const data = await fetchItemBySlug("projects", slug);
-      setProject(data);
+      if (data) {
+        setProject(data);
+        document.title = `${data.title} — Desktopalie Case Study`;
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.content = data.description || "";
+      } else {
+        const fallback = DEFAULT_SHOWCASE_PROJECTS.find(p => p.slug === slug || p.id === slug);
+        setProject(fallback || null);
+        if (fallback) {
+          document.title = `${fallback.title} — Desktopalie Case Study`;
+        }
+      }
       setLoading(false);
     }
     loadProject();
+    window.scrollTo(0, 0);
   }, [slug]);
 
   if (loading) {
     return (
       <PublicShell>
-        <section className="public-hero" style={{ textAlign: "center" }}>
-          <FaSpinner className="fa-spin" style={{ fontSize: "24px", color: "var(--accent)" }} />
-          <p style={{ marginTop: "12px" }}>Loading case study from Supabase...</p>
-        </section>
+        <div className="max-w-4xl mx-auto px-4 py-28 text-center flex flex-col items-center justify-center gap-3">
+          <FaSpinner className="animate-spin text-3xl text-primary" />
+          <p className="text-sm font-mono text-muted-foreground">Loading case study details...</p>
+        </div>
       </PublicShell>
     );
   }
@@ -807,40 +819,114 @@ export function ProjectDetailPage() {
   if (!project) {
     return (
       <PublicShell>
-        <section className="public-hero">
-          <span>PROJECT NOT FOUND</span>
-          <h1>This project does not exist.</h1>
-          <Link className="public-back" to="/projects"><FaArrowLeft /> Back to projects</Link>
-        </section>
+        <div className="max-w-3xl mx-auto px-4 py-24 text-center space-y-4">
+          <Badge variant="outline" className="text-xs">404 NOT FOUND</Badge>
+          <h1 className="text-3xl sm:text-4xl font-bold">This project does not exist.</h1>
+          <p className="text-muted-foreground text-sm">The project you are looking for may have been updated or moved.</p>
+          <Button asChild variant="default" size="sm" className="mt-4">
+            <Link to="/projects" className="gap-2">
+              <FaArrowLeft className="w-3.5 h-3.5" /> Back to all projects
+            </Link>
+          </Button>
+        </div>
       </PublicShell>
     );
   }
 
   return (
     <PublicShell>
-      <section className={`case-hero ${project.tone || "violet"}`}>
-        <Link to="/projects" className="public-back"><FaArrowLeft /> All projects</Link>
-        <span>{project.type} / {project.status} {project.platform_id ? `(${project.platform_id.toUpperCase()})` : ""}</span>
-        <h1>{project.title}</h1>
-        <p>{project.description}</p>
-        <div><i>Progress: {project.progress}%</i></div>
-      </section>
-      <section className="case-content">
-        <article>
-          <span>THE CHALLENGE</span>
-          <h2>Finding the useful signal inside the noise.</h2>
-          <p>{project.description}</p>
-        </article>
-        <div className={`case-visual ${project.tone || "violet"}`}>
-          <div>{project.title.slice(0, 2).toUpperCase()}</div>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24">
+        {/* Breadcrumb & Navigation */}
+        <div className="flex items-center justify-between gap-4 mb-8">
+          <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+            <Link to="/projects">
+              <FaArrowLeft className="w-3 h-3" /> Back to Selected Work
+            </Link>
+          </Button>
+          <div className="flex items-center gap-2">
+            <Badge variant="purple" className="text-xs font-mono">{project.number || "01"}</Badge>
+            <Badge variant="accent" className="text-xs">{project.type}</Badge>
+            <Badge variant="outline" className="text-xs font-mono">{project.status}</Badge>
+          </div>
         </div>
-        <article>
-          <span>THE OUTCOME</span>
-          <h2>A clearer and more memorable experience.</h2>
-          <p>Designed and built with modern web technologies, backed by Supabase PostgreSQL.</p>
-        </article>
-        <Link className="next-project" to="/projects">Explore more projects <FaArrowRight /></Link>
-      </section>
+
+        {/* Header Hero */}
+        <div className="space-y-4 mb-8">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground">
+            {project.title}
+          </h1>
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl">
+            {project.description}
+          </p>
+        </div>
+
+        {/* Hero Cover Image Showcase */}
+        <div className="rounded-2xl overflow-hidden border border-border/80 shadow-2xl bg-muted/20 aspect-video mb-12">
+          <img
+            src={project.image_url || `/project-1.png`}
+            alt={project.title}
+            className="w-full h-full object-cover object-top"
+          />
+        </div>
+
+        {/* Key Metrics & Metadata Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+          <Card className="p-4 bg-card/60 border-border/80">
+            <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block mb-1">Architecture</span>
+            <strong className="text-sm font-semibold text-foreground">{project.type || "Web Application"}</strong>
+          </Card>
+          <Card className="p-4 bg-card/60 border-border/80">
+            <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block mb-1">Performance Metric</span>
+            <strong className="text-sm font-semibold text-[#73e6ce]">{project.stats || "99.8% Uptime"}</strong>
+          </Card>
+          <Card className="p-4 bg-card/60 border-border/80">
+            <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block mb-1">Completion Progress</span>
+            <div className="flex items-center gap-2 mt-1">
+              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                <div className="h-full bg-primary rounded-full" style={{ width: `${project.progress || 100}%` }} />
+              </div>
+              <span className="text-xs font-mono font-bold">{project.progress || 100}%</span>
+            </div>
+          </Card>
+        </div>
+
+        {/* Content Section: Challenge & Outcome */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border/60">
+          <div className="space-y-3">
+            <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider">01 / The Challenge</Badge>
+            <h2 className="text-2xl font-bold text-foreground">Solving interface complexity with structured architecture.</h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {project.description}
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider">02 / Technologies & Systems</Badge>
+            <h2 className="text-2xl font-bold text-foreground">Modern Frontend & Real-time Cloud Pipeline</h2>
+            <div className="flex flex-wrap gap-2 pt-2">
+              {(Array.isArray(project.tags) ? project.tags : ["React 19", "Tailwind CSS", "Supabase", "shadcn UI"]).map((tag) => (
+                <Badge key={tag} variant="pulse" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Navigation */}
+        <div className="mt-16 pt-8 border-t border-border/60 flex items-center justify-between">
+          <Button asChild variant="outline" size="sm">
+            <Link to="/projects" className="gap-2">
+              <FaArrowLeft className="w-3.5 h-3.5" /> All Projects
+            </Link>
+          </Button>
+          <Button asChild variant="glow" size="sm">
+            <Link to="/projects" className="gap-2">
+              Explore More Case Studies <FaArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </Button>
+        </div>
+      </div>
     </PublicShell>
   );
 }

@@ -150,6 +150,26 @@ export function subscribeToCollection(type, callback, platformId = null) {
  * Fetch a single item by its slug from Supabase
  */
 export async function fetchItemBySlug(type, slug) {
+  if (type === "projects") {
+    try {
+      const { data: settingData } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "projects_data")
+        .maybeSingle();
+
+      if (settingData && settingData.value) {
+        const parsed = typeof settingData.value === "string" ? JSON.parse(settingData.value) : settingData.value;
+        if (Array.isArray(parsed)) {
+          const match = parsed.find(p => p.slug === slug || p.id === slug);
+          if (match) return match;
+        }
+      }
+    } catch (e) {
+      console.warn("Error looking up project by slug in site_settings:", e);
+    }
+  }
+
   const { data, error } = await supabase
     .from(type)
     .select("*")
