@@ -127,7 +127,7 @@ export function PublicShell({ children }) {
               <h4>Connect</h4>
               <div className="footer-email-box">
                 <FaEnvelope className="email-icon" />
-                <a href="mailto:hello@desktopalie.my.id">hello@desktopalie.my.id</a>
+                <a href="mailto:desktopalie@gmail.com">desktopalie@gmail.com</a>
               </div>
               <div className="footer-socials">
                 <a href="https://github.com/faizalidesk" target="_blank" rel="noreferrer" title="GitHub">
@@ -675,9 +675,9 @@ export function PublicInfoPage({ type }) {
           <p>Share a little about what you are building, where you are in the process, and how I might help. I usually reply within two working days.</p>
         </div>
         <div className="contact-options">
-          <a href="mailto:hello@desktopalie.my.id">
+          <a href="mailto:desktopalie@gmail.com">
             <span>Email</span>
-            <strong>hello@desktopalie.my.id</strong>
+            <strong>desktopalie@gmail.com</strong>
             <FaArrowRight />
           </a>
           <a href="https://github.com/faizalidesk" target="_blank" rel="noreferrer">

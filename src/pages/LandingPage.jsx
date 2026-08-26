@@ -327,7 +327,7 @@ const FAQS = [
   {
     id: "faq-4",
     question: "How do we get started on a project?",
-    answer: "You can reach out via email at faizalidesk@gmail.com or send a message using the quick inquiry form below. We'll set up an introductory discussion to map out your requirements and timeline.",
+    answer: "You can reach out via email at desktopalie@gmail.com or send a message using the quick inquiry form below. We'll set up an introductory discussion to map out your requirements and timeline.",
   },
 ];
 
@@ -363,7 +363,7 @@ const DEFAULT_LANDING_CONTENT = {
   stat_3_value: "100%",
   stat_3_label: "Focus on craft & detail",
   contact_title: "Let's make something thoughtful together.",
-  contact_email: "faizalidesk@gmail.com",
+  contact_email: "desktopalie@gmail.com",
   github_url: "https://github.com",
   linkedin_url: "https://linkedin.com",
   instagram_url: "https://www.instagram.com/desktopalie",
@@ -571,7 +571,7 @@ export default function LandingPage() {
 
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(landingContent.contact_email || "faizalidesk@gmail.com");
+    navigator.clipboard.writeText(landingContent.contact_email || "desktopalie@gmail.com");
     setCopiedEmail(true);
     toast.success("Email copied to clipboard!", {
       icon: "âœ¨",
