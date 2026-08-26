@@ -1033,10 +1033,12 @@ export default function LandingPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                {filteredProjects.map((project) => (
+                {filteredProjects.map((project, idx) => (
                   <Card
                     key={project.slug || project.title}
-                    className="group relative overflow-hidden bg-card/80 border-border/70 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between"
+                    className={`group relative overflow-hidden bg-card/80 border-border/70 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex-col justify-between ${
+                      idx >= 3 ? "hidden md:flex" : "flex"
+                    }`}
                   >
                     <div>
                       {/* Project Visual Header / Image */}
@@ -1109,6 +1111,18 @@ export default function LandingPage() {
                   </Card>
                 ))}
               </div>
+
+              {/* Mobile View All Projects Button */}
+              {filteredProjects.length > 3 && (
+                <div className="flex md:hidden justify-center mt-8">
+                  <Button asChild variant="outline" size="default" className="font-bold gap-2 w-full max-w-xs shadow-xs rounded-xl">
+                    <Link to="/projects">
+                      <span>Lihat Semua Proyek ({filteredProjects.length})</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </section>
           )}
