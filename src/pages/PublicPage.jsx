@@ -576,10 +576,10 @@ export function ProjectsPage() {
 
   return (
     <PublicShell>
-      {/* 1. HERO SECTION WITH SHADCN BADGES */}
-      <section className="site-wrap pt-12 pb-6">
-        <div className="max-w-3xl space-y-4">
-          <div className="flex items-center gap-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24">
+        {/* 1. HERO HEADER */}
+        <div className="max-w-3xl mb-8 space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge variant="purple" className="text-xs px-3 py-1 font-mono uppercase tracking-wider">
               01 / SELECTED WORK
             </Badge>
@@ -587,44 +587,42 @@ export function ProjectsPage() {
               {projects.length} Total Projects
             </Badge>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
             Projects shaped by curiosity, craft, and engineering.
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             A curated index of production applications, design systems, and software experiments developed across the Desktopalie platform ecosystem.
           </p>
         </div>
 
         {/* 2. SEARCH & FILTER TOOLBAR */}
-        <div className="mt-8 pt-6 border-t border-border/60 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-2.5 sm:p-3 rounded-2xl bg-card/70 border border-border/80 shadow-xs mb-8">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
               placeholder="Search projects by name, tag, or tech..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-card/60 border-border/80 text-sm h-10"
+              className="pl-10 bg-background/60 border-border/60 text-sm h-10 rounded-xl"
             />
           </div>
 
           {/* Category Filter Tabs */}
-          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full md:w-auto">
-            <TabsList className="grid grid-cols-4 w-full md:w-auto">
-              <TabsTrigger value="all">All ({projects.length})</TabsTrigger>
-              <TabsTrigger value="web">Web</TabsTrigger>
-              <TabsTrigger value="digital">Motion</TabsTrigger>
-              <TabsTrigger value="design">Systems</TabsTrigger>
+          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full sm:w-auto">
+            <TabsList className="grid grid-cols-4 w-full sm:w-auto h-10 p-1 rounded-xl bg-muted/60">
+              <TabsTrigger value="all" className="rounded-lg text-xs font-medium">All ({projects.length})</TabsTrigger>
+              <TabsTrigger value="web" className="rounded-lg text-xs font-medium">Web</TabsTrigger>
+              <TabsTrigger value="digital" className="rounded-lg text-xs font-medium">Motion</TabsTrigger>
+              <TabsTrigger value="design" className="rounded-lg text-xs font-medium">Systems</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
-      </section>
 
-      {/* 3. SHADCN CARDS GRID */}
-      <section className="site-wrap pb-20">
+        {/* 3. SHADCN CARDS GRID */}
         {loading ? (
-          <div className="text-center py-20 text-muted-foreground flex flex-col items-center justify-center gap-3">
+          <div className="text-center py-24 text-muted-foreground flex flex-col items-center justify-center gap-3">
             <FaSpinner className="animate-spin text-2xl text-primary" />
             <p className="text-sm font-mono">Fetching projects database...</p>
           </div>
@@ -644,42 +642,42 @@ export function ProjectsPage() {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
             {filteredProjects.map((project) => (
               <Card
                 key={project.slug || project.id}
-                className="group relative overflow-hidden bg-card/80 border-border/70 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between"
+                className="group relative overflow-hidden bg-card/80 border-border/70 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between rounded-2xl"
               >
                 <div>
-                  {/* Project Visual Cover Image */}
-                  <div className="h-52 relative overflow-hidden rounded-t-xl bg-muted/20 border-b border-border/60">
+                  {/* Project Cover Image */}
+                  <div className="h-56 w-full relative overflow-hidden rounded-t-2xl bg-muted/30 border-b border-border/60">
                     <img
                       src={project.image_url}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent pointer-events-none" />
-                    <span className="project-number absolute top-3 left-3 bg-background/80 backdrop-blur-md px-2.5 py-1 rounded-md text-xs font-mono font-bold border border-border/80 shadow-xs">
+                    <span className="project-number absolute top-3.5 left-3.5 bg-background/80 backdrop-blur-md px-2.5 py-0.5 rounded-md text-xs font-mono font-bold border border-border/80 shadow-xs">
                       {project.number}
                     </span>
                     <Badge
                       variant="outline"
-                      className="absolute top-3 right-3 bg-background/80 backdrop-blur-md text-[10px] font-mono border-border/80"
+                      className="absolute top-3.5 right-3.5 bg-background/80 backdrop-blur-md text-[10px] font-mono border-border/80 shadow-xs"
                     >
                       {project.status}
                     </Badge>
                   </div>
 
                   <CardHeader className="p-5 pb-2">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <Badge variant="accent" className="text-[10px]">{project.type}</Badge>
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <Badge variant="accent" className="text-[10px] px-2 py-0.5">{project.type}</Badge>
                       <span className="text-[10px] font-mono text-muted-foreground">{project.stats}</span>
                     </div>
-                    <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                    <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
                       {project.title}
                     </CardTitle>
-                    <CardDescription className="text-xs line-clamp-2 mt-2 leading-relaxed">
+                    <CardDescription className="text-xs text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">
                       {project.description}
                     </CardDescription>
                   </CardHeader>
@@ -704,9 +702,9 @@ export function ProjectsPage() {
                       <Eye className="w-3.5 h-3.5" /> Quick View
                     </Button>
 
-                    <Button asChild size="sm" variant="default" className="text-xs gap-1 h-8 px-3">
+                    <Button asChild size="sm" variant="default" className="text-xs gap-1.5 h-8 px-3.5 rounded-lg shadow-xs">
                       <Link to={`/projects/${project.slug}`}>
-                        Case Study <ArrowRight className="w-3 h-3" />
+                        Case Study <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </Button>
                   </div>
@@ -715,7 +713,7 @@ export function ProjectsPage() {
             ))}
           </div>
         )}
-      </section>
+      </div>
 
       {/* 4. PROJECT QUICK VIEW MODAL (SHADCN DIALOG) */}
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
