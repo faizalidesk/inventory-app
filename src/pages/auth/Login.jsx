@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaBan } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { setRememberSession, supabase } from "../../lib/supabase";
+import { fetchLandingPageSettings } from "../../services/workspaceService";
 import AuthLayout from "./AuthLayout";
 
 export default function Login() {
@@ -12,8 +13,46 @@ export default function Login() {
   const [rememberSession, setRememberSessionState] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [allowLogin, setAllowLogin] = useState(() => {
+    try {
+      const local = localStorage.getItem("desktopalie_landing_settings");
+      if (local) {
+        const parsed = JSON.parse(local);
+        return parsed.allow_login !== false;
+      }
+    } catch (e) {}
+    return true;
+  });
+  const [disabledMessage, setDisabledMessage] = useState(() => {
+    try {
+      const local = localStorage.getItem("desktopalie_landing_settings");
+      if (local) {
+        const parsed = JSON.parse(local);
+        return parsed.login_disabled_message || "";
+      }
+    } catch (e) {}
+    return "";
+  });
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    async function checkAuthSettings() {
+      try {
+        const data = await fetchLandingPageSettings();
+        if (data) {
+          const parsed = typeof data === "string" ? JSON.parse(data) : data;
+          if (parsed.allow_login !== undefined) {
+            setAllowLogin(parsed.allow_login !== false);
+          }
+          if (parsed.login_disabled_message) {
+            setDisabledMessage(parsed.login_disabled_message);
+          }
+        }
+      } catch (e) {}
+    }
+    checkAuthSettings();
+  }, []);
 
   function getSafeDestination() {
     const requestedLocation = location.state?.from;
@@ -95,6 +134,57 @@ export default function Login() {
       setLoading(false);
       setError("Google sign-in could not be started. Please try again.");
     }
+  }
+
+  if (!allowLogin) {
+    return (
+      <AuthLayout 
+        eyebrow="AUTHENTICATION ACCESS" 
+        title="Akses Login Ditutup." 
+        description="Akses autentikasi pengguna saat ini sedang dinonaktifkan oleh administrator."
+      >
+        <div 
+          className="auth-alert" 
+          style={{ 
+            background: "rgba(239, 68, 68, 0.08)", 
+            border: "1px solid rgba(239, 68, 68, 0.3)", 
+            color: "var(--danger, #ef4444)",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "10px",
+            padding: "1rem",
+            borderRadius: "10px",
+            fontSize: "0.85rem",
+            lineHeight: "1.5"
+          }}
+        >
+          <FaLock style={{ fontSize: "1.1rem", marginTop: "2px", flexShrink: 0 }} />
+          <div>
+            <strong>Login Dinonaktifkan:</strong>
+            <p style={{ margin: "4px 0 0 0", color: "var(--text-subtle, #94a3b8)" }}>
+              {disabledMessage || "Akses login dan autentikasi pengguna sedang dinonaktifkan sementara oleh administrator."}
+            </p>
+          </div>
+        </div>
+
+        <div style={{ marginTop: "1.75rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          <Link 
+            to="/" 
+            className="auth-submit" 
+            style={{ 
+              display: "inline-flex", 
+              alignItems: "center", 
+              justifyContent: "center", 
+              textDecoration: "none",
+              fontWeight: "bold",
+              gap: "8px"
+            }}
+          >
+            <span>← Kembali ke Halaman Utama</span>
+          </Link>
+        </div>
+      </AuthLayout>
+    );
   }
 
   return (

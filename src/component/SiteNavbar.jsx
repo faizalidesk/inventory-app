@@ -13,6 +13,7 @@ import {
 import DesktopalieMark from "./DesktopalieMark";
 import { useAuth } from "../context/auth-context";
 import { useTheme } from "../context/ThemeContext";
+import { fetchLandingPageSettings } from "../services/workspaceService";
 
 // shadcn UI Components
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,34 @@ export default function SiteNavbar({ activeNav = "" }) {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const isHomePage = location.pathname === "/" || location.pathname === "/landingpage";
+
+  const [allowLogin, setAllowLogin] = useState(() => {
+    try {
+      const local = localStorage.getItem("desktopalie_landing_settings");
+      if (local) {
+        const parsed = JSON.parse(local);
+        return parsed.allow_login !== false;
+      }
+    } catch (e) {}
+    return true;
+  });
+
+  useEffect(() => {
+    let mounted = true;
+    async function checkLogin() {
+      try {
+        const data = await fetchLandingPageSettings();
+        if (mounted && data) {
+          const parsed = typeof data === "string" ? JSON.parse(data) : data;
+          if (parsed.allow_login !== undefined) {
+            setAllowLogin(parsed.allow_login !== false);
+          }
+        }
+      } catch (e) {}
+    }
+    checkLogin();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -175,13 +204,13 @@ export default function SiteNavbar({ activeNav = "" }) {
                   Dashboard <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </Button>
-            ) : (
+            ) : allowLogin ? (
               <Button asChild size="sm" variant="default" className="hidden sm:inline-flex gap-2 font-bold shadow-sm rounded-lg">
                 <Link to="/login" className="no-underline">
                   Sign In <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </Button>
-            )}
+            ) : null}
 
             {/* MOBILE DRAWER SHEET */}
             <Sheet>
@@ -243,11 +272,11 @@ export default function SiteNavbar({ activeNav = "" }) {
                     <Button asChild className="w-full font-bold">
                       <Link to="/dashboard" className="no-underline">Go to Dashboard</Link>
                     </Button>
-                  ) : (
+                  ) : allowLogin ? (
                     <Button asChild className="w-full font-bold">
                       <Link to="/login" className="no-underline">Sign In</Link>
                     </Button>
-                  )}
+                  ) : null}
                   <div className="flex justify-between items-center text-xs text-muted-foreground pt-2">
                     <span>Theme: {theme.toUpperCase()}</span>
                     <Button variant="outline" size="sm" onClick={toggleTheme}>
