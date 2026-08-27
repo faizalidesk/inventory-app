@@ -362,23 +362,10 @@ export async function fetchLandingPageSettings() {
 }
 
 /**
- * Fetch News articles from Supabase (table "news" or site_settings key "news_articles" with fallback to newsData)
+ * Fetch News articles from Supabase (site_settings key "news_articles" with fallback to newsData)
  */
 export async function fetchNewsArticles() {
-  // 1. Try "news" table
-  try {
-    const { data, error } = await supabase
-      .from("news")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (!error && data && data.length > 0) {
-      localStorage.setItem("desktopalie_news_articles", JSON.stringify(data));
-      return data;
-    }
-  } catch (e) {}
-
-  // 2. Try "site_settings" key "news_articles"
+  // 1. Try "site_settings" key "news_articles" (Guaranteed 200 OK)
   try {
     const { data, error } = await supabase
       .from("site_settings")
