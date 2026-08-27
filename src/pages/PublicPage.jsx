@@ -89,7 +89,7 @@ export function PublicShell({ children }) {
                 <span>DESKTOPALIE</span>
               </Link>
               <p className="footer-desc">
-                <strong>Desktopalie</strong> is an independent digital space and creative studio dedicated to UI/UX design, modern full-stack web engineering, multi-platform architecture, and intelligent tools.
+                <strong>Desktopalie</strong> is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.
               </p>
               <div className="footer-status">
                 <span className="status-dot"></span> All Systems Operational
@@ -220,9 +220,9 @@ export function PublicInfoPage({ type }) {
         document.head.appendChild(script);
       }
     } else if (type === "services") {
-      document.title = "Services & Capabilities — Desktopalie Creative Technology Studio";
+      document.title = "Services & Capabilities — Desktopalie";
     } else if (type === "contact") {
-      document.title = "Contact & Inquiries — Desktopalie Creative Technology Studio";
+      document.title = "Contact & Inquiries — Desktopalie";
     }
 
     window.scrollTo(0, 0);
@@ -793,7 +793,7 @@ export function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
-    document.title = "Selected Projects & Portfolio — Desktopalie Creative Technology Studio";
+    document.title = "Selected Work & Projects — Desktopalie";
     let metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.content = "Explore selected software projects, UI/UX systems, and full-stack web applications crafted by Desktopalie Creative Technology Studio & Digital Lab.";

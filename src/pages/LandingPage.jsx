@@ -360,7 +360,7 @@ const DEFAULT_LANDING_CONTENT = {
   availability_badge: "AVAILABLE FOR Q1/Q2",
   hero_badge: "INDEPENDENT DIGITAL STUDIO & LAB",
   hero_title: "Ideas, crafted into digital experiences.",
-  hero_description: "Desktopalie is my personal space for projects, experiments, and digital creationsâ€”documenting my journey through web development, UI/UX design, and modern technology.",
+  hero_description: "Desktopalie is an independent Creative Technology Studio & Digital Lab crafting modern UI/UX design, high-performance web engineering, and intelligent software ecosystems.",
   hero_cta_text: "Explore selected work",
   hero_secondary_cta_text: "About Studio",
   hero_note: "CURRENTLY EXPLORING CREATIVE INTERFACES, THOUGHTFUL MOTION, AND USEFUL AI.",
@@ -1627,7 +1627,7 @@ export default function LandingPage() {
             </Link>
             
             <p className="text-xs font-mono text-muted-foreground">
-              Projects, experiments, and digital creations.
+              Creative Technology Studio & Digital Lab.
             </p>
 
             <div className="social-links flex items-center gap-2">

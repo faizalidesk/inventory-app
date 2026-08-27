@@ -79,7 +79,7 @@ export default function NewsDetailPage() {
 
   useEffect(() => {
     if (article) {
-      document.title = `${article.title} — Desktopalie News`;
+      document.title = `${article.title} — Desktopalie`;
       let metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.content = article.summary || "";
 

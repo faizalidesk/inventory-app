@@ -54,9 +54,9 @@ export default function NewsPage() {
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
-    document.title = "News & Insights — Desktopalie Newsroom";
+    document.title = "News & Insights — Desktopalie Creative Technology Studio & Digital Lab";
     let metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.content = "Latest insights, tech innovations, creative engineering, and software ecosystem updates from Desktopalie.";
+    if (metaDesc) metaDesc.content = "Latest insights, tech innovations, creative engineering, and software ecosystem updates from Desktopalie Creative Technology Studio & Digital Lab.";
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement("link");

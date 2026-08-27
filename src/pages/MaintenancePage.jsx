@@ -333,7 +333,7 @@ export default function MaintenancePage() {
             <DesktopalieMark className="brand-mark" />
             <span>Desktopalie</span>
           </Link>
-          <p>Projects, experiments, and digital creations.</p>
+          <p>Creative Technology Studio & Digital Lab.</p>
           <div className="social-links">
             <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub">
               <FaGithub />
